@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Fallback, should be covered by some other element. */
+    background: repeating-linear-gradient(-45deg,
+            #131313,
+            #131313 16px,
+            #000000 16px,
+            #000000 32px);
+}
+
+leptos-children,
+leptos-island {
+    display: contents;
+}

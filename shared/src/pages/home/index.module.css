@@ -1,0 +1,25 @@
+body {
+    
+}
+
+.logo {
+    display: block;
+    margin: auto;
+    height: 130px;
+    padding: 64px 0;
+    image-rendering: pixelated;
+
+    animation: logo-animation 0.75s ease-in-out forwards;
+}
+
+@keyframes logo-animation {
+    from {
+        opacity: 0;
+        padding-top: 184px;
+    }
+
+    to {
+        opacity: 1;
+        padding-top: 64px;
+    }
+}

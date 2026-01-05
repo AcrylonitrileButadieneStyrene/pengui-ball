@@ -1,0 +1,10 @@
+{
+    "rust-analyzer.cargo.features": ["ssr"],
+    "rust-analyzer.procMacro.ignored": {
+        "leptos_macro": [
+            "component",
+            "island",
+            "server"
+        ]
+    }
+}

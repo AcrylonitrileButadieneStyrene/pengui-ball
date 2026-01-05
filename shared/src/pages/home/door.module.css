@@ -1,0 +1,83 @@
+.door {
+    width: 224px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    cursor: pointer;
+    user-select: none;
+
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+    animation-delay: calc(var(--i) * 75ms + 750ms);
+}
+
+/* This is a hack.
+ * If the door has an animation that modifies the opacity it gets moved
+ * into a new stacking context, causing it to render over the spotlight, so
+ * the animation needs to be removed when the spotlight is created.
+ * If instead the door had an animation changing a CSS property, then
+ * it would no longer have that issue, but instead it doesn't fade in correctly.
+ * So the best approach without using JavaScript is this.
+ * The query could probably be optimizied, but I didn't want to add extra code
+ * to the on click handler to add a class to the doors for a cosmetic effect.
+ * The doors container is in a non-interactive component so a DOM query would
+ * need to be executed or the component would need to be moved to an island.
+ */
+body:has(.spotlight) .door {
+    opacity: 1;
+    animation: none;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.icon {
+    height: 120px;
+    z-index: 1;
+}
+
+.logo {
+    height: 60px;
+    z-index: 1;
+    margin-top: 4px;
+}
+
+.shadow {
+    position: absolute;
+    width: 180px;
+    height: 64px;
+    bottom: 42px;
+}
+
+.spotlight {
+    position: absolute;
+    transform: translateY(calc(-50% + 100px));
+    width: 20000vmax;
+    height: 20000vmax;
+    z-index: 2;
+
+    background: radial-gradient(transparent var(--spotlight-radius),
+            black var(--spotlight-radius));
+    animation: 2s spotlight-zoom ease-in forwards;
+}
+
+@property --spotlight-radius {
+    syntax: "<length>";
+    initial-value: max(120vw, 120vh);
+    inherits: false;
+}
+
+@keyframes spotlight-zoom {
+    to {
+        --spotlight-radius: 128px;
+    }
+}
