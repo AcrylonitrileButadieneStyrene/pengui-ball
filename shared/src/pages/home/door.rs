@@ -52,6 +52,7 @@ fn DoorSound(id: String, index: usize, children: Children) -> impl IntoView {
             node_ref=node_ref
             src=format!("https://ynoproject.net/audio/door_{id}.wav")
             hidden=true
+            prop:volume=0.5
         />
         {children()}
     }
