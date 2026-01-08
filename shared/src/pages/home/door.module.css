@@ -13,7 +13,7 @@
     image-rendering: crisp-edges;
 
     opacity: 0;
-    animation: fadeIn 0.5s ease forwards;
+    animation: fade-in 0.5s ease forwards;
     animation-delay: calc(var(--i) * 75ms + 750ms);
 }
 
@@ -34,7 +34,7 @@ body:has(.spotlight) .door {
     animation: none;
 }
 
-@keyframes fadeIn {
+@keyframes fade-in {
     to {
         opacity: 1;
     }

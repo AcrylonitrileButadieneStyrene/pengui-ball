@@ -18,11 +18,13 @@ pub fn Door(index: usize, game: crate::config::Game) -> impl IntoView {
                 >
                     <DoorSpotlight index />
                     <DoorImage id=game.id.clone() index />
-                    <img class=style::logo src=logo_src alt="" />
+                    <img class=style::logo src=logo_src alt="" height=60 />
                     <img
                         class=style::shadow
                         src="https://ynoproject.net/images/door_shadow.png"
                         alt=""
+                        width=180
+                        height=64
                     />
                 </div>
             </DoorClickable>
@@ -53,6 +55,7 @@ fn DoorSound(id: String, index: usize, children: Children) -> impl IntoView {
             src=format!("https://ynoproject.net/audio/door_{id}.wav")
             hidden=true
             prop:volume=0.5
+            preload="none"
         />
         {children()}
     }
@@ -82,7 +85,11 @@ fn DoorClickable(id: String, index: usize, children: Children) -> impl IntoView 
         }
     };
 
-    view! { <a href=id on:click=on_click>{children()}</a> }
+    view! {
+        <a href=id on:click=on_click>
+            {children()}
+        </a>
+    }
 }
 
 #[island]
@@ -91,7 +98,7 @@ fn DoorSpotlight(index: usize) -> impl IntoView {
 
     view! {
         <Show when=move || selected() == Some(index)>
-        <div class=style::spotlight />
+            <div class=style::spotlight />
         </Show>
     }
 }
@@ -109,6 +116,8 @@ fn DoorImage(id: String, index: usize) -> impl IntoView {
                     if selected() == Some(index) { "open_" } else { "" },
                 )
             }
+            alt=""
+            height=120
         />
     }
 }

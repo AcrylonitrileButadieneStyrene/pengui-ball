@@ -1,4 +1,5 @@
 #![allow(clippy::unused_async)]
+#![allow(non_snake_case)]
 
 mod app;
 mod config;

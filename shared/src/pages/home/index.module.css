@@ -1,5 +1,16 @@
-body {
-    
+.background {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    inset: 0;
+    z-index: -1;
+
+    background: url("https://ynoproject.net/images/bg.png");
+    background-size: cover;
+    background-position-x: center;
+
+    opacity: 0;
+    animation: fade-in 0.5s ease forwards;
 }
 
 .logo {
@@ -14,12 +25,18 @@ body {
 
 @keyframes logo-animation {
     from {
-        opacity: 0;
-        padding-top: 184px;
+        /* This line is a hack to fix Chrome Lighthouse. If it is set to exactly
+         * zero then the analyzer bugs out and refuses to see an LCP and dies.
+         * Every element is invisible by default, so that's probably the problem
+         * but this is the 1st and most prominent element so putting the fix
+         * on it makes the most sense. That or the background.
+         */
+        opacity: 0.01;
+        transform: translateY(120px)
     }
 
     to {
         opacity: 1;
-        padding-top: 64px;
+        transform: 0
     }
 }

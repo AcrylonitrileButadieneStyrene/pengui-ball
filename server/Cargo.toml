@@ -3,16 +3,20 @@ name = "server"
 version = "0.1.0"
 edition = "2024"
 
+[lints]
+workspace = true
+
 [dependencies]
 axum = "0.8.8"
 figment = { version = "0.10.19", features = ["env", "yaml"] }
 leptos.workspace = true
 leptos_axum = "0.8.7"
-leptos_meta.workspace = true
 leptos_router.workspace = true
 serde.workspace = true
-shared = { path = "../shared" }
+shared.path = "../shared"
 tokio = { version = "1", features = ["rt-multi-thread"] }
+tower = "0.5.2"
+tower-http = "0.6.8"
 
 [features]
-ssr = ["leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr"]
+ssr = ["leptos/ssr", "leptos_router/ssr"]

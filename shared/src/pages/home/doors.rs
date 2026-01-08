@@ -40,7 +40,14 @@ fn DoorsSound() -> impl IntoView {
         }
     });
 
-    view! { <audio node_ref=node_ref src="https://ynoproject.net/audio/door_effect.wav" hidden=true /> }
+    view! {
+        <audio
+            node_ref=node_ref
+            src="https://ynoproject.net/audio/door_effect.wav"
+            hidden=true
+            preload="none"
+        />
+    }
 }
 
 #[island]

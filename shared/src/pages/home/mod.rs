@@ -13,10 +13,12 @@ pub fn Home() -> impl IntoView {
             name="description"
             content="Play multiplayer Yume Nikki and Yume Nikki fangames for free! Ad-free and no registration required."
         />
+        <div class=style::background />
         <img
             src="https://ynoproject.net/images/logo_yno.png"
             class=style::logo
             alt="Website logo"
+            fetchpriority="high"
         />
         <doors::Doors />
     }
