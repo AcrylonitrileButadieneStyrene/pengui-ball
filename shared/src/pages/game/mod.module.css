@@ -4,8 +4,29 @@ body.game {
             rgb(0 0 0 / 32.5%) calc(100% - 150px),
             black), url("https://ynoproject.net/2kki/images/ui/2kki/system1/containerbg.png");
     background-size: 210px;
-    background-position-y: 0, -16px;
+    background-position-y: 0, calc(-16px - var(--scroll) * 25%);
+    background-attachment: fixed;
     image-rendering: pixelated;
+
+    /* Chrome only. Firefox needs JavaScript emulation. */
+    animation: scroll-progress linear;
+    animation-timeline: scroll(root);
+}
+
+@property --scroll {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+}
+
+@keyframes scroll-progress {
+    from {
+        --scroll: 0;
+    }
+
+    to {
+        --scroll: 1;
+    }
 }
 
 .main {
