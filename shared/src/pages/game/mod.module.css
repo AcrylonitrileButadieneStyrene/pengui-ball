@@ -1,0 +1,33 @@
+body.game {
+    background: linear-gradient(to bottom,
+            rgb(0 0 0 / 32.5%),
+            rgb(0 0 0 / 32.5%) calc(100% - 150px),
+            black), url("https://ynoproject.net/2kki/images/ui/2kki/system1/containerbg.png");
+    background-size: 210px;
+    background-position-y: 0, -16px;
+    image-rendering: pixelated;
+}
+
+.main {
+    width: fit-content;
+    margin: auto;
+}
+
+.content {
+    display: flex;
+
+}
+
+.canvas_iframe {
+    background-color: red;
+    width: 320;
+    height: 240;
+}
+
+.chat {
+    background-color: blue;
+    width: 320;
+    height: 240;
+}
+
+@media (min-width: 800px) and (min-height: 600px) {}

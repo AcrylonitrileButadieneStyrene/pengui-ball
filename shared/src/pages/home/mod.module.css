@@ -1,16 +1,18 @@
-.background {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    inset: 0;
-    z-index: -1;
-
+body.home {
     background: url("https://ynoproject.net/images/bg.png");
     background-size: cover;
-    background-position-x: center;
-
+    background-attachment: fixed;
     opacity: 0;
     animation: fade-in 0.5s ease forwards;
+}
+
+/* Also used by: 
+ * - door.module.css
+ */
+@keyframes fade-in {
+    to {
+        opacity: 1;
+    }
 }
 
 .logo {
