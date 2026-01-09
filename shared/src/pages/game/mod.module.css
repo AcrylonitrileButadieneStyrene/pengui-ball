@@ -1,4 +1,8 @@
 body.game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     background: linear-gradient(to bottom,
             rgb(0 0 0 / 32.5%),
             rgb(0 0 0 / 32.5%) calc(100% - 150px),
@@ -29,26 +33,34 @@ body.game {
     }
 }
 
-.main {
-    width: fit-content;
-    margin: auto;
+.horizontal-box {
+    padding: 8px;
 }
 
-.content {
-    display: flex;
+.border {
+    border: solid 24px;
+    border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 10 repeat;
+    border-image-width: 2;
+    border-width: 12px;
+}
 
+.header {
+    padding: 6px 12px;
+}
+
+.main {
+    display: flex;
 }
 
 .canvas_iframe {
-    background-color: red;
-    width: 320;
-    height: 240;
+    padding: 12px;
+    border-top: 0;
 }
 
 .chat {
-    background-color: blue;
-    width: 320;
-    height: 240;
+    padding: 12px 12px 12px 14px;
+    border-top: 0;
+    border-left: 0;
 }
 
 @media (min-width: 800px) and (min-height: 600px) {}
