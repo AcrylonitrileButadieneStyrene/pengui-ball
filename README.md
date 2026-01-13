@@ -26,6 +26,7 @@ ${\color{transparent}█████\color{#eeee70}██\color{white}█\color{
 ## Developing
 - `cargo leptos watch` (Recompile rust on change)
 - `just css` (Recompile CSS on change)
+- `just serve`
 ## Formatting
 - `cargo fmt` (Outside of views)
 - `just fmt` (Inside of views)

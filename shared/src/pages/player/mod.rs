@@ -1,13 +1,16 @@
 use leptos::prelude::*;
+use leptos_router::hooks::use_query_map;
 
 mod callbacks;
 
 #[component]
 pub fn Player() -> impl IntoView {
+    let game = use_query_map().get().get("game").unwrap();
+
     view! {
-        <canvas id="canvas" width=320 height=240 />
-        <script src="data/ynoengine-simd.js" />
-        <script>createEasyRpgPlayer()</script>
+        <canvas id="canvas" />
+        <script src=format!("yno/{game}/ynoengine-simd.js") />
+        <script>player = createEasyRpgPlayer()</script>
         <Setup />
     }
 }

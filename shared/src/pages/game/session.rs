@@ -15,7 +15,7 @@ pub fn ProvideSession(game: String, children: Children) -> impl IntoView {
     let UseWebSocketReturn {
         ready_state, send, ..
     } = use_websocket_with_options::<String, String, FromToStringCodec, _, _>(
-        &format!("wss://connect.ynoproject.net/{game}/session`"),
+        &format!("wss://connect.ynoproject.net/{game}/session"),
         UseWebSocketOptions::default()
             .immediate(false)
             .reconnect_interval(5000)

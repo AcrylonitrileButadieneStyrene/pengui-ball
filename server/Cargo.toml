@@ -15,8 +15,6 @@ leptos_router.workspace = true
 serde.workspace = true
 shared.path = "../shared"
 tokio = { version = "1", features = ["rt-multi-thread"] }
-tower = "0.5.2"
-tower-http = "0.6.8"
 
 [features]
 ssr = ["leptos/ssr", "leptos_router/ssr"]

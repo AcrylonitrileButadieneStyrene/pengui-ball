@@ -12,18 +12,6 @@ async fn main() {
             .await
             .unwrap(),
         axum::Router::new()
-            .route_service(
-                "/favicon.ico",
-                tower_http::services::ServeFile::new(
-                    std::path::Path::new(&*conf.site_root).join("favicon.ico"),
-                ),
-            )
-            .route_service(
-                "/robots.txt",
-                tower_http::services::ServeFile::new(
-                    std::path::Path::new(&*conf.site_root).join("robots.txt"),
-                ),
-            )
             .leptos_routes_with_context(
                 &conf,
                 leptos_axum::generate_route_list(shared::App),

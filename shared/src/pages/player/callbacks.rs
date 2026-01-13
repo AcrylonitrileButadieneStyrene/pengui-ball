@@ -11,6 +11,18 @@ pub fn setup() {
     let callbacks = &[
         callback!("onRequestFile", on_request_file, dyn Fn(_)),
         callback!("onUpdateSystemGraphic", on_update_system_graphic, dyn Fn(_)),
+        callback!(
+            "onUpdateConnectionStatus",
+            on_update_connection_status,
+            dyn Fn(_)
+        ),
+        callback!("onLoadMap", on_load_map, dyn Fn(_)),
+        callback!(
+            "onPlayerSpriteUpdated",
+            on_player_sprite_updated,
+            dyn Fn(_, _, _)
+        ),
+        callback!("onPlayerTeleported", on_player_teleported, dyn Fn(_, _, _)),
     ];
 
     let window = window();
@@ -23,10 +35,30 @@ pub fn setup() {
 
 #[wasm_bindgen]
 pub fn on_request_file(file: String) {
-    leptos::logging::log!("loading file: {file:?}");
+    leptos::logging::log!("loading file: {file}");
 }
 
 #[wasm_bindgen]
 pub fn on_update_system_graphic(graphic: String) {
-    leptos::logging::log!("changing system graphic: {graphic:?}");
+    leptos::logging::log!("changing system graphic: {graphic}");
+}
+
+#[wasm_bindgen]
+pub fn on_update_connection_status(status: u32) {
+    leptos::logging::log!("changing status: {status}");
+}
+
+#[wasm_bindgen]
+pub fn on_load_map(map: String) {
+    leptos::logging::log!("loading map: {map}");
+}
+
+#[wasm_bindgen]
+pub fn on_player_sprite_updated(sprite: String, index: u32, id: i32) {
+    leptos::logging::log!("changed {sprite}'s sprite to '{index}' #{id}");
+}
+
+#[wasm_bindgen]
+pub fn on_player_teleported(map: u32, x: u32, y: u32) {
+    leptos::logging::log!("teleported to Map{map:<04} X:{x} Y:{y}");
 }
