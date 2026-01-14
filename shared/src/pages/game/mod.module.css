@@ -52,9 +52,36 @@ body.game {
     display: flex;
 }
 
-.canvas_iframe {
+.game-window {
     padding: 12px;
     border-top: 0;
+}
+
+iframe.player {
+    border: 0;
+    width: 640px;
+    height: 480px;
+}
+
+@media screen and (min-width: 1346px) and (min-height: 904px) {
+    iframe.player {
+        width: 960px;
+        height: 720px;
+    }
+}
+
+@media screen and (min-width: 1666px) and (min-height: 1144px) {
+    iframe.player {
+        width: 1280px;
+        height: 960px;
+    }
+}
+
+@media screen and (min-width: 1986px) and (min-height: 1384px) {
+    iframe.player {
+        width: 1600px;
+        height: 1200px;
+    }
 }
 
 .chat {

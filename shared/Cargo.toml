@@ -13,13 +13,15 @@ crate-type = ["cdylib", "rlib"]
 leptos.workspace = true
 leptos_meta = "0.8.5"
 leptos_router.workspace = true
-leptos-use = "0.17.0"
+leptos-use.workspace = true
 serde.workspace = true
-stylance = { version = "0.7.4" }
+stylance = "0.7.4"
+send_wrapper = "0.6.0"
 
 # browser dependencies
 console_error_panic_hook = { version = "0.1", optional = true }
 wasm-bindgen = "=0.2.106"
+wasm-bindgen-futures = "0.4.56"
 web-sys = "*"
 
 [features]

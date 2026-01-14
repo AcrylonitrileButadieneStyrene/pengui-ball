@@ -2243,6 +2243,7 @@ dependencies = [
  "axum",
  "figment",
  "leptos",
+ "leptos-use",
  "leptos_axum",
  "leptos_router",
  "serde",
@@ -2346,10 +2347,12 @@ dependencies = [
  "leptos-use",
  "leptos_meta",
  "leptos_router",
+ "send_wrapper",
  "serde",
  "stylance",
  "stylance-cli",
  "wasm-bindgen",
+ "wasm-bindgen-futures",
  "web-sys",
 ]
 

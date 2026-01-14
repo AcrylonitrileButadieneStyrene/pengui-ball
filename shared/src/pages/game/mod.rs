@@ -18,9 +18,9 @@ pub fn Game() -> impl IntoView {
             </header>
 
             <main class=style::main>
-                <div class=style::canvas_iframe class=(style::border, true)>
+                <div class=style::game_window class=(style::border, true)>
                     <div style="height: 32px; background-color: gray;" />
-                    <iframe src=format!("/player?game={game}") style="width: 640px; height: 480px;" />
+                    <iframe class=style::player src=format!("/player?game={game}")/>
                 </div>
                 <div class=style::chat class=(style::border, true)>
                     <div style="width: 284px; height: 100%; background-color: darkgreen;" />

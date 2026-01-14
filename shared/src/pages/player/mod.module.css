@@ -1,0 +1,10 @@
+body.player {
+    overflow: hidden;
+}
+
+#canvas {
+    width: 100vw;
+    height: 100vh;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}

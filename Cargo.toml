@@ -16,6 +16,7 @@ panic = "abort"
 [workspace.dependencies]
 leptos = { version = "0.8.15", features = ["nightly", "islands"] }
 leptos_router = { version = "0.8.11", features = ["nightly"] }
+leptos-use = "0.17.0"
 serde = { version = "1", features = ["derive"] }
 
 [[workspace.metadata.leptos]]

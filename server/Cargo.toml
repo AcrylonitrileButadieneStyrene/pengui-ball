@@ -12,9 +12,10 @@ figment = { version = "0.10.19", features = ["env", "yaml"] }
 leptos.workspace = true
 leptos_axum = "0.8.7"
 leptos_router.workspace = true
+leptos-use.workspace = true
 serde.workspace = true
 shared.path = "../shared"
 tokio = { version = "1", features = ["rt-multi-thread"] }
 
 [features]
-ssr = ["leptos/ssr", "leptos_router/ssr"]
+ssr = ["leptos/ssr", "leptos_router/ssr", "leptos-use/ssr"]
