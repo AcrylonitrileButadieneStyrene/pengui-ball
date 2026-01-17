@@ -12,9 +12,7 @@ pub fn Player() -> impl IntoView {
 
     view! {
         <leptos_meta::Body {..} class=style::player />
-        <easyrpg::EasyRPG game>
-            <div></div>
-        </easyrpg::EasyRPG>
+        <easyrpg::EasyRPG game>{()}</easyrpg::EasyRPG>
     }
 }
 

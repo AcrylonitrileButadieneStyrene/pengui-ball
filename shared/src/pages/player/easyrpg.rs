@@ -51,7 +51,7 @@ fn StartPlayer(children: Children) -> impl IntoView {
     });
 
     view! {
-        <canvas id="canvas" node_ref=canvas tabindex=0 />
+        <canvas id="canvas" node_ref=canvas tabindex=0 role="application" />
         {children()}
     }
 }
