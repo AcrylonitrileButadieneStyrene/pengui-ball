@@ -1,17 +1,19 @@
+#![allow(non_snake_case)]
+
 use leptos::prelude::*;
 use leptos_router::hooks::use_query_map;
 
 mod callbacks;
 mod easyrpg;
 
-stylance::import_style!(pub style, "mod.module.css");
+stylance::import_style!(pub style, "lib.module.css");
 
 #[component]
-pub fn Player() -> impl IntoView {
+pub fn Engine() -> impl IntoView {
     let game = use_query_map().get().get("game").unwrap();
 
     view! {
-        <leptos_meta::Body {..} class=style::player />
+        <leptos_meta::Body {..} class=style::engine />
         <easyrpg::EasyRPG game>{()}</easyrpg::EasyRPG>
     }
 }

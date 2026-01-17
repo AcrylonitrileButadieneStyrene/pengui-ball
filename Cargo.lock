@@ -652,6 +652,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "engine"
+version = "0.1.0"
+dependencies = [
+ "common",
+ "leptos",
+ "leptos_meta",
+ "leptos_router",
+ "send_wrapper",
+ "serde",
+ "stylance",
+ "stylance-cli",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+]
+
+[[package]]
 name = "equivalent"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2365,6 +2382,7 @@ version = "0.1.0"
 dependencies = [
  "common",
  "console_error_panic_hook",
+ "engine",
  "futures-channel",
  "futures-util",
  "home",
@@ -2372,12 +2390,10 @@ dependencies = [
  "leptos-use",
  "leptos_meta",
  "leptos_router",
- "send_wrapper",
  "serde",
  "stylance",
  "stylance-cli",
  "wasm-bindgen",
- "wasm-bindgen-futures",
  "web-sys",
 ]
 

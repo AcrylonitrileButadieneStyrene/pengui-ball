@@ -1,4 +1,4 @@
-use leptos::{html::Canvas, prelude::*};
+use leptos::prelude::*;
 
 #[component]
 pub fn EasyRPG(game: String, children: Children) -> impl IntoView {
@@ -25,17 +25,17 @@ fn LoadPlayer(game: String, children: Children) -> impl IntoView {
     }
 }
 
-#[derive(Clone)]
-pub struct Player {
-    pub canvas: NodeRef<Canvas>,
-    pub object: ReadSignal<send_wrapper::SendWrapper<Option<PlayerJSObject>>>,
-}
+// #[derive(Clone)]
+// pub struct Player {
+//     pub canvas: NodeRef<Canvas>,
+//     pub object: ReadSignal<send_wrapper::SendWrapper<Option<PlayerJSObject>>>,
+// }
 
 #[island]
 fn StartPlayer(children: Children) -> impl IntoView {
     let canvas = NodeRef::new();
-    let (object, set_object) = signal(send_wrapper::SendWrapper::new(None));
-    provide_context(Player { canvas, object });
+    // let (object, set_object) = signal(send_wrapper::SendWrapper::new(None));
+    // provide_context(Player { canvas, object });
 
     let loaded = use_context::<Loaded>().unwrap();
     Effect::new(move || {
@@ -45,8 +45,8 @@ fn StartPlayer(children: Children) -> impl IntoView {
         }
 
         leptos::task::spawn_local(async move {
-            let object = create_easyrpg_player().await;
-            set_object(send_wrapper::SendWrapper::new(Some(object)));
+            let _object = create_easyrpg_player().await;
+            // set_object(send_wrapper::SendWrapper::new(Some(object)));
         });
     });
 

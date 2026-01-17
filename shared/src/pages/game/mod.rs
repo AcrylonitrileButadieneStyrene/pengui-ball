@@ -37,7 +37,7 @@ pub fn Game() -> impl IntoView {
                     <div style="height: 32px; background-color: gray;" />
                     <iframe
                         class=style::player
-                        src=format!("/player?game={}", game.id)
+                        src=format!("/engine?game={}", game.id)
                         title="Game Engine"
                     />
                 </div>
