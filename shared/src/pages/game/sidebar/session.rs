@@ -4,6 +4,7 @@ use leptos_use::{UseWebSocketOptions, UseWebSocketReturn, use_websocket_with_opt
 
 use crate::pages::game::state::{SessionCommand, State};
 
+#[allow(clippy::needless_pass_by_value)]
 #[island]
 pub fn Session(game: String) -> impl IntoView {
     let state = use_context::<std::sync::Arc<State>>().unwrap();
@@ -16,30 +17,26 @@ pub fn Session(game: String) -> impl IntoView {
 
     // DIFF: forest-orb increases the interval by 5 seconds on each attempt
     // i don't think that's too necessary so it's not done here.
-    let UseWebSocketReturn {
-        ready_state, send, ..
-    } = use_websocket_with_options::<String, String, FromToStringCodec, _, _>(
-        &format!("wss://connect.ynoproject.net/{game}/session"),
-        UseWebSocketOptions::default()
-            .immediate(false)
-            .reconnect_interval(5000)
-            .reconnect_limit(leptos_use::ReconnectLimit::Infinite)
-            .on_message(|message: &String| {
-                let mut parts = message.split('\u{FFFF}');
-                let Some(command) = parts.next() else {
-                    return;
-                };
-                let args = parts.collect::<Vec<_>>();
-                on_message(command, &args);
-            }),
-    );
+    let UseWebSocketReturn { send, .. } =
+        use_websocket_with_options::<String, String, FromToStringCodec, _, _>(
+            &format!("wss://connect.ynoproject.net/{game}/session"),
+            UseWebSocketOptions::default()
+                .immediate(false)
+                .reconnect_interval(5000)
+                .reconnect_limit(leptos_use::ReconnectLimit::Infinite)
+                .on_message(|message: &String| {
+                    let mut parts = message.split('\u{FFFF}');
+                    let Some(command) = parts.next() else {
+                        return;
+                    };
+                    let args = parts.collect::<Vec<_>>();
+                    on_message(command, &args);
+                }),
+        );
 
     leptos::task::spawn(async move {
         while let Some(message) = receiver.next().await {
-            let vec = match message {
-                SessionCommand::Unknown(args) => args,
-            };
-
+            let SessionCommand::Unknown(vec) = message;
             send(&vec.join("\u{FFFF}"));
         }
     });

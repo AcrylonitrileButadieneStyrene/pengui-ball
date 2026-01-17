@@ -1,5 +1,3 @@
-use leptos::prelude::*;
-
 #[derive(Clone, serde::Serialize, serde::Deserialize)]
 pub struct Config {
     pub games: Vec<Game>,
@@ -9,12 +7,4 @@ pub struct Config {
 pub struct Game {
     pub id: String,
     pub name: String,
-}
-
-#[server]
-pub async fn get_games() -> Result<Vec<Game>, ServerFnError> {
-    Ok(use_context::<std::sync::Arc<Config>>()
-        .unwrap()
-        .games
-        .clone())
 }

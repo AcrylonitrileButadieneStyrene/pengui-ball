@@ -1,0 +1,18 @@
+[package]
+name = "home"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+common.path = "../../common"
+leptos.workspace = true
+leptos_meta.workspace = true
+serde.workspace = true
+stylance.workspace = true
+web-sys = "*"
+
+[build-dependencies]
+stylance-cli.workspace = true
+
+[lints]
+workspace = true

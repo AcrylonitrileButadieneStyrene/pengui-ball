@@ -4,7 +4,7 @@ use web_sys::HtmlAudioElement;
 stylance::import_style!(pub style, "door.module.css");
 
 #[component]
-pub fn Door(index: usize, game: crate::config::Game) -> impl IntoView {
+pub fn Door(index: usize, game: common::config::Game) -> impl IntoView {
     let aria_label = format!("Play {} online", &game.name);
     let logo_src = format!("https://ynoproject.net/images/logo_{}.png", &game.id);
 

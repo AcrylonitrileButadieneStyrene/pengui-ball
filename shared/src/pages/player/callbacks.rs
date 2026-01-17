@@ -33,11 +33,13 @@ pub fn setup() {
     }
 }
 
+#[allow(clippy::needless_pass_by_value)]
 #[wasm_bindgen]
 pub fn on_request_file(_file: String) {
     // this callback is only used for preloads on forest-orb
 }
 
+#[allow(clippy::needless_pass_by_value)]
 #[wasm_bindgen]
 pub fn on_update_system_graphic(graphic: String) {
     leptos::logging::log!("changing system graphic: {graphic}");
@@ -48,11 +50,13 @@ pub fn on_update_connection_status(status: u32) {
     leptos::logging::log!("changing status: {status}");
 }
 
+#[allow(clippy::needless_pass_by_value)]
 #[wasm_bindgen]
 pub fn on_load_map(map: String) {
     leptos::logging::log!("loading map: {map}");
 }
 
+#[allow(clippy::needless_pass_by_value)]
 #[wasm_bindgen]
 pub fn on_player_sprite_updated(sprite: String, index: u32, id: i32) {
     leptos::logging::log!("changed {sprite}'s sprite to '{index}' #{id}");

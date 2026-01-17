@@ -10,18 +10,18 @@ workspace = true
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+common.path = "../common"
+console_error_panic_hook = { version = "0.1", optional = true }
 futures-channel = "0.3.31"
 futures-util = "0.3.31"
+home.path = "../pages/home"
 leptos.workspace = true
-leptos_meta = "0.8.5"
+leptos_meta.workspace = true
 leptos_router.workspace = true
 leptos-use.workspace = true
 serde.workspace = true
-stylance = "0.7.4"
+stylance.workspace = true
 send_wrapper = "0.6.0"
-
-# browser dependencies
-console_error_panic_hook = { version = "0.1", optional = true }
 wasm-bindgen = "=0.2.106"
 wasm-bindgen-futures = "0.4.56"
 web-sys = "*"
@@ -31,4 +31,4 @@ hydrate = ["dep:console_error_panic_hook", "leptos/hydrate"]
 ssr = ["leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr", "leptos-use/ssr"]
 
 [build-dependencies]
-stylance-cli = "0.7.4"
+stylance-cli.workspace = true

@@ -37,7 +37,7 @@ fn setup_context() -> impl Fn() + Clone {
         figment::Figment::new()
             .join(Env::prefixed("PENGUI_"))
             .join(Yaml::file("config.yaml"))
-            .extract::<shared::Config>()
+            .extract::<common::Config>()
             .unwrap(),
     );
 

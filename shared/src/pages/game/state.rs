@@ -23,6 +23,7 @@ impl State {
     }
 }
 
+#[non_exhaustive]
 pub enum SessionCommand {
     Unknown(Vec<String>),
 }

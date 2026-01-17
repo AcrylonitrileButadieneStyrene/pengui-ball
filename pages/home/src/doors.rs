@@ -3,11 +3,9 @@ use web_sys::HtmlAudioElement;
 
 stylance::import_style!(pub style, "doors.module.css");
 
-use super::door::*;
-
 #[component]
 pub fn Doors() -> impl IntoView {
-    let config = use_context::<std::sync::Arc<crate::Config>>().unwrap();
+    let config = use_context::<std::sync::Arc<common::Config>>().unwrap();
     let games = config.games.clone();
 
     view! {
@@ -19,11 +17,20 @@ pub fn Doors() -> impl IntoView {
                     key=|game| game.clone()
                     let((index, game))
                 >
-                    <Door index game />
+                    <super::door::Door index game />
                 </For>
             </DoorsContext>
         </main>
     }
+}
+
+#[island]
+fn DoorsContext(children: Children) -> impl IntoView {
+    let (selected, set_selected) = signal(None::<usize>);
+    provide_context(selected);
+    provide_context(set_selected);
+
+    view! { {children()} }
 }
 
 #[island]
@@ -48,13 +55,4 @@ fn DoorsSound() -> impl IntoView {
             preload="none"
         />
     }
-}
-
-#[island]
-fn DoorsContext(children: Children) -> impl IntoView {
-    let (selected, set_selected) = signal(None::<usize>);
-    provide_context(selected);
-    provide_context(set_selected);
-
-    view! { {children()} }
 }

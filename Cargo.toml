@@ -1,10 +1,12 @@
 [workspace]
 resolver = "3"
-members = ["server", "shared"]
+members = ["common", "pages/*", "server", "shared"]
 
 [workspace.lints.clippy]
 nursery = { level = "warn", priority = -1 }
 pedantic = { level = "warn", priority = -1 }
+needless_pass_by_value = { level = "allow" }
+must_use_candidate = { level = "allow" }
 
 [profile.wasm-release]
 inherits = "release"
@@ -16,8 +18,11 @@ panic = "abort"
 [workspace.dependencies]
 leptos = { version = "0.8.15", features = ["nightly", "islands"] }
 leptos_router = { version = "0.8.11", features = ["nightly"] }
-leptos-use = "0.17.0"
+leptos_meta = "0.8.5"
+leptos-use = "0.18.0"
 serde = { version = "1", features = ["derive"] }
+stylance = "0.7.4"
+stylance-cli = "0.7.4"
 
 [[workspace.metadata.leptos]]
 name = "pengui-ball"
@@ -33,7 +38,6 @@ site-root = "target/site"
 site-pkg-dir = "pkg"
 assets-dir = "assets"
 
-style-file = "target/bundle.css"
 browserquery = "fully supports wasm and fully supports webgl2"
 js-minify = true
 disable-server-fn_hash = true

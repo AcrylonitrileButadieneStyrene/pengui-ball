@@ -19,14 +19,18 @@ ${\color{transparent}█████\color{#eeee70}██\color{white}█\color{
 ## Setup
 - `cargo install `[`cargo-leptos`](https://github.com/leptos-rs/cargo-leptos)
 - (Optional) `cargo install `[`just`](https://github.com/casey/just)
+<!--
 - (Optional) `cargo install `[`stylance-cli`](https://github.com/basro/stylance-rs)
+-->
 - (Optional) `cargo install `[`leptosfmt`](https://github.com/bram209/leptosfmt)
 ## Compiling
 - `cargo leptos build --release`
 ## Developing
-- `cargo leptos watch` (Recompile rust on change)
+- `cargo leptos watch` (Recompile on change)
+<!--
 - `just css` (Recompile CSS on change)
-- `just serve`
+-->
+- `just serve` (Run nginx on port 8080)
 ## Formatting
 - `cargo fmt` (Outside of views)
 - `just fmt` (Inside of views)

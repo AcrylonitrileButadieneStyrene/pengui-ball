@@ -1,6 +1,6 @@
-css:
-    stylance -w shared --output-file target/site/pkg/pengui-ball.css
+# css:
+#     stylance -w shared --output-file target/site/pkg/pengui-ball.css
 fmt:
-    leptosfmt shared
+    leptosfmt shared pages/*
 serve:
     nginx -p nginx -c nginx.conf

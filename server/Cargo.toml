@@ -7,6 +7,7 @@ edition = "2024"
 workspace = true
 
 [dependencies]
+common.path = "../common"
 axum = "0.8.8"
 figment = { version = "0.10.19", features = ["env", "yaml"] }
 leptos.workspace = true
