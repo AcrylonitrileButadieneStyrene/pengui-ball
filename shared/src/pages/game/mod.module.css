@@ -1,3 +1,25 @@
+:root {
+    --adaptive-scale: 2;
+}
+
+@media screen and (min-width: 1346px) and (min-height: 904px) {
+    :root {
+        --adaptive-scale: 3;
+    }
+}
+
+@media screen and (min-width: 1666px) and (min-height: 1144px) {
+    :root {
+        --adaptive-scale: 4;
+    }
+}
+
+@media screen and (min-width: 1986px) and (min-height: 1384px) {
+    :root {
+        --adaptive-scale: 5;
+    }
+}
+
 body.game {
     display: flex;
     flex-direction: column;
@@ -33,10 +55,6 @@ body.game {
     }
 }
 
-.horizontal-box {
-    padding: 8px;
-}
-
 .border {
     border: solid 24px;
     border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 10 repeat;
@@ -44,47 +62,35 @@ body.game {
     border-width: 12px;
 }
 
+
+.main {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "game   chat  ";
+    grid-template-columns: 1fr minmax(284px, 604px);
+    padding: 8px;
+}
+
 .header {
+    grid-area: header;
     padding: 6px 12px;
 }
 
-.main {
-    display: flex;
-}
-
 .game-window {
+    grid-area: game;
     padding: 12px;
     border-top: 0;
 }
 
 iframe.player {
     border: 0;
-    width: 640px;
-    height: 480px;
-}
-
-@media screen and (min-width: 1346px) and (min-height: 904px) {
-    iframe.player {
-        width: 960px;
-        height: 720px;
-    }
-}
-
-@media screen and (min-width: 1666px) and (min-height: 1144px) {
-    iframe.player {
-        width: 1280px;
-        height: 960px;
-    }
-}
-
-@media screen and (min-width: 1986px) and (min-height: 1384px) {
-    iframe.player {
-        width: 1600px;
-        height: 1200px;
-    }
+    width: calc(320px * var(--adaptive-scale));
+    height: calc(240px * var(--adaptive-scale));
 }
 
 .chat {
+    grid-area: chat;
     padding: 12px 12px 12px 14px;
     border-top: 0;
     border-left: 0;

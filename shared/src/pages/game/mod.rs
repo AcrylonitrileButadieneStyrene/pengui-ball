@@ -2,6 +2,7 @@ use leptos::prelude::*;
 use leptos_router::hooks::use_params_map;
 
 mod session;
+mod state;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -12,20 +13,21 @@ pub fn Game() -> impl IntoView {
     view! {
         <leptos_meta::Body {..} class=style::game />
 
-        <div class=style::horizontal_box>
-            <header class=style::header class=(style::border, true)>
-                <div style="height: 60px; background-color: white;" />
-            </header>
-
+        <state::Provider>
             <main class=style::main>
+                <header class=style::header class=(style::border, true)>
+                    <div style="height: 60px; background-color: white;" />
+                </header>
+
                 <div class=style::game_window class=(style::border, true)>
                     <div style="height: 32px; background-color: gray;" />
-                    <iframe class=style::player src=format!("/player?game={game}")/>
+                    <iframe class=style::player src=format!("/player?game={game}") />
                 </div>
+
                 <div class=style::chat class=(style::border, true)>
-                    <div style="width: 284px; height: 100%; background-color: darkgreen;" />
+                    <div style="width: 100%; height: 100%; background-color: darkgreen;" />
                 </div>
             </main>
-        </div>
+        </state::Provider>
     }
 }

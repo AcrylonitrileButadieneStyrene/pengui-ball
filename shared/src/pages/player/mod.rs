@@ -11,7 +11,7 @@ pub fn Player() -> impl IntoView {
     let game = use_query_map().get().get("game").unwrap();
 
     view! {
-        <leptos_meta::Body {..} class=style::player/>
+        <leptos_meta::Body {..} class=style::player />
         <easyrpg::EasyRPG game>
             <div></div>
         </easyrpg::EasyRPG>

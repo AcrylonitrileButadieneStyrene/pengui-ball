@@ -34,8 +34,8 @@ pub fn setup() {
 }
 
 #[wasm_bindgen]
-pub fn on_request_file(file: String) {
-    leptos::logging::log!("loading file: {file}");
+pub fn on_request_file(_file: String) {
+    // this callback is only used for preloads on forest-orb
 }
 
 #[wasm_bindgen]
