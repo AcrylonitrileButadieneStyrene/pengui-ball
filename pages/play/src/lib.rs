@@ -30,7 +30,10 @@ pub fn Play() -> impl IntoView {
         <leptos_meta::Title text=format!("{} Online - YNOproject", game.name) />
         <leptos_meta::Meta
             name="description"
-            content=format!("Play multiplayer {} for free! Ad-free and no registration required.", game.name)
+            content=format!(
+                "Play multiplayer {} for free! Ad-free and no registration required.",
+                game.name,
+            )
         />
         <leptos_meta::Body {..} class=style::game />
 
