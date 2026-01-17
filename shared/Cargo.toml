@@ -10,19 +10,17 @@ workspace = true
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-common.path = "../common"
 console_error_panic_hook = { version = "0.1", optional = true }
-engine.path = "../pages/engine"
-home.path = "../pages/home"
 leptos.workspace = true
 leptos_meta.workspace = true
 leptos_router.workspace = true
 leptos-use.workspace = true
-play.path = "../pages/play"
-serde.workspace = true
-stylance.workspace = true
 wasm-bindgen.workspace = true
-web-sys = "*"
+
+# local crates
+engine.path = "../pages/engine"
+home.path = "../pages/home"
+play.path = "../pages/play"
 
 [features]
 hydrate = ["dep:console_error_panic_hook", "leptos/hydrate"]

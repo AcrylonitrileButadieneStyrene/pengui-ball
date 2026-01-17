@@ -1,5 +1,4 @@
-use leptos::prelude::*;
-use web_sys::HtmlAudioElement;
+use leptos::{prelude::*, web_sys::HtmlAudioElement};
 
 stylance::import_style!(pub style, "doors.module.css");
 

@@ -1,5 +1,10 @@
-use leptos::prelude::window;
-use web_sys::wasm_bindgen::prelude::{Closure, JsValue, wasm_bindgen};
+use leptos::{
+    prelude::window,
+    web_sys::{
+        self,
+        wasm_bindgen::prelude::{Closure, JsValue, wasm_bindgen},
+    },
+};
 
 macro_rules! callback {
     ($name: expr, $func: ident, $type: ty) => {

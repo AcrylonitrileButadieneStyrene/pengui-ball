@@ -655,17 +655,14 @@ dependencies = [
 name = "engine"
 version = "0.1.0"
 dependencies = [
- "common",
  "leptos",
  "leptos_meta",
  "leptos_router",
- "send_wrapper",
  "serde",
  "stylance",
  "stylance-cli",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "web-sys",
 ]
 
 [[package]]
@@ -945,7 +942,6 @@ dependencies = [
  "serde",
  "stylance",
  "stylance-cli",
- "web-sys",
 ]
 
 [[package]]
@@ -1860,8 +1856,6 @@ dependencies = [
  "serde",
  "stylance",
  "stylance-cli",
- "wasm-bindgen",
- "web-sys",
 ]
 
 [[package]]
@@ -2398,7 +2392,6 @@ dependencies = [
 name = "shared"
 version = "0.1.0"
 dependencies = [
- "common",
  "console_error_panic_hook",
  "engine",
  "home",
@@ -2407,11 +2400,8 @@ dependencies = [
  "leptos_meta",
  "leptos_router",
  "play",
- "serde",
- "stylance",
  "stylance-cli",
  "wasm-bindgen",
- "web-sys",
 ]
 
 [[package]]

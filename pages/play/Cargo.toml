@@ -16,8 +16,6 @@ leptos_router.workspace = true
 leptos-use.workspace = true
 serde.workspace = true
 stylance.workspace = true
-wasm-bindgen.workspace = true
-web-sys = "*"
 
 [build-dependencies]
 stylance-cli.workspace = true
