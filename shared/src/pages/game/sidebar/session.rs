@@ -1,15 +1,19 @@
+use futures_util::StreamExt as _;
 use leptos::{prelude::*, server::codee::string::FromToStringCodec};
-use leptos_use::{
-    UseWebSocketOptions, UseWebSocketReturn, core::ConnectionReadyState, use_websocket_with_options,
-};
+use leptos_use::{UseWebSocketOptions, UseWebSocketReturn, use_websocket_with_options};
 
-pub struct Session {
-    pub status: Signal<ConnectionReadyState>,
-    pub send: Box<dyn Fn(String, Vec<String>) + Send + Sync>,
-}
+use crate::pages::game::state::{SessionCommand, State};
 
 #[island]
-pub fn ProvideSession(game: String, children: Children) -> impl IntoView {
+pub fn Session(game: String) -> impl IntoView {
+    let state = use_context::<std::sync::Arc<State>>().unwrap();
+    let mut receiver = state
+        .__session_command_queue
+        .lock()
+        .unwrap()
+        .take()
+        .unwrap();
+
     // DIFF: forest-orb increases the interval by 5 seconds on each attempt
     // i don't think that's too necessary so it's not done here.
     let UseWebSocketReturn {
@@ -30,18 +34,15 @@ pub fn ProvideSession(game: String, children: Children) -> impl IntoView {
             }),
     );
 
-    provide_context(Session {
-        status: ready_state,
-        send: Box::new(move |command, mut arguments| {
-            let mut vec = Vec::with_capacity(arguments.len() + 1);
-            vec.push(command);
-            vec.append(&mut arguments);
-            let str = vec.join("\u{FFFF}");
-            send(&str);
-        }),
-    });
+    leptos::task::spawn(async move {
+        while let Some(message) = receiver.next().await {
+            let vec = match message {
+                SessionCommand::Unknown(args) => args,
+            };
 
-    children();
+            send(&vec.join("\u{FFFF}"));
+        }
+    });
 }
 
 fn on_message(command: &str, args: &[&str]) {

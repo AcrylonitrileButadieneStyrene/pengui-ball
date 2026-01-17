@@ -4,7 +4,9 @@ use leptos_router::hooks::use_params_map;
 mod sidebar;
 mod state;
 
-stylance::import_style!(pub style, "mod.module.scss");
+stylance::import_style!(pub style, "mod.module.css");
+
+pub type CurrentGame = std::sync::Arc<crate::config::Game>;
 
 #[component]
 pub fn Game() -> impl IntoView {
@@ -17,6 +19,9 @@ pub fn Game() -> impl IntoView {
             view! { <leptos_router::components::Redirect path="/" /> },
         );
     };
+
+    let game = std::sync::Arc::new(game);
+    provide_context(game.clone());
 
     leptos::either::Either::Right(view! {
         <leptos_meta::Title text=format!("{} Online - YNOproject", game.name) />

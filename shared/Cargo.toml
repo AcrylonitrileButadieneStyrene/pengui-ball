@@ -10,6 +10,8 @@ workspace = true
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+futures-channel = "0.3.31"
+futures-util = "0.3.31"
 leptos.workspace = true
 leptos_meta = "0.8.5"
 leptos_router.workspace = true
