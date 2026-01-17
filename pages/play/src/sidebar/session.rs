@@ -2,12 +2,10 @@ use futures_util::StreamExt as _;
 use leptos::{prelude::*, server::codee::string::FromToStringCodec};
 use leptos_use::{UseWebSocketOptions, UseWebSocketReturn, use_websocket_with_options};
 
-use crate::pages::game::state::{SessionCommand, State};
-
 #[allow(clippy::needless_pass_by_value)]
 #[island]
 pub fn Session(game: String) -> impl IntoView {
-    let state = use_context::<std::sync::Arc<State>>().unwrap();
+    let state = use_context::<std::sync::Arc<crate::state::State>>().unwrap();
     let mut receiver = state
         .__session_command_queue
         .lock()
@@ -36,7 +34,7 @@ pub fn Session(game: String) -> impl IntoView {
 
     leptos::task::spawn(async move {
         while let Some(message) = receiver.next().await {
-            let SessionCommand::Unknown(vec) = message;
+            let crate::state::SessionCommand::Unknown(vec) = message;
             send(&vec.join("\u{FFFF}"));
         }
     });

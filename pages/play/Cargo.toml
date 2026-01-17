@@ -1,5 +1,5 @@
 [package]
-name = "engine"
+name = "play"
 version = "0.1.0"
 edition = "2024"
 
@@ -8,14 +8,15 @@ workspace = true
 
 [dependencies]
 common.path = "../../common"
+futures-channel = "0.3.31"
+futures-util = "0.3.31"
 leptos.workspace = true
 leptos_meta.workspace = true
 leptos_router.workspace = true
-send_wrapper = "0.6.0"
+leptos-use.workspace = true
 serde.workspace = true
 stylance.workspace = true
 wasm-bindgen.workspace = true
-wasm-bindgen-futures = "0.4.56"
 web-sys = "*"
 
 [build-dependencies]

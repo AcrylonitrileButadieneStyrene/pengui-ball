@@ -13,13 +13,12 @@ crate-type = ["cdylib", "rlib"]
 common.path = "../common"
 console_error_panic_hook = { version = "0.1", optional = true }
 engine.path = "../pages/engine"
-futures-channel = "0.3.31"
-futures-util = "0.3.31"
 home.path = "../pages/home"
 leptos.workspace = true
 leptos_meta.workspace = true
 leptos_router.workspace = true
 leptos-use.workspace = true
+play.path = "../pages/play"
 serde.workspace = true
 stylance.workspace = true
 wasm-bindgen.workspace = true

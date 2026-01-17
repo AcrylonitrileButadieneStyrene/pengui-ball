@@ -14,6 +14,8 @@ pub fn Engine() -> impl IntoView {
 
     view! {
         <leptos_meta::Body {..} class=style::engine />
+        <leptos_meta::Link rel="stylesheet" href="pkg/engine.css" />
+
         <easyrpg::EasyRPG game>{()}</easyrpg::EasyRPG>
     }
 }

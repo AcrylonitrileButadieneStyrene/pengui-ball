@@ -1,15 +1,17 @@
+#![allow(non_snake_case)]
+
 use leptos::prelude::*;
 use leptos_router::hooks::use_params_map;
 
 mod sidebar;
 mod state;
 
-stylance::import_style!(pub style, "mod.module.css");
+stylance::import_style!(pub style, "lib.module.css");
 
 pub type CurrentGame = std::sync::Arc<common::config::Game>;
 
 #[component]
-pub fn Game() -> impl IntoView {
+pub fn Play() -> impl IntoView {
     let id = use_params_map().get().get("game").unwrap();
     let config = use_context::<std::sync::Arc<common::Config>>().unwrap();
     let games = config.games.clone();
@@ -24,7 +26,12 @@ pub fn Game() -> impl IntoView {
     provide_context(game.clone());
 
     leptos::either::Either::Right(view! {
+        <leptos_meta::Link rel="stylesheet" href="pkg/play.css" />
         <leptos_meta::Title text=format!("{} Online - YNOproject", game.name) />
+        <leptos_meta::Meta
+            name="description"
+            content=format!("Play multiplayer {} for free! Ad-free and no registration required.", game.name)
+        />
         <leptos_meta::Body {..} class=style::game />
 
         <state::Provider>

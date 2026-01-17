@@ -1847,6 +1847,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
 
 [[package]]
+name = "play"
+version = "0.1.0"
+dependencies = [
+ "common",
+ "futures-channel",
+ "futures-util",
+ "leptos",
+ "leptos-use",
+ "leptos_meta",
+ "leptos_router",
+ "serde",
+ "stylance",
+ "stylance-cli",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "potential_utf"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2383,13 +2401,12 @@ dependencies = [
  "common",
  "console_error_panic_hook",
  "engine",
- "futures-channel",
- "futures-util",
  "home",
  "leptos",
  "leptos-use",
  "leptos_meta",
  "leptos_router",
+ "play",
  "serde",
  "stylance",
  "stylance-cli",

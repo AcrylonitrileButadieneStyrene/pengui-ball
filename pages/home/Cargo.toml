@@ -3,6 +3,9 @@ name = "home"
 version = "0.1.0"
 edition = "2024"
 
+[lints]
+workspace = true
+
 [dependencies]
 common.path = "../../common"
 leptos.workspace = true
@@ -13,6 +16,3 @@ web-sys = "*"
 
 [build-dependencies]
 stylance-cli.workspace = true
-
-[lints]
-workspace = true

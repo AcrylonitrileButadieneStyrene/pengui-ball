@@ -39,7 +39,7 @@ pub fn App() -> impl IntoView {
             <Routes fallback=pages::Error404>
                 <Route path=path!("/") view=home::Home />
                 <Route path=path!("/engine") view=engine::Engine />
-                <Route path=path!("/:game") view=pages::Game />
+                <Route path=path!("/:game") view=play::Play />
             </Routes>
         </Router>
     }
