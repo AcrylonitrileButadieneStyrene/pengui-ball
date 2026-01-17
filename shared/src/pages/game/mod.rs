@@ -1,10 +1,10 @@
 use leptos::prelude::*;
 use leptos_router::hooks::use_params_map;
 
-mod session;
+mod sidebar;
 mod state;
 
-stylance::import_style!(pub style, "mod.module.css");
+stylance::import_style!(pub style, "mod.module.scss");
 
 #[component]
 pub fn Game() -> impl IntoView {
@@ -13,7 +13,9 @@ pub fn Game() -> impl IntoView {
     let games = config.games.clone();
 
     let Some(game) = games.into_iter().find(|game| game.id == id) else {
-        return leptos::either::Either::Left(view! { <leptos_router::components::Redirect path="/" /> });
+        return leptos::either::Either::Left(
+            view! { <leptos_router::components::Redirect path="/" /> },
+        );
     };
 
     leptos::either::Either::Right(view! {
@@ -21,12 +23,12 @@ pub fn Game() -> impl IntoView {
         <leptos_meta::Body {..} class=style::game />
 
         <state::Provider>
-            <main class=style::main>
-                <header class=style::header class=(style::border, true)>
+            <main class=style::layout>
+                <header class=style::header>
                     <div style="height: 60px; background-color: white;" />
                 </header>
 
-                <div class=style::game_window class=(style::border, true)>
+                <div class=style::game_window>
                     <div style="height: 32px; background-color: gray;" />
                     <iframe
                         class=style::player
@@ -35,8 +37,8 @@ pub fn Game() -> impl IntoView {
                     />
                 </div>
 
-                <div class=style::chat class=(style::border, true)>
-                    <div style="width: 100%; height: 100%; background-color: darkgreen;" />
+                <div class=style::chat>
+                    <sidebar::Sidebar />
                 </div>
             </main>
         </state::Provider>
