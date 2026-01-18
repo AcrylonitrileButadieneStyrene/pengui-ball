@@ -1,0 +1,14 @@
+.container {
+    position: relative;
+    flex: 1;
+}
+
+/* A hack to prevent the chatbox from making the parent expand
+ */
+.scroller {
+    position: absolute;
+    inset: 0;
+    
+    word-wrap: break-word;
+    overflow-y: scroll;
+}

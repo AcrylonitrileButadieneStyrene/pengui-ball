@@ -1,7 +1,10 @@
 use leptos::prelude::*;
 
+mod chat;
 mod player_count;
 pub mod session;
+
+pub use chat::ChatState;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -14,6 +17,7 @@ pub fn Sidebar() -> impl IntoView {
         </div>
 
         <div>Location: Unknown Location</div>
-        <div style="width: 100%; height: 100%; background-color: darkgreen;" />
+
+        <chat::Chat />
     }
 }

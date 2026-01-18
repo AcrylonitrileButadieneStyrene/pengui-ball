@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-use crate::sidebar::session::CommandChannel;
+use crate::sidebar::{ChatState, session::CommandChannel};
 
 #[island]
 pub fn Provider(children: Children) -> impl IntoView {
@@ -11,6 +11,7 @@ pub fn Provider(children: Children) -> impl IntoView {
 pub struct State {
     pub player_count: RwSignal<Option<u32>>,
     pub session_command: CommandChannel,
+    pub chat: ChatState,
 }
 
 impl State {
@@ -18,6 +19,7 @@ impl State {
         Self {
             player_count: RwSignal::new(None),
             session_command: CommandChannel::new(),
+            chat: ChatState::default(),
         }
     }
 }
