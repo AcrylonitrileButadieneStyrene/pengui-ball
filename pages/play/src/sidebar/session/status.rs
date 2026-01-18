@@ -6,21 +6,21 @@ stylance::import_style!(pub style, "status.module.css");
 #[island]
 pub fn Status() -> impl IntoView {
     let ready_state = use_context::<Signal<ConnectionReadyState>>().unwrap();
-    let connected = move || matches!(ready_state.get(), ConnectionReadyState::Open);
-    let connecting = move || matches!(ready_state.get(), ConnectionReadyState::Connecting);
 
     view! {
-        <span class=style::indicator class:connected=connected class:connecting=connecting>
+        <div
+            class=style::indicator
+            class:connected=move || matches!(ready_state.get(), ConnectionReadyState::Open)
+            class:connecting=move || matches!(ready_state.get(), ConnectionReadyState::Connecting)
+        >
             {"\u{25cf}"}
-        </span>
-        {move || {
-            if connected() {
-                "Connected"
-            } else if connecting() {
-                "Connecting"
-            } else {
-                "Disconnected"
-            }
-        }}
+        </div>
+        <div>
+            {move || match ready_state.get() {
+                ConnectionReadyState::Open => "Connected",
+                ConnectionReadyState::Connecting => "Connecting",
+                ConnectionReadyState::Closing | ConnectionReadyState::Closed => "Disconnected",
+            }}
+        </div>
     }
 }

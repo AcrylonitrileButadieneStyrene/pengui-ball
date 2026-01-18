@@ -19,7 +19,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
             <head>
                 <meta charset="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="stylesheet" href="pkg/pengui-ball.css" />
+                <link rel="stylesheet" href="pkg/shared.css" />
                 <HydrationScripts options islands=true />
             </head>
             <body>

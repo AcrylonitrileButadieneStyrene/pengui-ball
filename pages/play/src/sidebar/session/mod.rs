@@ -9,11 +9,26 @@ mod status;
 
 pub use command::{Command, CommandChannel};
 
+use crate::CurrentGame;
+
 stylance::import_style!(pub style, "mod.module.css");
 
 #[allow(clippy::needless_pass_by_value)]
+#[component]
+pub fn Session() -> impl IntoView {
+    let game = use_context::<CurrentGame>().unwrap();
+
+    view! {
+        <Connection game=game.id.clone()>
+            <svg viewBox="0 0 18 18">
+                <path d="m0 7q1.5-7 9-7 3 0 5.5 2.5l2-2.5 1.5 8h-8l2-2.5q-5-3.5-8 1.5h-4m18 4q-1.5 7-9 7-3 0-5.5-2.5l-2 2.5-1.5-8h8l-2 2.5q5 3.5 8-1.5h4" />
+            </svg>
+        </Connection>
+    }
+}
+
 #[island]
-pub fn Session(game: String) -> impl IntoView {
+fn Connection(game: String, children: Children) -> impl IntoView {
     let state = use_context::<std::sync::Arc<crate::state::State>>().unwrap();
 
     // DIFF: forest-orb increases the interval by 5 seconds on each attempt
@@ -60,7 +75,7 @@ pub fn Session(game: String) -> impl IntoView {
                 });
             }
         >
-            R
+            {children()}
         </button>
     }
 }
