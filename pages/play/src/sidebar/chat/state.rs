@@ -29,27 +29,27 @@ impl ChatState {
     pub fn add_map(&self, message: Message) {
         self.map.update(|chat| {
             if chat.len() + 1 > self.map_cap.get_untracked() {
-                chat.pop_front();
+                chat.pop_back();
             }
-            chat.push_back(message);
+            chat.push_front(message);
         });
     }
 
     pub fn add_party(&self, message: Message) {
         self.party.update(|chat| {
             if chat.len() + 1 > self.party_cap.get_untracked() {
-                chat.pop_front();
+                chat.pop_back();
             }
-            chat.push_back(message);
+            chat.push_front(message);
         });
     }
 
     pub fn add_global(&self, message: Message) {
         self.global.update(|chat| {
             if chat.len() + 1 > self.global_cap.get_untracked() {
-                chat.pop_front();
+                chat.pop_back();
             }
-            chat.push_back(message);
+            chat.push_front(message);
         });
     }
 }
