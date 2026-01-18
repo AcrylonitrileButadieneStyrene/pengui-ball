@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-mod session;
+pub mod session;
 
 #[component]
 pub fn Sidebar() -> impl IntoView {

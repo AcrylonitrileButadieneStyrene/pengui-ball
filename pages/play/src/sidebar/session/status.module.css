@@ -1,0 +1,11 @@
+.indicator:global(.connecting) {
+    color: orange;
+}
+
+.indicator:global(.connected) {
+    color: lime;
+}
+
+.indicator:not(:global(.connecting)):not(:global(.connected)) {
+    color: red;
+}

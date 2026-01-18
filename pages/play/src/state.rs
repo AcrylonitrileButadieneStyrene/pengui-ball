@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+use crate::sidebar::session::CommandChannel;
+
 #[island]
 pub fn Provider(children: Children) -> impl IntoView {
     provide_context(std::sync::Arc::new(State::new()));
@@ -7,23 +9,15 @@ pub fn Provider(children: Children) -> impl IntoView {
 }
 
 pub struct State {
-    pub send_session_command: futures_channel::mpsc::Sender<SessionCommand>,
-    pub __session_command_queue:
-        std::sync::Mutex<Option<futures_channel::mpsc::Receiver<SessionCommand>>>,
+    pub player_count: RwSignal<Option<u32>>,
+    pub session_command: CommandChannel,
 }
 
 impl State {
     pub fn new() -> Self {
-        let (send_session_command, session_command_queue) = futures_channel::mpsc::channel(16);
-
         Self {
-            send_session_command,
-            __session_command_queue: std::sync::Mutex::new(Some(session_command_queue)),
+            player_count: RwSignal::new(None),
+            session_command: CommandChannel::new(),
         }
     }
-}
-
-#[non_exhaustive]
-pub enum SessionCommand {
-    Unknown(Vec<String>),
 }
