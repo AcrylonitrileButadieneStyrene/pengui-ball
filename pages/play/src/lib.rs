@@ -1,3 +1,4 @@
+#![feature(result_option_map_or_default)]
 #![allow(non_snake_case)]
 
 use leptos::prelude::*;
@@ -5,6 +6,8 @@ use leptos_router::hooks::use_params_map;
 
 mod sidebar;
 mod state;
+
+pub use state::State;
 
 stylance::import_style!(pub style, "lib.module.css");
 

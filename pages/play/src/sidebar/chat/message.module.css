@@ -1,0 +1,24 @@
+.message {
+    /* temporary */
+    padding-top: 8px;
+}
+
+.message .author {
+    padding-inline-end: 6px;
+}
+
+.message .author:global(.user)::before {
+    content: "[";
+}
+
+.message .author:global(.user)::after {
+    content: "]";
+}
+
+.message .author:not(:global(.user))::before {
+    content: "<";
+}
+
+.message .author:not(:global(.user))::after {
+    content: ">";
+}

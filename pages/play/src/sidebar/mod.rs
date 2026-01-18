@@ -4,8 +4,6 @@ mod chat;
 mod player_count;
 pub mod session;
 
-pub use chat::ChatState;
-
 stylance::import_style!(pub style, "mod.module.css");
 
 #[component]

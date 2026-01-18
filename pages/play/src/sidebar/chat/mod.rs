@@ -1,8 +1,8 @@
 use leptos::prelude::*;
 
-mod state;
+use crate::state::Message;
 
-pub use state::{ChatState, Message};
+mod message;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -11,33 +11,29 @@ pub fn Chat() -> impl IntoView {
     view! {
         <div class=style::container>
             <div class=style::scroller>
-                <Messages />
+                <ChatMessages />
             </div>
         </div>
     }
 }
 
 #[island]
-pub fn Messages() -> impl IntoView {
+pub fn ChatMessages() -> impl IntoView {
     let state = use_context::<std::sync::Arc<crate::state::State>>().unwrap();
     let global = state.chat.global;
+
+    let render = move |message: Message| {
+        let author = state
+            .players
+            .with_untracked(|players| players.get(&message.author).cloned());
+        view! { <message::ChatMessage message author /> }
+    };
 
     view! {
         <For
             each=move || global.get()
             key=|item| item.id.clone()
-            children=|message| view! { <Message message /> }
+            children=render
         />
-    }
-}
-
-#[component]
-pub fn Message(message: Message) -> impl IntoView {
-    view! {
-        <div>
-            <span>{message.author}</span>
-            {": "}
-            <span>{message.content}</span>
-        </div>
     }
 }
