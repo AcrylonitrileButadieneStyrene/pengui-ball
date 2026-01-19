@@ -1,10 +1,23 @@
 .reconnect {
     background: 0;
     border: 0;
+    margin-right: 4px;
 }
 
 .reconnect svg {
     width: 12px;
     height: 12px;
     fill: white;
+}
+
+.reconnect:global(.connecting) svg {
+    fill: orange;
+}
+
+.reconnect:global(.connected) svg {
+    fill: lime;
+}
+
+.reconnect:not(:global(.connecting)):not(:global(.connected)) svg {
+    fill: red;
 }

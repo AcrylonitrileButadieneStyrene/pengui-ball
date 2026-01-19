@@ -43,7 +43,7 @@ pub fn Play() -> impl IntoView {
 
         <state::Provider>
             <main class=style::layout>
-                <header::Header/>
+                <header::Header />
 
                 <div class=style::game_window>
                     <div style="height: 32px; background-color: gray;" />
@@ -54,9 +54,7 @@ pub fn Play() -> impl IntoView {
                     />
                 </div>
 
-                <div class=style::chat>
-                    <sidebar::Sidebar />
-                </div>
+                <sidebar::Sidebar />
             </main>
         </state::Provider>
     })

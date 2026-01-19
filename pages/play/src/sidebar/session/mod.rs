@@ -1,10 +1,11 @@
 use futures_util::{SinkExt as _, StreamExt as _};
 use leptos::{prelude::*, server::codee::string::FromToStringCodec};
-use leptos_use::{UseWebSocketOptions, UseWebSocketReturn, use_websocket_with_options};
+use leptos_use::{
+    UseWebSocketOptions, UseWebSocketReturn, core::ConnectionReadyState, use_websocket_with_options,
+};
 
 mod command;
 mod handler;
-mod status;
 
 pub use command::{Command, CommandChannel};
 
@@ -52,7 +53,6 @@ fn Connection(game: String, children: Children) -> impl IntoView {
                 }
             }),
     );
-    provide_context(ready_state);
     let reconnect = reconnect_handler(open, close);
 
     leptos::task::spawn(async move {
@@ -64,9 +64,10 @@ fn Connection(game: String, children: Children) -> impl IntoView {
     });
 
     view! {
-        <status::Status />
         <button
             class=style::reconnect
+            class:connected=move || matches!(ready_state.get(), ConnectionReadyState::Open)
+            class:connecting=move || matches!(ready_state.get(), ConnectionReadyState::Connecting)
             on:click=move |_| {
                 let mut reconnect = reconnect.clone();
                 leptos::task::spawn(async move {
@@ -76,6 +77,13 @@ fn Connection(game: String, children: Children) -> impl IntoView {
         >
             {children()}
         </button>
+        <div>
+            {move || match ready_state.get() {
+                ConnectionReadyState::Open => "Connected",
+                ConnectionReadyState::Connecting => "Connecting",
+                ConnectionReadyState::Closing | ConnectionReadyState::Closed => "Disconnected",
+            }}
+        </div>
     }
 }
 

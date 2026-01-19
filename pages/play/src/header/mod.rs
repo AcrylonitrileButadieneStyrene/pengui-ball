@@ -11,7 +11,10 @@ pub fn Header() -> impl IntoView {
     view! {
         <header class=style::header>
             <logo::Logo />
-            <img class=style::game_logo src=format!("https://ynoproject.net/images/logo_{}.png", game.id) />
+            <img
+                class=style::game_logo
+                src=format!("https://ynoproject.net/images/logo_{}.png", game.id)
+            />
         </header>
     }
 }
