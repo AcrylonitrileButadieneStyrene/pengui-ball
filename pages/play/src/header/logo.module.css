@@ -1,0 +1,22 @@
+.logo {
+    display: flex;
+    fill: white;
+    margin-left: 10px;
+    margin-right: 13px;
+}
+
+.logo :first-child {
+    margin-right: 6px;
+}
+
+.logo:hover .closed {
+    display: none;
+}
+
+.open {
+    display: none;
+}
+
+.logo:hover .open {
+    display: initial;
+}

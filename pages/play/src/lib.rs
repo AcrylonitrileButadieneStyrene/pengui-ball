@@ -4,6 +4,7 @@
 use leptos::prelude::*;
 use leptos_router::hooks::use_params_map;
 
+mod header;
 mod sidebar;
 mod state;
 
@@ -42,9 +43,7 @@ pub fn Play() -> impl IntoView {
 
         <state::Provider>
             <main class=style::layout>
-                <header class=style::header>
-                    <div style="height: 60px; background-color: white;" />
-                </header>
+                <header::Header/>
 
                 <div class=style::game_window>
                     <div style="height: 32px; background-color: gray;" />

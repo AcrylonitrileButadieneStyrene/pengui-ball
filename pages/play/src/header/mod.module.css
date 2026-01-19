@@ -1,0 +1,13 @@
+.header {
+    grid-area: header;
+
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.game_logo {
+    height: 48px;
+}

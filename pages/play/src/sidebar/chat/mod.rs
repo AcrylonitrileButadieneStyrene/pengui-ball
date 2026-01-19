@@ -29,11 +29,5 @@ pub fn ChatMessages() -> impl IntoView {
         view! { <message::ChatMessage message author /> }
     };
 
-    view! {
-        <For
-            each=move || global.get()
-            key=|item| item.id.clone()
-            children=render
-        />
-    }
+    view! { <For each=move || global.get() key=|item| item.id.clone() children=render /> }
 }

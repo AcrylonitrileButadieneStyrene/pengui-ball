@@ -75,12 +75,6 @@ body.game {
     padding: 12px;
 }
 
-.header {
-    grid-area: header;
-    padding-top: 6px;
-    padding-bottom: 6px;
-}
-
 .game-window {
     grid-area: game;
     border-top: 0;

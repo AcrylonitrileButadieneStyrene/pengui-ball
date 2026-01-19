@@ -15,7 +15,9 @@ pub fn ChatMessage(message: Message, author: Option<Arc<Player>>) -> impl IntoVi
 
     view! {
         <div class=style::message>
-            <span class=style::author class:user=account>{sender}</span>
+            <span class=style::author class:user=account>
+                {sender}
+            </span>
             <span>{message.content}</span>
         </div>
     }
