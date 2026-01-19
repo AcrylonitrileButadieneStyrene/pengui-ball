@@ -18,4 +18,5 @@ pub fn Sidebar() -> impl IntoView {
 
         <chat::Chat />
     }
+    .into_any()
 }

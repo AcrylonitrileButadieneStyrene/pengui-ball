@@ -4,7 +4,6 @@ use leptos_use::{UseWebSocketOptions, UseWebSocketReturn, use_websocket_with_opt
 
 mod command;
 mod handler;
-mod reconnect;
 mod status;
 
 pub use command::{Command, CommandChannel};
