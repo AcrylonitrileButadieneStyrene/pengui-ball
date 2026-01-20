@@ -28,6 +28,20 @@ pub fn setup() {
             dyn Fn(_, _, _)
         ),
         callback!("onPlayerTeleported", on_player_teleported, dyn Fn(_, _, _)),
+        callback!("syncPlayerData", sync_player_data, dyn Fn(_, _, _, _, _, _)),
+        callback!("onRoomSwitch", on_room_switch, dyn Fn()),
+        callback!(
+            "shouldConnectPlayer",
+            should_connect_player,
+            dyn Fn(_) -> bool
+        ),
+        callback!(
+            "onPlayerConnectedOrUpdated",
+            on_player_connected_or_updated,
+            dyn Fn(_, _, _)
+        ),
+        callback!("onPlayerDisconnected", on_player_disconnected, dyn Fn(_)),
+        callback!("onNametagModeUpdated", on_nametag_mode_updated, dyn Fn(_))
     ];
 
     let window = window();
@@ -76,4 +90,42 @@ pub fn on_player_sprite_updated(sprite: String, index: u32, id: i32) {
 #[wasm_bindgen]
 pub fn on_player_teleported(map: u32, x: u32, y: u32) {
     leptos::logging::log!("teleported to Map{map:<04} X:{x} Y:{y}");
+}
+
+#[wasm_bindgen]
+pub fn sync_player_data(
+    uuid: String,
+    _rank: u32,
+    _account: bool,
+    _badge: String,
+    _medals: Vec<u32>,
+    _id: u32,
+) {
+    leptos::logging::log!("sync player {}", uuid);
+}
+
+#[wasm_bindgen]
+pub fn on_room_switch() {
+    leptos::logging::log!("room switched");
+}
+
+#[wasm_bindgen]
+pub fn should_connect_player(_uuid: String) -> bool {
+    // blocking, but other people can still see you even if you return false
+    true
+}
+
+#[wasm_bindgen]
+pub fn on_player_connected_or_updated(_system: String, name: String, id: u32) {
+    leptos::logging::log!("connected {name} as id {id}");
+}
+
+#[wasm_bindgen]
+pub fn on_player_disconnected(id: u32) {
+    leptos::logging::log!("player with {id} disconnected");
+}
+
+#[wasm_bindgen]
+pub fn on_nametag_mode_updated(_mode: u32) {
+    // why is this even a callback
 }
