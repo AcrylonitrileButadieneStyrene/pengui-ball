@@ -14,7 +14,7 @@ pub use player::Player;
 
 #[island]
 pub fn Provider(children: Children) -> impl IntoView {
-    provide_context(Arc::new(State::new()));
+    provide_context(Arc::new(State::default()));
     children()
 }
 
@@ -25,8 +25,8 @@ pub struct State {
     pub players: RwSignal<HashMap<String, Arc<Player>>>,
 }
 
-impl State {
-    pub fn new() -> Self {
+impl Default for State {
+    fn default() -> Self {
         Self {
             player_count: RwSignal::new(None),
             session_command: CommandChannel::new(),

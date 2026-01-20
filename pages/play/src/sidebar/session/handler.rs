@@ -8,7 +8,7 @@ pub fn on_message(state: &crate::state::State, parts: &[&str]) {
         ["say", uuid, txt] => state.chat.add_map(Message::new("", uuid, txt)),
         ["psay", uuid, txt, id] => state.chat.add_party(Message::new(id, uuid, txt)),
         ["gsay", uuid, _map, _, _, _x, _y, txt, id] => {
-            state.chat.add_global(Message::new(id, uuid, txt))
+            state.chat.add_global(Message::new(id, uuid, txt));
         }
         ["p", uuid, name, system, rank, account, badge, medals @ ..] => {
             let uuid = uuid.to_string();
@@ -22,7 +22,7 @@ pub fn on_message(state: &crate::state::State, parts: &[&str]) {
                     _ => Some(badge.to_string()),
                 },
                 medals: medals
-                    .into_iter()
+                    .iter()
                     .map(|medal| medal.parse().unwrap())
                     .collect::<Vec<_>>()
                     .try_into()
@@ -34,7 +34,7 @@ pub fn on_message(state: &crate::state::State, parts: &[&str]) {
             });
         }
         [cmd, args @ ..] => {
-            leptos::logging::warn!("Received unknown command \"{cmd}\" with args {args:?}")
+            leptos::logging::warn!("Received unknown command \"{cmd}\" with args {args:?}");
         }
         [] => leptos::logging::warn!("Received empty command"),
     }

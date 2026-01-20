@@ -5,6 +5,9 @@ use leptos_router::hooks::use_query_map;
 
 mod callbacks;
 mod easyrpg;
+mod state;
+
+pub use state::EngineState;
 
 stylance::import_style!(pub style, "lib.module.css");
 
@@ -16,7 +19,9 @@ pub fn Engine() -> impl IntoView {
         <leptos_meta::Body {..} class=style::engine />
         <leptos_meta::Link rel="stylesheet" href="pkg/engine.css" />
 
-        <easyrpg::EasyRPG game>{None::<()>}</easyrpg::EasyRPG>
+        <state::Provider>
+            <easyrpg::EasyRPG game>{None::<()>}</easyrpg::EasyRPG>
+        </state::Provider>
     }
 }
 

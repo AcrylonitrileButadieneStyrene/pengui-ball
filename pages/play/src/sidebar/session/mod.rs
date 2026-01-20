@@ -52,8 +52,6 @@ fn Connection(game: String, children: Children) -> impl IntoView {
                 }
             }),
     );
-    
-    
 
     leptos::task::spawn(async move {
         let mut receiver = state.session_command.take_receiver().unwrap();
@@ -62,7 +60,7 @@ fn Connection(game: String, children: Children) -> impl IntoView {
             send(&vec.join("\u{FFFF}"));
         }
     });
-    
+
     let reconnect = reconnect_handler(open, close);
     view! {
         <button
@@ -95,11 +93,10 @@ fn reconnect_handler(
 ) -> futures_channel::mpsc::Sender<()> {
     let (reconnect, mut __reconnect) = futures_channel::mpsc::channel::<()>(1);
     leptos::task::spawn(async move {
-        while let Some(()) = __reconnect.next().await {
+        while __reconnect.next().await == Some(()) {
             close();
             open();
         }
     });
     reconnect
 }
-
