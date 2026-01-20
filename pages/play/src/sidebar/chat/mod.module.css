@@ -1,13 +1,15 @@
-.container {
+.messages {
     position: relative;
     flex: 1;
 }
 
 /* A hack to prevent the chatbox from making the parent expand
  */
-.scroller {
+.scroll-view {
     position: absolute;
     inset: 0;
+    border: solid 8px;
+    border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
     
     display: flex;
     flex-direction: column-reverse;

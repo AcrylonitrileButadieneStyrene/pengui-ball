@@ -34,8 +34,6 @@ fn LoadPlayer(game: String, children: Children) -> impl IntoView {
 #[island]
 fn StartPlayer(children: Children) -> impl IntoView {
     let canvas = NodeRef::new();
-    // let (object, set_object) = signal(send_wrapper::SendWrapper::new(None));
-    // provide_context(Player { canvas, object });
 
     let loaded = use_context::<Loaded>().unwrap();
     Effect::new(move || {
@@ -45,7 +43,15 @@ fn StartPlayer(children: Children) -> impl IntoView {
         }
 
         leptos::task::spawn_local(async move {
-            let _object = create_easyrpg_player().await;
+            let object = create_easyrpg_player().await;
+            object.init_api();
+
+            leptos::web_sys::js_sys::Reflect::set(
+                &window(),
+                &wasm_bindgen::JsValue::from_str("easyrpgPlayer"),
+                &object,
+            )
+            .unwrap();
             // set_object(send_wrapper::SendWrapper::new(Some(object)));
         });
     });
@@ -64,6 +70,6 @@ extern "C" {
     #[wasm_bindgen(js_name = createEasyRpgPlayer)]
     pub async fn create_easyrpg_player() -> PlayerJSObject;
 
-    #[wasm_bindgen(method, js_name = setCanvasSize)]
-    pub fn set_canvas_size(this: &PlayerJSObject, width: u32, height: u32, no_updates: bool);
+    #[wasm_bindgen(method, js_name = initApi)]
+    pub fn init_api(this: &PlayerJSObject);
 }

@@ -70,8 +70,7 @@ body.game {
 
 .layout>* {
     border: solid 12px;
-    border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 10 repeat;
-    border-image-slice: 4 fill;
+    border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
     padding: 12px;
 }
 

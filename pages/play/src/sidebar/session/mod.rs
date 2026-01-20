@@ -13,7 +13,6 @@ use crate::CurrentGame;
 
 stylance::import_style!(pub style, "mod.module.css");
 
-#[allow(clippy::needless_pass_by_value)]
 #[component]
 pub fn Session() -> impl IntoView {
     let game = use_context::<CurrentGame>().unwrap();
@@ -53,7 +52,8 @@ fn Connection(game: String, children: Children) -> impl IntoView {
                 }
             }),
     );
-    let reconnect = reconnect_handler(open, close);
+    
+    
 
     leptos::task::spawn(async move {
         let mut receiver = state.session_command.take_receiver().unwrap();
@@ -62,7 +62,8 @@ fn Connection(game: String, children: Children) -> impl IntoView {
             send(&vec.join("\u{FFFF}"));
         }
     });
-
+    
+    let reconnect = reconnect_handler(open, close);
     view! {
         <button
             class=style::reconnect
@@ -102,6 +103,3 @@ fn reconnect_handler(
     reconnect
 }
 
-fn on_message(command: &str, args: &[&str]) {
-    leptos::logging::log!("Received command {command} with arguments: {args:?}");
-}

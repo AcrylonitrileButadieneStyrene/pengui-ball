@@ -9,8 +9,8 @@ stylance::import_style!(pub style, "mod.module.css");
 #[component]
 pub fn Chat() -> impl IntoView {
     view! {
-        <div class=style::container>
-            <div class=style::scroller>
+        <div class=style::messages>
+            <div class=style::scroll_view>
                 <ChatMessages />
             </div>
         </div>
