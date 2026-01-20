@@ -1,6 +1,6 @@
 use leptos::{
     prelude::*,
-    web_sys::{self, HtmlAudioElement},
+    web_sys::{self, HtmlAudioElement, js_sys::Reflect, wasm_bindgen::JsValue},
 };
 
 stylance::import_style!(pub style, "door.module.css");
@@ -37,7 +37,7 @@ pub fn Door(index: usize, game: common::config::Game) -> impl IntoView {
 #[island]
 fn DoorSound(id: String, index: usize, children: Children) -> impl IntoView {
     let node_ref = NodeRef::new();
-    let selected = use_context::<ReadSignal<Option<usize>>>().unwrap();
+    let selected = use_context::<RwSignal<Option<usize>>>().unwrap();
 
     Effect::new(move || {
         if selected() == Some(index)
@@ -65,20 +65,20 @@ fn DoorSound(id: String, index: usize, children: Children) -> impl IntoView {
 
 #[island]
 fn DoorClickable(id: String, index: usize, children: Children) -> impl IntoView {
-    let set_selected = use_context::<WriteSignal<Option<usize>>>().unwrap();
+    let selected = use_context::<RwSignal<Option<usize>>>().unwrap();
 
     let on_click = {
         let id = id.clone();
         move |e: web_sys::MouseEvent| {
             e.prevent_default();
-            set_selected.set(Some(index));
+            selected.set(Some(index));
             let id = id.clone();
             set_timeout(
                 move || {
-                    web_sys::js_sys::Reflect::set(
-                        &window().document().unwrap(),
-                        &web_sys::wasm_bindgen::JsValue::from_str("location"),
-                        &web_sys::wasm_bindgen::JsValue::from_str(&id),
+                    Reflect::set(
+                        &document(),
+                        &JsValue::from_str("location"),
+                        &JsValue::from_str(&id),
                     )
                     .unwrap();
                 },
@@ -96,7 +96,7 @@ fn DoorClickable(id: String, index: usize, children: Children) -> impl IntoView 
 
 #[island]
 fn DoorSpotlight(index: usize) -> impl IntoView {
-    let selected = use_context::<ReadSignal<Option<usize>>>().unwrap();
+    let selected = use_context::<RwSignal<Option<usize>>>().unwrap();
 
     view! {
         <Show when=move || selected() == Some(index)>
@@ -107,7 +107,7 @@ fn DoorSpotlight(index: usize) -> impl IntoView {
 
 #[island]
 fn DoorImage(id: String, index: usize) -> impl IntoView {
-    let selected = use_context::<ReadSignal<Option<usize>>>().unwrap();
+    let selected = use_context::<RwSignal<Option<usize>>>().unwrap();
 
     view! {
         <img

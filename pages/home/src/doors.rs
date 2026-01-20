@@ -1,4 +1,4 @@
-use leptos::{prelude::*, web_sys::HtmlAudioElement};
+use leptos::{ev, prelude::*, web_sys::HtmlAudioElement};
 
 stylance::import_style!(pub style, "doors.module.css");
 
@@ -25,16 +25,19 @@ pub fn Doors() -> impl IntoView {
 
 #[island]
 fn DoorsContext(children: Children) -> impl IntoView {
-    let (selected, set_selected) = signal(None::<usize>);
+    let selected = RwSignal::new(None::<usize>);
     provide_context(selected);
-    provide_context(set_selected);
+
+    window_event_listener(ev::pageshow, move |_| {
+        selected.set(None);
+    });
 
     view! { {children()} }
 }
 
 #[island]
 fn DoorsSound() -> impl IntoView {
-    let selected = use_context::<ReadSignal<Option<usize>>>().unwrap();
+    let selected = use_context::<RwSignal<Option<usize>>>().unwrap();
     let node_ref = NodeRef::new();
 
     Effect::new(move || {
