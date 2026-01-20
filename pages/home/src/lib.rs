@@ -10,7 +10,7 @@ stylance::import_style!(pub style, "lib.module.css");
 #[component]
 pub fn Home() -> impl IntoView {
     view! {
-        <leptos_meta::Link rel="stylesheet" href="pkg/home.css" />
+        <leptos_meta::Link rel="stylesheet" href="/pkg/home.css" />
         <leptos_meta::Title text="Yume Nikki Online Project" />
         <leptos_meta::Meta
             name="description"

@@ -1,6 +1,6 @@
 use leptos::{
     prelude::*,
-    web_sys::{self, HtmlAudioElement, js_sys::Reflect, wasm_bindgen::JsValue},
+    web_sys::{self, HtmlAudioElement},
 };
 
 stylance::import_style!(pub style, "door.module.css");
@@ -67,28 +67,23 @@ fn DoorSound(id: String, index: usize, children: Children) -> impl IntoView {
 fn DoorClickable(id: String, index: usize, children: Children) -> impl IntoView {
     let selected = use_context::<RwSignal<Option<usize>>>().unwrap();
 
+    let href = format!("/{id}/");
     let on_click = {
-        let id = id.clone();
+        let href = href.clone();
         move |e: web_sys::MouseEvent| {
             e.prevent_default();
             selected.set(Some(index));
-            let id = id.clone();
+
+            let href = href.clone();
             set_timeout(
-                move || {
-                    Reflect::set(
-                        &document(),
-                        &JsValue::from_str("location"),
-                        &JsValue::from_str(&id),
-                    )
-                    .unwrap();
-                },
+                move || location().set_pathname(&href).unwrap(),
                 std::time::Duration::from_millis(2500),
             );
         }
     };
 
     view! {
-        <a href=id on:click=on_click>
+        <a href=href on:click=on_click>
             {children()}
         </a>
     }

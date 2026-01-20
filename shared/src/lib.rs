@@ -21,7 +21,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
             <head>
                 <meta charset="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="stylesheet" href="pkg/shared.css" />
+                <link rel="stylesheet" href="/pkg/shared.css" />
                 <HydrationScripts options islands=true />
             </head>
             <body>
@@ -38,8 +38,8 @@ pub fn App() -> impl IntoView {
         <Router>
             <Routes fallback=|| ()>
                 <Route path=path!("/") view=home::Home />
-                <Route path=path!("/engine") view=engine::Engine />
-                <Route path=path!("/:game") view=play::Play />
+                <Route path=path!("/:game/") view=play::Play />
+                <Route path=path!("/:game/engine") view=engine::Engine />
             </Routes>
         </Router>
     }

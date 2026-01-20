@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 
 use leptos::prelude::*;
-use leptos_router::hooks::use_query_map;
+use leptos_router::hooks::use_params_map;
 
 mod callbacks;
 mod easyrpg;
@@ -14,23 +14,15 @@ stylance::import_style!(pub style, "lib.module.css");
 
 #[component]
 pub fn Engine() -> impl IntoView {
-    let game = use_query_map().get().get("game").unwrap();
+    let game = use_params_map().get().get("game").unwrap();
 
     view! {
         <leptos_meta::Body {..} class=style::engine />
-        <leptos_meta::Link rel="stylesheet" href="pkg/engine.css" />
+        <leptos_meta::Link rel="stylesheet" href="/pkg/engine.css" />
 
-        <state::Provider>
+        <state::Provider game=game.clone()>
             <easyrpg::EasyRPG game>{None::<()>}</easyrpg::EasyRPG>
             <messages::Handler />
         </state::Provider>
     }
 }
-
-// #[island]
-// fn Setup() -> impl IntoView {
-//     let handle = window_event_listener(leptos::ev::message, |msg| {
-//         leptos::logging::log!("message {msg:?}")
-//     });
-//     on_cleanup(|| handle.remove());
-// }

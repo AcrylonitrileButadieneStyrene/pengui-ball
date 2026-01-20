@@ -20,7 +20,7 @@ fn LoadPlayer(game: String, children: Children) -> impl IntoView {
     Effect::new(super::callbacks::setup);
 
     view! {
-        <script src=format!("yno/{game}/ynoengine-simd.js") onload=move || set_loaded(true) />
+        <script src=format!("/yno/{game}/ynoengine-simd.js") onload=move || set_loaded(true) />
         {children()}
     }
 }
@@ -36,7 +36,13 @@ fn StartPlayer(children: Children) -> impl IntoView {
         }
 
         let state = state.clone();
-        leptos::task::spawn_local(async move { state.easyrpg_player.start().await });
+        leptos::task::spawn_local(async move {
+            let config = crate::state::easyrpg::Configuration {
+                websocket_url: format!("wss://connect.ynoproject.net/{}/", state.game),
+                game: state.game.clone(),
+            };
+            state.easyrpg_player.start(config).await
+        });
     });
 
     view! {
