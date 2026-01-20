@@ -4,7 +4,9 @@
 use leptos::prelude::*;
 use leptos_router::hooks::use_params_map;
 
+mod game;
 mod header;
+mod messages;
 mod sidebar;
 mod state;
 
@@ -44,16 +46,7 @@ pub fn Play() -> impl IntoView {
         <state::Provider>
             <main class=style::layout>
                 <header::Header />
-
-                <div class=style::game_window>
-                    <div style="height: 32px; background-color: gray;" />
-                    <iframe
-                        class=style::player
-                        src=format!("/engine?game={}", game.id)
-                        title="Game Engine"
-                    />
-                </div>
-
+                <game::Game />
                 <sidebar::Sidebar />
             </main>
         </state::Provider>

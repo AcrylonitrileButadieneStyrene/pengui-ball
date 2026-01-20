@@ -1,25 +1,3 @@
-:root {
-    --adaptive-scale: 2;
-}
-
-@media screen and (min-width: 1346px) and (min-height: 904px) {
-    :root {
-        --adaptive-scale: 3;
-    }
-}
-
-@media screen and (min-width: 1666px) and (min-height: 1144px) {
-    :root {
-        --adaptive-scale: 4;
-    }
-}
-
-@media screen and (min-width: 1986px) and (min-height: 1384px) {
-    :root {
-        --adaptive-scale: 5;
-    }
-}
-
 body.game {
     display: flex;
     flex-direction: column;
@@ -72,15 +50,4 @@ body.game {
     border: solid 12px;
     border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
     padding: 12px;
-}
-
-.game-window {
-    grid-area: game;
-    border-top: 0;
-}
-
-iframe.player {
-    border: 0;
-    width: calc(320px * var(--adaptive-scale));
-    height: calc(240px * var(--adaptive-scale));
 }

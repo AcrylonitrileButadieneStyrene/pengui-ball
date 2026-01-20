@@ -52,7 +52,13 @@ pub fn on_update_system_graphic(graphic: String) {
 
 #[wasm_bindgen]
 pub fn on_update_connection_status(status: u32) {
-    leptos::logging::log!("changing status: {status}");
+    use common::messages::play::ConnectionStatus;
+    crate::messages::send(common::PlayMessage::ConnectionStatusUpdated(match status {
+        0 => ConnectionStatus::Disconnected,
+        1 => ConnectionStatus::Connected,
+        2 => ConnectionStatus::Connecting,
+        _ => panic!("Invalid connection state sent to callback"),
+    }));
 }
 
 #[allow(clippy::needless_pass_by_value)]

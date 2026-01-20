@@ -53,6 +53,17 @@ fn Connection(game: String, children: Children) -> impl IntoView {
             }),
     );
 
+    Effect::new({
+        let state = state.clone();
+        move || {
+            if ready_state.get() != ConnectionReadyState::Open {
+                return;
+            }
+
+            state.engine.send(common::EngineMessage::Connect);
+        }
+    });
+
     leptos::task::spawn(async move {
         let mut receiver = state.session_command.take_receiver().unwrap();
         while let Some(message) = receiver.next().await {

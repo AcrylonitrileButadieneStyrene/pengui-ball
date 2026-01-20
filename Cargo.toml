@@ -24,6 +24,7 @@ serde = { version = "1", features = ["derive"] }
 stylance = "0.7.4"
 stylance-cli = "0.7.4"
 wasm-bindgen = "=0.2.106"
+web-sys = "*"
 
 [[workspace.metadata.leptos]]
 name = "pengui-ball"

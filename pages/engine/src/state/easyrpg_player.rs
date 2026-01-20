@@ -5,14 +5,6 @@ pub struct EasyRPGPlayer {
     set_object: WriteSignal<SendOption<PlayerJSObject>>,
 }
 
-impl std::ops::Deref for EasyRPGPlayer {
-    type Target = ReadSignal<SendOption<PlayerJSObject>>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.object
-    }
-}
-
 impl Default for EasyRPGPlayer {
     fn default() -> Self {
         let (object, set_object) = signal(SendOption::new_local(None::<PlayerJSObject>));
@@ -37,10 +29,21 @@ impl EasyRPGPlayer {
         object.init_api();
         self.set_object.set(SendOption::new_local(Some(object)));
     }
+
+    pub fn call<F>(&self, closure: F)
+    where
+        F: FnOnce(&PlayerJSObject),
+    {
+        let object = self.object.read_untracked();
+        if let Some(object) = &**object {
+            closure(object)
+        }
+    }
 }
 
 #[wasm_bindgen::prelude::wasm_bindgen]
 extern "C" {
+    // (window.)easyrpgPlayer
     #[wasm_bindgen]
     pub type PlayerJSObject;
 
@@ -49,4 +52,14 @@ extern "C" {
 
     #[wasm_bindgen(method, js_name = initApi)]
     pub fn init_api(this: &PlayerJSObject);
+
+    #[wasm_bindgen(method, getter)]
+    pub fn api(this: &PlayerJSObject) -> PlayerAPIJSObject;
+
+    // (window.)easyrpgPlayer.api
+    #[wasm_bindgen]
+    pub type PlayerAPIJSObject;
+
+    #[wasm_bindgen(method, js_name = sessionReady)]
+    pub fn session_ready(this: &PlayerAPIJSObject);
 }

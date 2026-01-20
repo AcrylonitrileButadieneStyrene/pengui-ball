@@ -96,7 +96,7 @@ fn watch_config() -> tokio::sync::mpsc::Receiver<()> {
     }) {
         watcher
             .watch(
-                std::path::Path::new(""),
+                std::path::Path::new("config.yaml"),
                 notify::RecursiveMode::NonRecursive,
             )
             .unwrap();
