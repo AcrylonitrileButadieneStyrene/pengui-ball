@@ -1,12 +1,14 @@
 use leptos::prelude::*;
 
+mod controls;
+
 stylance::import_style!(pub style, "mod.module.css");
 
 #[component]
 pub fn Game() -> impl IntoView {
     view! {
         <div class=style::game_window>
-            <div style="height: 32px; background-color: gray;" />
+            <controls::Controls />
             <Engine />
         </div>
     }

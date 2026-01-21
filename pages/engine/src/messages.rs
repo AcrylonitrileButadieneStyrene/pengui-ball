@@ -18,7 +18,10 @@ fn handle(state: &crate::EngineState, message: common::EngineMessage) {
         common::EngineMessage::Connect => {
             state
                 .easyrpg_player
-                .call(|player| player.api().session_ready());
+                .call_untracked(|player| player.api().session_ready());
+        }
+        common::EngineMessage::Mute(muted) => {
+            state.muted.set(muted);
         }
     }
 }

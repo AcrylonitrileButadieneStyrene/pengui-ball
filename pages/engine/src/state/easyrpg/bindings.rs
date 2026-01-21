@@ -21,4 +21,10 @@ extern "C" {
 
     #[wasm_bindgen(method, js_name = sessionReady)]
     pub fn session_ready(this: &PlayerAPIJSObject);
+
+    #[wasm_bindgen(method, js_name = setSoundVolume)]
+    pub fn set_sound_volume(this: &PlayerAPIJSObject, value: u8);
+
+    #[wasm_bindgen(method, js_name = setMusicVolume)]
+    pub fn set_music_volume(this: &PlayerAPIJSObject, value: u8);
 }

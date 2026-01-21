@@ -5,6 +5,7 @@ use leptos_router::hooks::use_params_map;
 
 mod callbacks;
 mod easyrpg;
+mod effects;
 mod messages;
 mod state;
 
@@ -23,6 +24,7 @@ pub fn Engine() -> impl IntoView {
         <state::Provider game=game.clone()>
             <easyrpg::EasyRPG game>{None::<()>}</easyrpg::EasyRPG>
             <messages::Handler />
+            <effects::Effects />
         </state::Provider>
     }
 }

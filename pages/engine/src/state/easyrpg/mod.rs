@@ -41,6 +41,16 @@ impl Player {
     where
         F: FnOnce(&PlayerJSObject),
     {
+        let object = self.object.read();
+        if let Some(object) = &**object {
+            closure(object)
+        }
+    }
+
+    pub fn call_untracked<F>(&self, closure: F)
+    where
+        F: FnOnce(&PlayerJSObject),
+    {
         let object = self.object.read_untracked();
         if let Some(object) = &**object {
             closure(object)

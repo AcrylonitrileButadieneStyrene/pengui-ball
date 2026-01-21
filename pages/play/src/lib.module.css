@@ -1,3 +1,7 @@
+:root {
+    --pop-out-transition: transform 0.125s cubic-bezier(0.7, 0, 0.7, 1.5)
+}
+
 body.game {
     display: flex;
     flex-direction: column;
@@ -37,12 +41,20 @@ body.game {
     }
 }
 
+button svg {
+    transition: var(--pop-out-transition);
+}
+
+button:hover svg {
+    transform: scale(1.25);
+}
+
 .layout {
     display: grid;
     grid-template-areas:
         "header header"
         "game   chat  ";
-    grid-template-columns: 1fr minmax(284px, 604px);
+    grid-template-columns: 1fr minmax(320px, 640px);
     padding: 8px;
 }
 

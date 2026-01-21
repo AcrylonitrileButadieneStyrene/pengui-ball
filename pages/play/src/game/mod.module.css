@@ -2,19 +2,19 @@
     --adaptive-scale: 2;
 }
 
-@media screen and (min-width: 1346px) and (min-height: 904px) {
+@media screen and (min-width: 1328px) and (min-height: 908px) {
     :root {
         --adaptive-scale: 3;
     }
 }
 
-@media screen and (min-width: 1666px) and (min-height: 1144px) {
+@media screen and (min-width: 1648px) and (min-height: 1148px) {
     :root {
         --adaptive-scale: 4;
     }
 }
 
-@media screen and (min-width: 1986px) and (min-height: 1384px) {
+@media screen and (min-width: 1968px) and (min-height: 1388px) {
     :root {
         --adaptive-scale: 5;
     }

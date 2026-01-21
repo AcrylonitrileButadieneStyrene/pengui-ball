@@ -3,7 +3,7 @@
     fill: white;
     margin-left: 10px;
     margin-right: 13px;
-    transition: transform 0.125s cubic-bezier(0.7, 0, 0.7, 1.5)
+    transition: var(--pop-out-transition)
 }
 
 .logo:hover {
