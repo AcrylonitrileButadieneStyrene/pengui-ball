@@ -12,13 +12,23 @@ pub fn ChatMessage(message: Message, author: Option<Arc<Player>>) -> impl IntoVi
     let sender = author
         .as_ref()
         .map_or_else(|| message.author, |player| player.name.clone());
+    let badge = author.as_ref().and_then(|player| {
+        player.badge.as_ref().map(|badge| {
+            view! {
+                <img
+                    class=style::badge
+                    src=format!("https://ynoproject.net/2kki/images/badge/{badge}.png")
+                />
+            }
+        })
+    });
 
     // not reactive
     let timestamp = message.timestamp.format(
         if message.timestamp.date_naive() < chrono::Local::now().date_naive() {
-            "%i:%M %p (%a)"
+            "%l:%M %p (%a)"
         } else {
-            "%i:%M %p"
+            "%l:%M %p"
         },
     );
 
@@ -31,13 +41,7 @@ pub fn ChatMessage(message: Message, author: Option<Arc<Player>>) -> impl IntoVi
                 {timestamp.to_string()}
             </div>
             <div>
-                <div class=style::author>
-                    {name_start} {sender}
-                    <img
-                        class=style::badge
-                        src="https://ynoproject.net/2kki/images/badge/lotus_girl.png"
-                    /> {name_end}
-                </div>
+                <div class=style::author>{name_start} {sender} {badge} {name_end}</div>
                 <span>{message.content}</span>
             </div>
         </div>
