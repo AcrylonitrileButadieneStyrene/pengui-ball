@@ -1,3 +1,4 @@
+use common::messages::play::ConnectionStatus;
 use futures_util::{SinkExt as _, StreamExt as _};
 use leptos::{prelude::*, server::codee::string::FromToStringCodec};
 use leptos_use::{
@@ -20,7 +21,8 @@ pub fn Session() -> impl IntoView {
     view! {
         <Connection game=game.id.clone()>
             <svg viewBox="0 0 18 18">
-                <path d="m0 7q1.5-7 9-7 3 0 5.5 2.5l2-2.5 1.5 8h-8l2-2.5q-5-3.5-8 1.5h-4m18 4q-1.5 7-9 7-3 0-5.5-2.5l-2 2.5-1.5-8h8l-2 2.5q5 3.5 8-1.5h4" />
+                <path d="m0 7q1.5-7 9-7 3 0 5.5 2.5l2-2.5 1.5 8h-8l2-2.5q-5-3.5-8 1.5h-4" />
+                <path d="M18 11q-1.5 7-9 7-3 0-5.5-2.5l-2 2.5-1.5-8h8l-2 2.5q5 3.5 8-1.5h4" />
             </svg>
         </Connection>
     }
@@ -29,6 +31,7 @@ pub fn Session() -> impl IntoView {
 #[island]
 fn Connection(game: String, children: Children) -> impl IntoView {
     let state = use_context::<std::sync::Arc<crate::state::State>>().unwrap();
+    let room_state = state.engine.status.clone();
 
     // DIFF: forest-orb increases the interval by 5 seconds on each attempt
     // i don't think that's too necessary so it's not done here.
@@ -52,6 +55,7 @@ fn Connection(game: String, children: Children) -> impl IntoView {
                 }
             }),
     );
+    let reconnect = reconnect_handler(open, close);
 
     Effect::new({
         let state = state.clone();
@@ -72,12 +76,13 @@ fn Connection(game: String, children: Children) -> impl IntoView {
         }
     });
 
-    let reconnect = reconnect_handler(open, close);
     view! {
         <button
             class=style::reconnect
-            class:connected=move || matches!(ready_state.get(), ConnectionReadyState::Open)
-            class:connecting=move || matches!(ready_state.get(), ConnectionReadyState::Connecting)
+            class:connected=move || ready_state.get() == ConnectionReadyState::Open
+            class:connecting=move || ready_state.get() == ConnectionReadyState::Connecting
+            class:room-connected=move || room_state.get() == ConnectionStatus::Connected
+            class:room-connecting=move || room_state.get() == ConnectionStatus::Connecting
             on:click=move |_| {
                 let mut reconnect = reconnect.clone();
                 leptos::task::spawn(async move {

@@ -85,7 +85,7 @@ pub fn on_load_map(map: String) {
 #[allow(clippy::needless_pass_by_value)]
 #[wasm_bindgen]
 pub fn on_player_sprite_updated(sprite: String, index: u32, id: i32) {
-    leptos::logging::log!("changed {sprite}'s sprite to '{index}' #{id}");
+    leptos::logging::log!("changed {id}'s sprite to {sprite}/{index}");
 }
 
 #[wasm_bindgen]

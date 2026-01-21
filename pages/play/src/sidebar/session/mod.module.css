@@ -10,14 +10,26 @@
     fill: white;
 }
 
-.reconnect:global(.connecting) svg {
+.reconnect:global(.connecting) path:first-child {
     fill: orange;
 }
 
-.reconnect:global(.connected) svg {
+.reconnect:global(.connected) path:first-child {
     fill: lime;
 }
 
-.reconnect:not(:global(.connecting)):not(:global(.connected)) svg {
+.reconnect:not(:global(.connecting)):not(:global(.connected)) path:first-child {
+    fill: red;
+}
+
+.reconnect:global(.room-connecting) path:nth-child(2) {
+    fill: orange;
+}
+
+.reconnect:global(.room-connected) path:nth-child(2) {
+    fill: lime;
+}
+
+.reconnect:not(:global(.room-connecting)):not(:global(.room-connected)) path:nth-child(2) {
     fill: red;
 }

@@ -49,6 +49,7 @@ pub fn Play() -> impl IntoView {
                 <game::Game />
                 <sidebar::Sidebar />
             </main>
+            <messages::Handler />
         </state::Provider>
     })
 }
