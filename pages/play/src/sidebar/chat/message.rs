@@ -13,13 +13,22 @@ pub fn ChatMessage(message: Message, author: Option<Arc<Player>>) -> impl IntoVi
         .as_ref()
         .map_or_else(|| message.author, |player| player.name.clone());
 
+    // not reactive
+    let timestamp = message.timestamp.format(
+        if message.timestamp.date_naive() < chrono::Local::now().date_naive() {
+            "%i:%M %p (%a)"
+        } else {
+            "%i:%M %p"
+        },
+    );
+
     let (name_start, name_end) = if account { ("[", "]") } else { ("<", ">") };
 
     view! {
         <div class=style::message>
             <div class=style::header>
                 <span>Unknown Location</span>
-                99:99 AM
+                {timestamp.to_string()}
             </div>
             <div>
                 <div class=style::author>

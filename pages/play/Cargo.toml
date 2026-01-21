@@ -16,6 +16,7 @@ leptos_router.workspace = true
 leptos-use.workspace = true
 serde.workspace = true
 stylance.workspace = true
+chrono = "0.4.43"
 
 [build-dependencies]
 stylance-cli.workspace = true
