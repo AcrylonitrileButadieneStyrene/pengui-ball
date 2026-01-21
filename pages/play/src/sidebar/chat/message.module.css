@@ -1,24 +1,29 @@
 .message {
-    /* temporary */
-    padding-top: 8px;
+    display: flex;
+    flex-direction: column;
 }
 
-.message .author {
+.message~.message {
+    border-bottom: solid 4px;
+    border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.author {
+    display: inline-block;
     padding-inline-end: 6px;
 }
 
-.message .author:global(.user)::before {
-    content: "[";
-}
-
-.message .author:global(.user)::after {
-    content: "]";
-}
-
-.message .author:not(:global(.user))::before {
-    content: "<";
-}
-
-.message .author:not(:global(.user))::after {
-    content: ">";
+.badge {
+    image-rendering: auto;
+    height: 18.5px;
+    width: 18.5px;
+    margin-top: -4px;
+    margin-inline-start: 2px;
+    vertical-align: middle;
+    user-select: none;
 }

@@ -13,12 +13,24 @@ pub fn ChatMessage(message: Message, author: Option<Arc<Player>>) -> impl IntoVi
         .as_ref()
         .map_or_else(|| message.author, |player| player.name.clone());
 
+    let (name_start, name_end) = if account { ("[", "]") } else { ("<", ">") };
+
     view! {
         <div class=style::message>
-            <span class=style::author class:user=account>
-                {sender}
-            </span>
-            <span>{message.content}</span>
+            <div class=style::header>
+                <span>Unknown Location</span>
+                99:99 AM
+            </div>
+            <div>
+                <div class=style::author>
+                    {name_start} {sender}
+                    <img
+                        class=style::badge
+                        src="https://ynoproject.net/2kki/images/badge/lotus_girl.png"
+                    /> {name_end}
+                </div>
+                <span>{message.content}</span>
+            </div>
         </div>
     }
 }
