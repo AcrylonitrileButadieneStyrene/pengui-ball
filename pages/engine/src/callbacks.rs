@@ -96,13 +96,20 @@ pub fn on_player_teleported(map: u32, x: u32, y: u32) {
 #[wasm_bindgen]
 pub fn sync_player_data(
     uuid: String,
-    _rank: u32,
-    _account: bool,
-    _badge: String,
-    _medals: Vec<u32>,
-    _id: u32,
+    rank: u32,
+    account: bool,
+    badge: String,
+    medals: Vec<u32>,
+    id: u32,
 ) {
-    leptos::logging::log!("sync player {}", uuid);
+    crate::messages::send(common::PlayMessage::SyncPlayerData(
+        uuid,
+        rank,
+        account,
+        badge,
+        medals.try_into().unwrap(),
+        id,
+    ));
 }
 
 #[wasm_bindgen]

@@ -23,8 +23,9 @@ pub fn Provider(children: Children) -> impl IntoView {
 pub struct State {
     pub chat: ChatState,
     pub session_command: CommandChannel,
-    pub players: RwSignal<HashMap<Arc<str>, Arc<Player>>>,
+    pub players: RwSignal<HashMap<Arc<str>, Player>>,
     pub player_count: RwSignal<Option<u32>>,
+    pub uuids: RwSignal<HashMap<u32, Arc<str>>>,
     pub engine: EngineState,
 }
 
@@ -35,6 +36,7 @@ impl Default for State {
             session_command: CommandChannel::new(),
             players: RwSignal::new(HashMap::new()),
             player_count: RwSignal::new(None),
+            uuids: RwSignal::new(HashMap::default()),
             engine: EngineState::default(),
         }
     }

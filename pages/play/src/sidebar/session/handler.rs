@@ -33,8 +33,8 @@ pub fn on_message(state: &crate::state::State, parts: &[&str]) {
         ["p", uuid, name, system, rank, account, badge, medals @ ..] => {
             let uuid = Arc::from(*uuid);
             let new_player = Player {
-                name: Arc::from(*name),
-                system: Arc::from(*system),
+                name: Some(Arc::from(*name)),
+                system: Some(Arc::from(*system)),
                 rank: rank.parse().unwrap(),
                 account: (*account).eq("1"),
                 badge: match *badge {
@@ -50,7 +50,7 @@ pub fn on_message(state: &crate::state::State, parts: &[&str]) {
             };
 
             state.players.update(|players| {
-                players.insert(uuid, std::sync::Arc::new(new_player));
+                players.insert(uuid, new_player);
             });
         }
         [cmd, args @ ..] => {
