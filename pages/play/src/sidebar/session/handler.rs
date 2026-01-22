@@ -1,25 +1,45 @@
+use std::sync::Arc;
+
 use leptos::prelude::{Set, Update};
 
-use crate::state::{Message, Player};
+use crate::state::{Message, MessageData, Player};
 
 pub fn on_message(state: &crate::state::State, parts: &[&str]) {
     match parts {
         ["pc", count] => state.player_count.set(count.parse::<u32>().ok()),
-        ["say", uuid, txt] => state.chat.add_map(Message::new(None::<&&str>, uuid, txt)),
-        ["psay", uuid, txt, id] => state.chat.add_party(Message::new(Some(id), uuid, txt)),
-        ["gsay", uuid, _map, _, _, _x, _y, txt, id] => {
-            state.chat.add_global(Message::new(Some(id), uuid, txt));
+        ["say", uuid, text] => state.chat.map.add(Message::new(
+            None::<&str>,
+            MessageData::Map {
+                author: Arc::from(*uuid),
+                text: Arc::from(*text),
+            },
+        )),
+        ["psay", uuid, text, id] => state.chat.party.add(Message::new(
+            Some(*id),
+            MessageData::Party {
+                author: Arc::from(*uuid),
+                text: Arc::from(*text),
+            },
+        )),
+        ["gsay", uuid, _map, _, _, _x, _y, text, id] => {
+            state.chat.global.add(Message::new(
+                Some(*id),
+                MessageData::Global {
+                    author: Arc::from(*uuid),
+                    text: Arc::from(*text),
+                },
+            ));
         }
         ["p", uuid, name, system, rank, account, badge, medals @ ..] => {
-            let uuid = uuid.to_string();
+            let uuid = Arc::from(*uuid);
             let new_player = Player {
-                name: name.to_string(),
-                system: system.to_string(),
+                name: Arc::from(*name),
+                system: Arc::from(*system),
                 rank: rank.parse().unwrap(),
                 account: (*account).eq("1"),
                 badge: match *badge {
                     "null" => None,
-                    _ => Some(badge.to_string()),
+                    _ => Some(Arc::from(*badge)),
                 },
                 medals: medals
                     .iter()

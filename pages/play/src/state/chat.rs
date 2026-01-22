@@ -1,57 +1,68 @@
-use std::collections::VecDeque;
+use std::{
+    collections::VecDeque,
+    sync::{Arc, Mutex},
+};
 
 use leptos::prelude::*;
 
 use crate::state::Message;
 
 pub struct ChatState {
-    pub map_cap: RwSignal<usize>,
-    pub party_cap: RwSignal<usize>,
-    pub global_cap: RwSignal<usize>,
+    pub messages: ReadSignal<indexmap::IndexMap<Arc<str>, Message>>,
 
-    pub map: RwSignal<VecDeque<Message>>,
-    pub party: RwSignal<VecDeque<Message>>,
-    pub global: RwSignal<VecDeque<Message>>,
+    pub map: ChatChannel,
+    pub party: ChatChannel,
+    pub global: ChatChannel,
 }
 
 impl Default for ChatState {
     fn default() -> Self {
+        let (messages, set_messages) = signal(indexmap::IndexMap::new());
+
         Self {
-            map_cap: RwSignal::new(150),
-            party_cap: RwSignal::new(150),
-            global_cap: RwSignal::new(150),
-            map: RwSignal::new(VecDeque::with_capacity(150)),
-            party: RwSignal::new(VecDeque::with_capacity(150)),
-            global: RwSignal::new(VecDeque::with_capacity(150)),
+            messages,
+            map: ChatChannel::new(set_messages, 150),
+            party: ChatChannel::new(set_messages, 150),
+            global: ChatChannel::new(set_messages, 150),
         }
     }
 }
 
-impl ChatState {
-    pub fn add_map(&self, message: Message) {
-        self.map.update(|chat| {
-            if chat.len() + 1 > self.map_cap.get_untracked() {
-                chat.pop_back();
-            }
-            chat.push_front(message);
-        });
+pub struct ChatChannel {
+    pub capacity: RwSignal<usize>,
+    pub tracker: Mutex<VecDeque<Arc<str>>>,
+    messages: WriteSignal<indexmap::IndexMap<Arc<str>, Message>>,
+}
+
+impl ChatChannel {
+    pub fn new(
+        messages: WriteSignal<indexmap::IndexMap<Arc<str>, Message>>,
+        capacity: usize,
+    ) -> Self {
+        Self {
+            capacity: RwSignal::new(capacity),
+            tracker: Mutex::new(VecDeque::with_capacity(capacity)),
+            messages,
+        }
     }
 
-    pub fn add_party(&self, message: Message) {
-        self.party.update(|chat| {
-            if chat.len() + 1 > self.party_cap.get_untracked() {
-                chat.pop_back();
-            }
-            chat.push_front(message);
-        });
-    }
+    pub fn add(&self, message: Message) {
+        let mut buffer = self.tracker.lock().unwrap();
+        let removed = if buffer.len() + 1 > self.capacity.get_untracked() {
+            buffer.pop_back()
+        } else {
+            None
+        };
 
-    pub fn add_global(&self, message: Message) {
-        self.global.update(|chat| {
-            if chat.len() + 1 > self.global_cap.get_untracked() {
-                chat.pop_back();
+        let id: Arc<str> = message.id.clone().into();
+        buffer.push_front(id.clone());
+
+        self.messages.update(|messages| {
+            if let Some(id) = removed {
+                messages.shift_remove(&id);
             }
-            chat.push_front(message);
+
+            messages.insert(id, message);
         });
     }
 }

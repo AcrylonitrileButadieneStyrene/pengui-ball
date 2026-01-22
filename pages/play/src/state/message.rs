@@ -1,24 +1,41 @@
+use std::sync::Arc;
+
 #[derive(Clone)]
 pub struct Message {
-    pub id: String,
-    pub author: String,
-    pub content: String,
+    pub id: Arc<str>,
+    pub data: MessageData,
     pub timestamp: chrono::DateTime<chrono::Local>,
 }
 
 impl Message {
-    pub fn new(id: Option<impl ToString>, author: impl ToString, content: impl ToString) -> Self {
+    pub fn new(id: Option<impl Into<Arc<str>>>, data: MessageData) -> Self {
         leptos_use::use_timestamp();
 
         let timestamp = chrono::Local::now();
         Self {
             id: id.map_or_else(
-                || timestamp.timestamp_millis().to_string(),
-                |id| id.to_string(),
+                || timestamp.timestamp_millis().to_string().into(),
+                |id| id.into(),
             ),
-            author: author.to_string(),
-            content: content.to_string(),
+            data,
             timestamp,
+        }
+    }
+}
+
+#[derive(Clone)]
+pub enum MessageData {
+    Map { author: Arc<str>, text: Arc<str> },
+    Party { author: Arc<str>, text: Arc<str> },
+    Global { author: Arc<str>, text: Arc<str> },
+}
+
+impl MessageData {
+    pub fn author(&self) -> Option<Arc<str>> {
+        match self {
+            Self::Map { author, .. } => Some(author.clone()),
+            Self::Party { author, .. } => Some(author.clone()),
+            Self::Global { author, .. } => Some(author.clone()),
         }
     }
 }

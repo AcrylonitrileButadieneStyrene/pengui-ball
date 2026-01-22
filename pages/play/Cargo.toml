@@ -10,6 +10,7 @@ workspace = true
 common.path = "../../common"
 futures-channel = "0.3.31"
 futures-util = "0.3.31"
+indexmap = "2.13.0"
 leptos.workspace = true
 leptos_meta.workspace = true
 leptos_router.workspace = true

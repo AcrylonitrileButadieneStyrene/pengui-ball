@@ -11,7 +11,7 @@ mod player;
 
 pub use chat::ChatState;
 pub use engine::EngineState;
-pub use message::Message;
+pub use message::{Message, MessageData};
 pub use player::Player;
 
 #[island]
@@ -23,7 +23,7 @@ pub fn Provider(children: Children) -> impl IntoView {
 pub struct State {
     pub chat: ChatState,
     pub session_command: CommandChannel,
-    pub players: RwSignal<HashMap<String, Arc<Player>>>,
+    pub players: RwSignal<HashMap<Arc<str>, Arc<Player>>>,
     pub player_count: RwSignal<Option<u32>>,
     pub engine: EngineState,
 }
