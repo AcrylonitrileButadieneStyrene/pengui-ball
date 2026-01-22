@@ -23,9 +23,9 @@ pub fn Provider(children: Children) -> impl IntoView {
 pub struct State {
     pub chat: ChatState,
     pub session_command: CommandChannel,
-    pub players: RwSignal<HashMap<Arc<str>, Player>>,
+    pub players: RwSignal<HashMap<Arc<str>, RwSignal<Player>>>,
     pub player_count: RwSignal<Option<u32>>,
-    pub uuids: RwSignal<HashMap<u32, Arc<str>>>,
+    pub uuids: RwSignal<HashMap<i32, Arc<str>>>,
     pub engine: EngineState,
 }
 

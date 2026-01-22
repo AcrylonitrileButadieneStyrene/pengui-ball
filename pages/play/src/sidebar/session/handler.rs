@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use leptos::prelude::{Set, Update};
+use leptos::prelude::{RwSignal, Set, Update};
 
 use crate::state::{Message, MessageData, Player};
 
@@ -50,7 +50,7 @@ pub fn on_message(state: &crate::state::State, parts: &[&str]) {
             };
 
             state.players.update(|players| {
-                players.insert(uuid, new_player);
+                players.insert(uuid, RwSignal::new(new_player));
             });
         }
         [cmd, args @ ..] => {

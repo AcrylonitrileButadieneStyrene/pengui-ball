@@ -20,35 +20,66 @@ fn handle(state: &crate::State, message: common::PlayMessage) {
         common::PlayMessage::ConnectionStatusUpdated(status) => {
             state.engine.set_status(status);
         }
-        common::PlayMessage::SyncPlayerData(uuid, rank, account, badge, medals, id) => {
+        common::PlayMessage::PlayerSync(common::messages::play::PlayerSyncData {
+            uuid,
+            rank,
+            account,
+            badge,
+            medals,
+            id,
+        }) => {
             let uuid = Arc::<str>::from(uuid);
             state
                 .uuids
                 .update(|uuids| drop(uuids.insert(id, uuid.clone())));
-            state.players.update(|players| {
-                let badge = match &*badge {
-                    "null" => None,
-                    _ => Some(Arc::from(badge)),
-                };
 
-                if let Some(player) = players.get_mut(&uuid) {
+            let badge = match &*badge {
+                "null" => None,
+                _ => Some(Arc::from(badge)),
+            };
+
+            // get player, create new if neeeded, then update
+            state
+                .players
+                .with(|players| players.get(&uuid).cloned())
+                .unwrap_or_else(|| {
+                    let signal = RwSignal::new(crate::state::Player::default());
+                    state
+                        .players
+                        .update(|players| assert!(players.insert(uuid.clone(), signal).is_none()));
+                    signal
+                })
+                .update(|player| {
                     player.rank = rank;
                     player.account = account;
                     player.badge = badge;
                     player.medals = medals;
-                } else {
-                    players.insert(
-                        uuid,
-                        crate::state::Player {
-                            name: None,
-                            system: None,
-                            rank,
-                            account,
-                            badge,
-                            medals,
-                        },
-                    );
-                }
+                });
+        }
+        common::PlayMessage::PlayerConnect(common::messages::play::PlayerConnectData {
+            id,
+            name,
+            system,
+        }) => {
+            state.players.with(|players| {
+                let uuids = state.uuids.read_untracked();
+                let Some(uuid) = uuids.get(&id) else {
+                    return;
+                };
+
+                let Some(player) = players.get(uuid) else {
+                    return;
+                };
+
+                player.update(|player| {
+                    if !name.is_empty() {
+                        player.name = Some(name.into());
+                    }
+
+                    if !system.is_empty() {
+                        player.system = Some(system.into());
+                    }
+                });
             });
         }
     }

@@ -43,23 +43,29 @@ fn Author(uuid: Arc<str>) -> impl IntoView {
     let author = state
         .players
         .with_untracked(|players| players.get(&uuid).cloned());
-    let (account, sender, badge) = author.as_ref().map_or_default(|player| {
-        (
-            player.account,
-            player.name.clone(),
-            player.badge.as_ref().map(|badge| {
+
+    author.map(|player| {
+        move || {
+            let player = player.get();
+
+            let (name_start, name_end) = if player.account {
+                ("[", "]")
+            } else {
+                ("<", ">")
+            };
+
+            let badge = player.badge.as_ref().map(|badge| {
                 view! {
                     <img
                         class=style::badge
                         src=format!("https://ynoproject.net/2kki/images/badge/{badge}.png")
                     />
                 }
-            }),
-        )
-    });
-    let (name_start, name_end) = if account { ("[", "]") } else { ("<", ">") };
+            });
 
-    view! {
-        <div class=style::author>{name_start} {sender} {badge} {name_end}</div>
-    }
+            view! {
+                <div class=style::author>{name_start} {player.name.clone()} {badge} {name_end}</div>
+            }
+        }
+    })
 }

@@ -100,15 +100,17 @@ pub fn sync_player_data(
     account: bool,
     badge: String,
     medals: Vec<u32>,
-    id: u32,
+    id: i32,
 ) {
-    crate::messages::send(common::PlayMessage::SyncPlayerData(
-        uuid,
-        rank,
-        account,
-        badge,
-        medals.try_into().unwrap(),
-        id,
+    crate::messages::send(common::PlayMessage::PlayerSync(
+        common::messages::play::PlayerSyncData {
+            uuid,
+            rank,
+            account,
+            badge,
+            medals: medals.try_into().unwrap(),
+            id,
+        },
     ));
 }
 
@@ -124,8 +126,10 @@ pub fn should_connect_player(_uuid: String) -> bool {
 }
 
 #[wasm_bindgen]
-pub fn on_player_connected_or_updated(_system: String, name: String, id: u32) {
-    leptos::logging::log!("connected {name} as id {id}");
+pub fn on_player_connected_or_updated(system: String, name: String, id: i32) {
+    crate::messages::send(common::PlayMessage::PlayerConnect(
+        common::messages::play::PlayerConnectData { id, system, name },
+    ));
 }
 
 #[wasm_bindgen]

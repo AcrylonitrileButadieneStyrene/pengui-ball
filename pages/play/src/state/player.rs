@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct Player {
     pub name: Option<Arc<str>>,
     pub system: Option<Arc<str>>,
