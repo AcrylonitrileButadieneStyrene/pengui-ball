@@ -1,12 +1,12 @@
 use std::sync::Arc;
 
-use leptos::prelude::{RwSignal, Set, Update};
+use leptos::prelude::*;
 
-use crate::state::{Message, MessageData, Player};
+use crate::state::{Message, MessageData};
 
 pub fn on_message(state: &crate::state::State, parts: &[&str]) {
     match parts {
-        ["pc", count] => state.player_count.set(count.parse::<u32>().ok()),
+        ["pc", count] => state.players.count.set(count.parse::<u32>().ok()),
         ["say", uuid, text] => state.chat.map.add(Message::new(
             None::<&str>,
             MessageData::Map {
@@ -32,25 +32,24 @@ pub fn on_message(state: &crate::state::State, parts: &[&str]) {
         }
         ["p", uuid, name, system, rank, account, badge, medals @ ..] => {
             let uuid = Arc::from(*uuid);
-            let new_player = Player {
-                name: Some(Arc::from(*name)),
-                system: Some(Arc::from(*system)),
-                rank: rank.parse().unwrap(),
-                account: (*account).eq("1"),
-                badge: match *badge {
+
+            leptos::logging::log!("CHANGED {name} BADGE TO {badge}");
+
+            state.players.get_or_init(&uuid).update(|player| {
+                player.name = Some(Arc::from(*name));
+                player.system = Some(Arc::from(*system));
+                player.rank = rank.parse().unwrap();
+                player.account = (*account).eq("1");
+                player.badge = match *badge {
                     "null" => None,
                     _ => Some(Arc::from(*badge)),
-                },
-                medals: medals
+                };
+                player.medals = medals
                     .iter()
                     .map(|medal| medal.parse().unwrap())
                     .collect::<Vec<_>>()
                     .try_into()
-                    .unwrap(),
-            };
-
-            state.players.update(|players| {
-                players.insert(uuid, RwSignal::new(new_player));
+                    .unwrap();
             });
         }
         [cmd, args @ ..] => {

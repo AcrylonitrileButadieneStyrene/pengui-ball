@@ -30,6 +30,7 @@ fn handle(state: &crate::State, message: common::PlayMessage) {
         }) => {
             let uuid = Arc::<str>::from(uuid);
             state
+                .players
                 .uuids
                 .update(|uuids| drop(uuids.insert(id, uuid.clone())));
 
@@ -38,31 +39,20 @@ fn handle(state: &crate::State, message: common::PlayMessage) {
                 _ => Some(Arc::from(badge)),
             };
 
-            // get player, create new if neeeded, then update
-            state
-                .players
-                .with(|players| players.get(&uuid).cloned())
-                .unwrap_or_else(|| {
-                    let signal = RwSignal::new(crate::state::Player::default());
-                    state
-                        .players
-                        .update(|players| assert!(players.insert(uuid.clone(), signal).is_none()));
-                    signal
-                })
-                .update(|player| {
-                    player.rank = rank;
-                    player.account = account;
-                    player.badge = badge;
-                    player.medals = medals;
-                });
+            state.players.get_or_init(&uuid).update(|player| {
+                player.rank = rank;
+                player.account = account;
+                player.badge = badge;
+                player.medals = medals;
+            });
         }
         common::PlayMessage::PlayerConnect(common::messages::play::PlayerConnectData {
             id,
             name,
             system,
         }) => {
-            state.players.with(|players| {
-                let uuids = state.uuids.read_untracked();
+            state.players.with_untracked(|players| {
+                let uuids = state.players.uuids.read_untracked();
                 let Some(uuid) = uuids.get(&id) else {
                     return;
                 };

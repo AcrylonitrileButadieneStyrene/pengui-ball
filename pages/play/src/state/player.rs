@@ -1,4 +1,41 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
+
+use leptos::prelude::*;
+
+pub struct PlayersState {
+    pub inner: RwSignal<HashMap<Arc<str>, RwSignal<Player>>>,
+    pub count: RwSignal<Option<u32>>,
+    pub uuids: RwSignal<HashMap<i32, Arc<str>>>,
+}
+
+impl std::ops::Deref for PlayersState {
+    type Target = RwSignal<HashMap<Arc<str>, RwSignal<Player>>>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
+
+impl Default for PlayersState {
+    fn default() -> Self {
+        Self {
+            inner: RwSignal::new(HashMap::new()),
+            count: RwSignal::new(None),
+            uuids: RwSignal::new(HashMap::default()),
+        }
+    }
+}
+
+impl PlayersState {
+    pub fn get_or_init(&self, uuid: &Arc<str>) -> RwSignal<Player> {
+        self.with_untracked(|players| players.get(uuid).cloned())
+            .unwrap_or_else(|| {
+                let signal = RwSignal::new(crate::state::Player::default());
+                self.update(|players| assert!(players.insert(uuid.clone(), signal).is_none()));
+                signal
+            })
+    }
+}
 
 #[derive(Clone, Default)]
 pub struct Player {

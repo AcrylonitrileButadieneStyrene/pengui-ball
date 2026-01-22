@@ -10,7 +10,8 @@ pub fn PlayerCount() -> impl IntoView {
         format!(
             "{} Players Online",
             state
-                .player_count
+                .players
+                .count
                 .get()
                 .map_or_else(|| "?".to_string(), |count| count.to_string())
         )
