@@ -6,7 +6,7 @@ stylance::import_style!(pub style, "mod.module.css");
 
 #[component]
 pub fn Header() -> impl IntoView {
-    let game = use_context::<crate::CurrentGame>().unwrap();
+    let game = expect_context::<crate::CurrentGame>();
 
     view! {
         <header class=style::header>

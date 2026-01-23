@@ -19,7 +19,7 @@ pub fn Chat() -> impl IntoView {
 
 #[island]
 pub fn ChatMessages() -> impl IntoView {
-    let state = use_context::<std::sync::Arc<crate::state::State>>().unwrap();
+    let state = expect_context::<std::sync::Arc<crate::state::State>>();
     let messages = state.chat.messages;
 
     let each = move || {

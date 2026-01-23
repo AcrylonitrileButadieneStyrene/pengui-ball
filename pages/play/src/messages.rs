@@ -4,7 +4,7 @@ use leptos::{ev, prelude::*};
 
 #[island]
 pub fn Handler() -> impl IntoView {
-    let state = use_context::<Arc<crate::State>>().unwrap();
+    let state = expect_context::<Arc<crate::State>>();
 
     window_event_listener(ev::message, move |ev| {
         let Some(message) = common::PlayMessage::de(ev.data()) else {

@@ -19,7 +19,7 @@ pub type CurrentGame = std::sync::Arc<common::config::Game>;
 #[component]
 pub fn Play() -> impl IntoView {
     let id = use_params_map().get().get("game").unwrap();
-    let config = use_context::<std::sync::Arc<common::Config>>().unwrap();
+    let config = expect_context::<std::sync::Arc<common::Config>>();
     let games = config.games.clone();
 
     let Some(game) = games.into_iter().find(|game| game.id == id) else {

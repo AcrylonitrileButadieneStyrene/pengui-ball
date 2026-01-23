@@ -16,7 +16,7 @@ pub fn Game() -> impl IntoView {
 
 #[island]
 fn Engine() -> impl IntoView {
-    let state = use_context::<std::sync::Arc<crate::State>>().unwrap();
+    let state = expect_context::<std::sync::Arc<crate::State>>();
 
     view! {
         <iframe

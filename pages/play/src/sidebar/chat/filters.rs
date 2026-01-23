@@ -37,7 +37,7 @@ fn Filter(of: Filter) -> impl IntoView {
 
 #[island]
 fn Handler(filter: Filter) -> impl IntoView {
-    let state = use_context::<std::sync::Arc<crate::State>>().unwrap();
+    let state = expect_context::<std::sync::Arc<crate::State>>();
     let filter = match filter {
         Filter::Map => state.chat.map.filter,
         Filter::Global => state.chat.global.filter,

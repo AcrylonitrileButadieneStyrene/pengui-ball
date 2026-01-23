@@ -16,7 +16,7 @@ stylance::import_style!(pub style, "mod.module.css");
 
 #[component]
 pub fn Session() -> impl IntoView {
-    let game = use_context::<CurrentGame>().unwrap();
+    let game = expect_context::<CurrentGame>();
 
     view! {
         <Connection game=game.id.clone()>
@@ -30,7 +30,7 @@ pub fn Session() -> impl IntoView {
 
 #[island]
 fn Connection(game: String, children: Children) -> impl IntoView {
-    let state = use_context::<std::sync::Arc<crate::state::State>>().unwrap();
+    let state = expect_context::<std::sync::Arc<crate::state::State>>();
     let room_state = state.engine.status.clone();
 
     // DIFF: forest-orb increases the interval by 5 seconds on each attempt

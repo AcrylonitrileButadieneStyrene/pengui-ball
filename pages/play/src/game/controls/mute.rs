@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 #[island]
 pub fn Mute(children: Children) -> impl IntoView {
-    let state = use_context::<std::sync::Arc<crate::State>>().unwrap();
+    let state = expect_context::<std::sync::Arc<crate::State>>();
     let (muted, set_muted) = signal(false);
 
     Effect::new(move || {

@@ -45,7 +45,7 @@ pub fn ChatMessage(message: Message) -> impl IntoView {
 
 #[island]
 fn Author(uuid: Arc<str>) -> impl IntoView {
-    let state = use_context::<std::sync::Arc<crate::state::State>>().unwrap();
+    let state = expect_context::<std::sync::Arc<crate::state::State>>();
     let author = state
         .players
         .with_untracked(|players| players.get(&uuid).cloned());

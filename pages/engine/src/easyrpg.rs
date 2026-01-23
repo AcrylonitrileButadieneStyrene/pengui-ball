@@ -27,8 +27,8 @@ fn LoadPlayer(game: String, children: Children) -> impl IntoView {
 
 #[island]
 fn StartPlayer(children: Children) -> impl IntoView {
-    let loaded = use_context::<Loaded>().unwrap();
-    let state = use_context::<std::sync::Arc<crate::EngineState>>().unwrap();
+    let loaded = expect_context::<Loaded>();
+    let state = expect_context::<std::sync::Arc<crate::EngineState>>();
 
     Effect::new(move || {
         if !loaded.0.get() {

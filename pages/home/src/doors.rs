@@ -4,7 +4,7 @@ stylance::import_style!(pub style, "doors.module.css");
 
 #[component]
 pub fn Doors() -> impl IntoView {
-    let config = use_context::<std::sync::Arc<common::Config>>().unwrap();
+    let config = expect_context::<std::sync::Arc<common::Config>>();
     let games = config.games.clone();
 
     view! {
@@ -37,7 +37,7 @@ fn DoorsContext(children: Children) -> impl IntoView {
 
 #[island]
 fn DoorsSound() -> impl IntoView {
-    let selected = use_context::<RwSignal<Option<usize>>>().unwrap();
+    let selected = expect_context::<RwSignal<Option<usize>>>();
     let node_ref = NodeRef::new();
 
     Effect::new(move || {

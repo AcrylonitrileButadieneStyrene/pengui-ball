@@ -37,7 +37,7 @@ pub fn Door(index: usize, game: common::config::Game) -> impl IntoView {
 #[island]
 fn DoorSound(id: String, index: usize, children: Children) -> impl IntoView {
     let node_ref = NodeRef::new();
-    let selected = use_context::<RwSignal<Option<usize>>>().unwrap();
+    let selected = expect_context::<RwSignal<Option<usize>>>();
 
     Effect::new(move || {
         if selected() == Some(index)
@@ -65,7 +65,7 @@ fn DoorSound(id: String, index: usize, children: Children) -> impl IntoView {
 
 #[island]
 fn DoorClickable(id: String, index: usize, children: Children) -> impl IntoView {
-    let selected = use_context::<RwSignal<Option<usize>>>().unwrap();
+    let selected = expect_context::<RwSignal<Option<usize>>>();
 
     let href = format!("/{id}/");
     let on_click = {
@@ -91,7 +91,7 @@ fn DoorClickable(id: String, index: usize, children: Children) -> impl IntoView 
 
 #[island]
 fn DoorSpotlight(index: usize) -> impl IntoView {
-    let selected = use_context::<RwSignal<Option<usize>>>().unwrap();
+    let selected = expect_context::<RwSignal<Option<usize>>>();
 
     view! {
         <Show when=move || selected() == Some(index)>
@@ -102,7 +102,7 @@ fn DoorSpotlight(index: usize) -> impl IntoView {
 
 #[island]
 fn DoorImage(id: String, index: usize) -> impl IntoView {
-    let selected = use_context::<RwSignal<Option<usize>>>().unwrap();
+    let selected = expect_context::<RwSignal<Option<usize>>>();
 
     view! {
         <img
