@@ -1,6 +1,7 @@
 use leptos::prelude::*;
 
 mod controls;
+mod messages;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -16,7 +17,8 @@ pub fn Game() -> impl IntoView {
 
 #[island]
 fn Engine() -> impl IntoView {
-    let state = expect_context::<std::sync::Arc<crate::State>>();
+    let state = crate::state();
+    messages::setup_handler(state.clone());
 
     view! {
         <iframe

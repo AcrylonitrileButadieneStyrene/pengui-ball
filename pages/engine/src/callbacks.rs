@@ -68,7 +68,7 @@ pub fn on_update_system_graphic(graphic: String) {
 #[wasm_bindgen]
 pub fn on_update_connection_status(status: u32) {
     use common::messages::play::ConnectionStatus;
-    crate::messages::send(common::PlayMessage::ConnectionStatusUpdated(match status {
+    crate::send(common::PlayMessage::ConnectionStatusUpdated(match status {
         0 => ConnectionStatus::Disconnected,
         1 => ConnectionStatus::Connected,
         2 => ConnectionStatus::Connecting,
@@ -102,7 +102,7 @@ pub fn sync_player_data(
     medals: Vec<u32>,
     id: i32,
 ) {
-    crate::messages::send(common::PlayMessage::PlayerSync(
+    crate::send(common::PlayMessage::PlayerSync(
         common::messages::play::PlayerSyncData {
             uuid,
             rank,
@@ -127,7 +127,7 @@ pub fn should_connect_player(_uuid: String) -> bool {
 
 #[wasm_bindgen]
 pub fn on_player_connected_or_updated(system: String, name: String, id: i32) {
-    crate::messages::send(common::PlayMessage::PlayerConnect(
+    crate::send(common::PlayMessage::PlayerConnect(
         common::messages::play::PlayerConnectData { id, system, name },
     ));
 }

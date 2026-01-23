@@ -1,25 +1,28 @@
 #![feature(result_option_map_or_default)]
 #![allow(non_snake_case)]
 
+use std::sync::Arc;
+
 use leptos::prelude::*;
 use leptos_router::hooks::use_params_map;
 
 mod game;
 mod header;
-mod messages;
 mod sidebar;
 mod state;
 
-pub use state::State;
-
 stylance::import_style!(pub style, "lib.module.css");
 
-pub type CurrentGame = std::sync::Arc<common::config::Game>;
+pub type CurrentGame = Arc<common::config::Game>;
+
+pub fn state() -> Arc<state::PlayState> {
+    expect_context::<Arc<state::PlayState>>()
+}
 
 #[component]
 pub fn Play() -> impl IntoView {
     let id = use_params_map().get().get("game").unwrap();
-    let config = expect_context::<std::sync::Arc<common::Config>>();
+    let config = expect_context::<Arc<common::Config>>();
     let games = config.games.clone();
 
     let Some(game) = games.into_iter().find(|game| game.id == id) else {
@@ -28,7 +31,7 @@ pub fn Play() -> impl IntoView {
         );
     };
 
-    let game = std::sync::Arc::new(game);
+    let game = Arc::new(game);
     provide_context(game.clone());
 
     leptos::either::Either::Right(view! {
@@ -49,7 +52,6 @@ pub fn Play() -> impl IntoView {
                 <game::Game />
                 <sidebar::Sidebar />
             </main>
-            <messages::Handler />
         </state::Provider>
     })
 }

@@ -30,7 +30,7 @@ pub fn Session() -> impl IntoView {
 
 #[island]
 fn Connection(game: String, children: Children) -> impl IntoView {
-    let state = expect_context::<std::sync::Arc<crate::state::State>>();
+    let state = crate::state();
     let room_state = state.engine.status.clone();
 
     // DIFF: forest-orb increases the interval by 5 seconds on each attempt

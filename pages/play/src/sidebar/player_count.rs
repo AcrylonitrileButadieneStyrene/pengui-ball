@@ -4,8 +4,7 @@ stylance::import_style!(pub style, "player_count.module.css");
 
 #[island]
 pub fn PlayerCount() -> impl IntoView {
-    let state = expect_context::<std::sync::Arc<crate::state::State>>();
-
+    let state = crate::state();
     let text = move || {
         format!(
             "{} Players Online",

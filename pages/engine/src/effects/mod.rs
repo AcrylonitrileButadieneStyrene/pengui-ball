@@ -4,7 +4,7 @@ mod volume;
 
 #[island]
 pub fn Effects() -> impl IntoView {
-    let state = expect_context::<std::sync::Arc<crate::EngineState>>();
+    let state = expect_context::<crate::EngineState>();
 
     volume::effect(state);
 }

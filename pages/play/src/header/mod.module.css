@@ -8,6 +8,10 @@
     padding-bottom: 6px;
 }
 
+.middle {
+    flex: 1;
+}
+
 .game_logo {
     height: 48px;
 }

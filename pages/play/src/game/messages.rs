@@ -1,11 +1,12 @@
 use std::sync::Arc;
 
+use common::{
+    PlayMessage,
+    messages::play::{PlayerConnectData, PlayerSyncData},
+};
 use leptos::{ev, prelude::*};
 
-#[island]
-pub fn Handler() -> impl IntoView {
-    let state = expect_context::<Arc<crate::State>>();
-
+pub fn setup_handler(state: Arc<crate::state::PlayState>) {
     window_event_listener(ev::message, move |ev| {
         let Some(message) = common::PlayMessage::de(ev.data()) else {
             return;
@@ -15,12 +16,12 @@ pub fn Handler() -> impl IntoView {
     });
 }
 
-fn handle(state: &crate::State, message: common::PlayMessage) {
+fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
     match message {
-        common::PlayMessage::ConnectionStatusUpdated(status) => {
+        PlayMessage::ConnectionStatusUpdated(status) => {
             state.engine.set_status(status);
         }
-        common::PlayMessage::PlayerSync(common::messages::play::PlayerSyncData {
+        PlayMessage::PlayerSync(PlayerSyncData {
             uuid,
             rank,
             account,
@@ -46,11 +47,7 @@ fn handle(state: &crate::State, message: common::PlayMessage) {
                 player.medals = medals;
             });
         }
-        common::PlayMessage::PlayerConnect(common::messages::play::PlayerConnectData {
-            id,
-            name,
-            system,
-        }) => {
+        PlayMessage::PlayerConnect(PlayerConnectData { id, name, system }) => {
             state.players.with_untracked(|players| {
                 let uuids = state.players.uuids.read_untracked();
                 let Some(uuid) = uuids.get(&id) else {

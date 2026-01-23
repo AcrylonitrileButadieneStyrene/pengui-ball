@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+pub mod messages;
+
 #[component]
 pub fn EasyRPG(game: String, children: Children) -> impl IntoView {
     view! {
@@ -14,6 +16,9 @@ pub struct Loaded(pub ReadSignal<bool>);
 
 #[island]
 fn LoadPlayer(game: String, children: Children) -> impl IntoView {
+    let state = expect_context::<crate::EngineState>();
+    messages::setup_handler(state);
+
     let (loaded, set_loaded) = signal(false);
     provide_context(Loaded(loaded));
 
@@ -28,7 +33,7 @@ fn LoadPlayer(game: String, children: Children) -> impl IntoView {
 #[island]
 fn StartPlayer(children: Children) -> impl IntoView {
     let loaded = expect_context::<Loaded>();
-    let state = expect_context::<std::sync::Arc<crate::EngineState>>();
+    let state = expect_context::<crate::EngineState>();
 
     Effect::new(move || {
         if !loaded.0.get() {

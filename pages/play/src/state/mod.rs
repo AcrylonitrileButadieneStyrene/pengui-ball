@@ -16,18 +16,18 @@ pub use player::{Player, PlayersState};
 
 #[island]
 pub fn Provider(children: Children) -> impl IntoView {
-    provide_context(Arc::new(State::default()));
+    provide_context(Arc::new(PlayState::default()));
     children()
 }
 
-pub struct State {
+pub struct PlayState {
     pub chat: ChatState,
     pub session_command: CommandChannel,
     pub players: PlayersState,
     pub engine: EngineState,
 }
 
-impl Default for State {
+impl Default for PlayState {
     fn default() -> Self {
         Self {
             chat: ChatState::default(),

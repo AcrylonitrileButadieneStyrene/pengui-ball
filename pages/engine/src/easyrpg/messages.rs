@@ -1,9 +1,6 @@
 use leptos::{ev, prelude::*};
 
-#[island]
-pub fn Handler() -> impl IntoView {
-    let state = expect_context::<std::sync::Arc<crate::EngineState>>();
-
+pub fn setup_handler(state: crate::EngineState) {
     window_event_listener(ev::message, move |ev| {
         let Some(message) = common::EngineMessage::de(ev.data()) else {
             return;

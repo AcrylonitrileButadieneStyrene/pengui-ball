@@ -4,7 +4,7 @@ use leptos::prelude::*;
 
 use crate::state::{Message, MessageData};
 
-pub fn on_message(state: &crate::state::State, parts: &[&str]) {
+pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
     match parts {
         ["pc", count] => state.players.count.set(count.parse::<u32>().ok()),
         ["say", uuid, text] => state.chat.map.add(Message::new(
@@ -32,8 +32,6 @@ pub fn on_message(state: &crate::state::State, parts: &[&str]) {
         }
         ["p", uuid, name, system, rank, account, badge, medals @ ..] => {
             let uuid = Arc::from(*uuid);
-
-            leptos::logging::log!("CHANGED {name} BADGE TO {badge}");
 
             state.players.get_or_init(&uuid).update(|player| {
                 player.name = Some(Arc::from(*name));

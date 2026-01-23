@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-pub fn effect(state: std::sync::Arc<crate::EngineState>) {
+pub fn effect(state: crate::EngineState) {
     Effect::new(move || {
         state.easyrpg_player.call({
             let state = state.clone();
