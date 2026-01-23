@@ -1,10 +1,13 @@
 use std::sync::Arc;
 
+use leptos::prelude::*;
+
 #[derive(Clone)]
 pub struct Message {
     pub id: Arc<str>,
     pub data: MessageData,
     pub timestamp: chrono::DateTime<chrono::Local>,
+    pub filtered: Option<ReadSignal<bool>>,
 }
 
 impl Message {
@@ -19,6 +22,7 @@ impl Message {
             ),
             data,
             timestamp,
+            filtered: None,
         }
     }
 }

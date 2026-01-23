@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 
+mod filters;
 mod message;
 
 stylance::import_style!(pub style, "mod.module.css");
@@ -12,6 +13,7 @@ pub fn Chat() -> impl IntoView {
                 <ChatMessages />
             </div>
         </div>
+        <filters::Filters />
     }
 }
 
@@ -34,11 +36,5 @@ pub fn ChatMessages() -> impl IntoView {
         })
     };
 
-    view! {
-        <For
-            each=each
-            key=|key| std::sync::Arc::as_ptr(&key)
-            children=render
-        />
-    }
+    view! { <For each=each key=|key| std::sync::Arc::as_ptr(&key) children=render /> }
 }

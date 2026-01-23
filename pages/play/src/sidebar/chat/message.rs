@@ -17,23 +17,29 @@ pub fn ChatMessage(message: Message) -> impl IntoView {
         },
     );
 
-    match &message.data {
-        MessageData::Map { author, text }
-        | MessageData::Party { author, text }
-        | MessageData::Global { author, text } => {
-            view! {
-                <div class=style::message>
-                    <div class=style::header>
-                        <span>Unknown Location</span>
-                        {timestamp.to_string()}
-                    </div>
-                    <div>
-                        <Author uuid=author.clone() />
-                        <span>{text.to_string()}</span>
-                    </div>
-                </div>
-            }
-        }
+    view! {
+        <Show when=move || {
+            !message.filtered.map_or_default(|filter| filter.get())
+        }>
+            {match &message.data {
+                MessageData::Map { author, text }
+                | MessageData::Party { author, text }
+                | MessageData::Global { author, text } => {
+                    view! {
+                        <div class=style::message>
+                            <div class=style::header>
+                                <span>Unknown Location</span>
+                                {timestamp.to_string()}
+                            </div>
+                            <div>
+                                <Author uuid=author.clone() />
+                                <span>{text.to_string()}</span>
+                            </div>
+                        </div>
+                    }
+                }
+            }}
+        </Show>
     }
 }
 
@@ -63,9 +69,7 @@ fn Author(uuid: Arc<str>) -> impl IntoView {
                 }
             });
 
-            view! {
-                <div class=style::author>{name_start} {player.name.clone()} {badge} {name_end}</div>
-            }
+            view! { <div class=style::author>{name_start} {player.name.clone()} {badge} {name_end}</div> }
         }
     })
 }
