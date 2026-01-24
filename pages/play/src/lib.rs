@@ -8,6 +8,7 @@ use leptos_router::hooks::use_params_map;
 
 mod game;
 mod header;
+mod modals;
 mod sidebar;
 mod state;
 

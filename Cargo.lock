@@ -1884,6 +1884,7 @@ dependencies = [
  "common",
  "futures-channel",
  "futures-util",
+ "gloo-net",
  "indexmap",
  "leptos",
  "leptos-use",

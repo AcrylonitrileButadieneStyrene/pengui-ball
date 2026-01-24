@@ -17,6 +17,28 @@ pub fn Header() -> impl IntoView {
             />
 
             <div class=style::middle />
+            <CurrentUser />
         </header>
+    }
+}
+
+#[island]
+fn CurrentUser() -> impl IntoView {
+    let state = crate::state();
+
+    move || {
+        state.user.map(|user| match user {
+            Ok(user) => user.uuid.clone().into_any(),
+            Err(_) => {
+                view! {
+                    <crate::modals::Modal>
+                        CORS issue. I will make a userscript for this later.<br/>
+                        For now use a CORS bypass extension
+                        (and configure it correctly for your own security).
+                    </crate::modals::Modal>
+                }
+            }
+            .into_any(),
+        })
     }
 }

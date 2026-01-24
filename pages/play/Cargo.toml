@@ -18,6 +18,7 @@ leptos-use.workspace = true
 serde.workspace = true
 stylance.workspace = true
 chrono = "0.4.43"
+gloo-net = { version = "0.6.0", default-features = false, features = ["http", "json", "serde", "serde_json"] }
 
 [build-dependencies]
 stylance-cli.workspace = true

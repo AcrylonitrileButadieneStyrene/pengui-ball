@@ -1,0 +1,21 @@
+.modal {
+    background: url("https://ynoproject.net/2kki/images/ui/2kki/system1/containerbg.png");
+    border: solid 12px;
+    border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
+    padding: 12px;
+    inset: 0;
+    color: white;
+    z-index: 1;
+}
+
+.modal :first-child {
+    color: white;
+    position: absolute;
+    top: -24px;
+    right: -24px;
+    border: 0;
+    background: 0;
+    font-size: 32px;
+    line-height: 32px;
+    cursor: pointer;
+}
