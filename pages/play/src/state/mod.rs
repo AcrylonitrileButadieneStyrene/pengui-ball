@@ -27,6 +27,7 @@ pub struct PlayState {
     pub players: PlayersState,
     pub engine: EngineState,
     pub user: LocalResource<Result<user::User, gloo_net::Error>>,
+    pub modal: RwSignal<Option<crate::modals::Modals>>,
 }
 
 impl PlayState {
@@ -44,6 +45,7 @@ impl PlayState {
                     .await
                     .unwrap())
             }),
+            modal: RwSignal::new(None),
         }
     }
 }

@@ -53,6 +53,7 @@ pub fn Play() -> impl IntoView {
                 <game::Game />
                 <sidebar::Sidebar />
             </main>
+            <modals::Modals />
         </state::Provider>
     })
 }

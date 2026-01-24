@@ -24,21 +24,20 @@ pub fn Header() -> impl IntoView {
 
 #[island]
 fn CurrentUser() -> impl IntoView {
+    let (once, set_once) = signal(true);
     let state = crate::state();
 
     move || {
         state.user.map(|user| match user {
-            Ok(user) => user.uuid.clone().into_any(),
+            Ok(user) => Some(user.uuid.clone()),
             Err(_) => {
-                view! {
-                    <crate::modals::Modal>
-                        CORS issue. I will make a userscript for this later.<br/>
-                        For now use a CORS bypass extension
-                        (and configure it correctly for your own security).
-                    </crate::modals::Modal>
+                if once.get_untracked() {
+                    set_once(false);
+                    state.modal.set(Some(crate::modals::Modals::CORS));
                 }
+
+                None
             }
-            .into_any(),
         })
     }
 }
