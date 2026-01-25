@@ -1,3 +1,10 @@
+:root {
+    /* This is a hack to fix Chrome Lighthouse. If it is set to exactly zero
+     * then the analyzer bugs out and refuses to see an LCP element and dies.
+     */
+    --fade-in-opacity: 0.001;
+}
+
 body.home {
     background: url("https://ynoproject.net/images/bg.png");
     background-size: cover;

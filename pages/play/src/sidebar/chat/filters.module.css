@@ -7,7 +7,6 @@
     border: solid 4px;
     border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
     user-select: none;
-    cursor: pointer;
     color: red;
 }
 

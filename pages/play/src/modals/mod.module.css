@@ -5,17 +5,24 @@
     padding: 12px;
     inset: 0;
     color: white;
-    z-index: 1;
+    overflow: visible;
 }
 
-.modal :first-child {
+@media not (prefers-reduced-motion: reduce) {
+    .modal::backdrop {
+        backdrop-filter: blur(5px);
+    }
+}
+
+.modal>:first-child button {
     color: white;
     position: absolute;
-    top: -24px;
-    right: -24px;
+    top: -23px;
+    right: -21px;
+    width: 32px;
     border: 0;
     background: 0;
+    padding: 0;
     font-size: 32px;
     line-height: 32px;
-    cursor: pointer;
 }

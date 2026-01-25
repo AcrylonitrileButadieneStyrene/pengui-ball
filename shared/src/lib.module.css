@@ -3,10 +3,6 @@
 
 :root {
     background-color: black;
-    /* This is a hack to fix Chrome Lighthouse. If it is set to exactly zero
-     * then the analyzer bugs out and refuses to see an LCP element and dies.
-     */
-    --fade-in-opacity: 0.001;
 }
 
 body {
@@ -19,4 +15,8 @@ body {
 leptos-children,
 leptos-island {
     display: contents;
+}
+
+button {
+    cursor: pointer;
 }
