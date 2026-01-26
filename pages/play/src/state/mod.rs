@@ -26,7 +26,7 @@ pub struct PlayState {
     pub session_command: CommandChannel,
     pub players: PlayersState,
     pub engine: EngineState,
-    pub user: LocalResource<Result<user::User, gloo_net::Error>>,
+    pub user: LocalResource<Option<user::User>>,
     pub modal: RwSignal<Option<crate::modals::Modals>>,
 }
 
@@ -38,12 +38,13 @@ impl PlayState {
             players: PlayersState::default(),
             engine: EngineState::default(),
             user: LocalResource::new(|| async {
-                Ok(gloo_net::http::Request::get("api/info")
+                gloo_net::http::Request::get("api/info")
                     .send()
-                    .await?
+                    .await
+                    .ok()?
                     .json()
                     .await
-                    .unwrap())
+                    .ok()?
             }),
             modal: RwSignal::new(None),
         }

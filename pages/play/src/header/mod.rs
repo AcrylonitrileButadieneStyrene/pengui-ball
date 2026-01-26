@@ -29,8 +29,8 @@ fn CurrentUser() -> impl IntoView {
 
     move || {
         state.user.map(|user| match user {
-            Ok(user) => Some(user.uuid.clone()),
-            Err(_) => {
+            Some(user) => Some(user.uuid.clone()),
+            None => {
                 if once.get_untracked() {
                     set_once(false);
                     state.modal.set(Some(crate::modals::Modals::CORS));
