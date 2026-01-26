@@ -23,8 +23,7 @@ _fmt-linux:
 serve:
     just _serve-{{os()}}
 _serve-windows:
-    mkdir ./target
-    mkdir ./target/nginx
+    mkdir ./target ./target/nginx 2>$null
     nginx -p nginx -c nginx.conf
 _serve-linux:
     mkdir -p target/nginx
