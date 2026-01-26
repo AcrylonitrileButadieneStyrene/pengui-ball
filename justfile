@@ -23,7 +23,7 @@ _fmt-linux:
 serve:
     just _serve-{{os()}}
 _serve-windows:
-    mkdir ./target ./target/nginx 2>$null
+    New-Item -Path "./target/nginx/" -ItemType Directory -Force
     nginx -p nginx -c nginx.conf
 _serve-linux:
     mkdir -p target/nginx
