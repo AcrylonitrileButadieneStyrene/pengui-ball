@@ -12,7 +12,7 @@ fn main() {
                     .find(|x| x.ends_with("target"))
                     .unwrap()
                     .to_path_buf()
-                    .join("../assets/pkg/shared.css"),
+                    .join("../assets/css/shared.css"),
             ),
             ..Default::default()
         },

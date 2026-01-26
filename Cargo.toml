@@ -42,4 +42,4 @@ assets-dir = "assets"
 
 browserquery = "fully supports wasm and fully supports webgl2"
 js-minify = true
-disable-server-fn_hash = true
+disable-server-fn-hash = true
