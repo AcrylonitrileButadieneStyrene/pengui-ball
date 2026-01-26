@@ -71,5 +71,5 @@ fn Author(uuid: Arc<str>) -> impl IntoView {
 
             view! { <div class=style::author>{name_start} {player.name.clone()} {badge} {name_end}</div> }
         }
-    })
+    }).into_any()
 }
