@@ -6,6 +6,7 @@
     inset: 0;
     color: white;
     overflow: visible;
+    outline: 0;
 }
 
 @media not (prefers-reduced-motion: reduce) {

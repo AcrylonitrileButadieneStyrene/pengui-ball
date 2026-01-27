@@ -4,9 +4,20 @@ use leptos::prelude::*;
 pub fn modal() -> impl IntoView {
     view! {
         <super::Modal when=super::Modals::CORS>
-            CORS issue. I will make a userscript for this later.<br />
-            For now use a CORS bypass extension
-            (and configure it correctly for your own security).
+            <div>Pengui Ball is not officially supported.</div>
+            <div>
+                To have access to API features, install
+                <a
+                    href="https://raw.githubusercontent.com/AcrylonitrileButadieneStyrene/pengui-ball/master/js/pengui-ball.user.js"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    this script.
+                </a>
+            </div>
+            <div>
+                The API is required for all account-based features, such as badges and leaderboards.
+            </div>
         </super::Modal>
     }
 }

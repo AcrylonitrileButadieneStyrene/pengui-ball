@@ -46,7 +46,8 @@ pub fn Modal(when: Modals, children: Children) -> impl IntoView {
             node_ref=node_ref
             class=style::modal
             on:close=on_close
-            autofocus=true // idk if i like this or not
+            // idk if i like this or not
+            autofocus=true
         >
             <form method="dialog">
                 <button>{"\u{2716}"}</button>

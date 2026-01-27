@@ -21,6 +21,7 @@ pub fn Engine() -> impl IntoView {
     view! {
         <leptos_meta::Body {..} class=style::engine />
         <leptos_meta::Link rel="stylesheet" href="/css/engine.css" />
+        <leptos_meta::Meta name="robots" content="noindex" />
 
         <state::Provider game=game.clone()>
             <easyrpg::EasyRPG game>{None::<()>}</easyrpg::EasyRPG>
