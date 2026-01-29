@@ -1,5 +1,6 @@
 #[derive(serde::Serialize, serde::Deserialize)]
 pub enum Message {
+    EngineLoaded,
     ConnectionStatusUpdated(ConnectionStatus),
     PlayerSync(PlayerSyncData),
     PlayerConnect(PlayerConnectData),

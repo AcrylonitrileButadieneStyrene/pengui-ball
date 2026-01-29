@@ -3,6 +3,7 @@ use leptos::{html::Iframe, prelude::*};
 
 pub struct EngineState {
     pub frame: NodeRef<Iframe>,
+    pub load_count: RwSignal<u32>,
     pub status: ReadSignal<ConnectionStatus>,
 
     set_status: WriteSignal<ConnectionStatus>,
@@ -14,6 +15,7 @@ impl Default for EngineState {
 
         Self {
             frame: NodeRef::new(),
+            load_count: RwSignal::new(0),
             status,
             set_status,
         }

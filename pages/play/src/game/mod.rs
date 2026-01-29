@@ -21,6 +21,7 @@ fn Engine() -> impl IntoView {
     let state = crate::state();
     let frame = state.engine.frame;
     let status = state.session.status;
+    let load_count = state.engine.load_count;
     messages::setup_handler(state);
 
     Effect::new(move || {
@@ -35,6 +36,7 @@ fn Engine() -> impl IntoView {
             class=style::player
             src="./engine"
             title="Game Engine"
+            on:load=move |_| load_count.update(|val| *val += 1)
         />
     }
 }

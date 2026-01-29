@@ -47,6 +47,7 @@ fn StartPlayer(children: Children) -> impl IntoView {
                 game: state.game.clone(),
             };
             state.easyrpg_player.start(config).await;
+            crate::send(common::PlayMessage::EngineLoaded);
         });
     });
 

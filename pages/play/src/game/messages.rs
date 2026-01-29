@@ -5,6 +5,7 @@ use common::{
     messages::play::{PlayerConnectData, PlayerSyncData},
 };
 use leptos::{ev, prelude::*};
+use leptos_use::core::ConnectionReadyState;
 
 pub fn setup_handler(state: Arc<crate::state::PlayState>) {
     window_event_listener(ev::message, move |ev| {
@@ -18,6 +19,13 @@ pub fn setup_handler(state: Arc<crate::state::PlayState>) {
 
 fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
     match message {
+        PlayMessage::EngineLoaded => {
+            if state.engine.load_count.get_untracked() > 1
+                && state.session.status.get_untracked() == ConnectionReadyState::Open
+            {
+                state.engine.send(common::EngineMessage::Connect);
+            }
+        }
         PlayMessage::ConnectionStatusUpdated(status) => {
             state.engine.set_status(status);
         }
