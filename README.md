@@ -30,3 +30,7 @@ ${\color{transparent}█████\color{#eeee70}██\color{white}█\color{
 ## Formatting
 - `cargo fmt` (Outside of views)
 - `just fmt` (Inside of views)
+
+# License
+This project is licensed under [MIT](LICENSE-MIT) OR [Apache-2.0](LICENSE-APACHE), 
+at your choice, with exceptions listed in [LICENSE-EXCEPTIONS](LICENSE-EXCEPTIONS).
