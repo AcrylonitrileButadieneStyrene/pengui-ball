@@ -1,6 +1,13 @@
 /* Everything in this file is included for all pages
  */
 
+@font-face {
+    font-family: "PGothic";
+    src: local("MS PGothic"),
+        url("/yno/fonts/ms-pgothic.woff2") format("woff2"),
+        url("/yno/fonts/ms-pgothic.woff") format("woff");
+}
+
 :root {
     background-color: black;
 }
@@ -19,4 +26,9 @@ leptos-island {
 
 button {
     cursor: pointer;
+}
+
+* {
+    font-size: 16px;
+    font-family: "PGothic", "sans-serif";
 }

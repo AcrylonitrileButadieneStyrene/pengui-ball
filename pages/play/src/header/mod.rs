@@ -52,11 +52,11 @@ fn CurrentUser() -> impl IntoView {
                 "Not Supported"
             }
         });
-        
+
         let on_click = on_click.clone();
         content.map(|content| {
             view! {
-                <button on:click=on_click>
+                <button on:click=on_click class=style::button>
                     {content}
                 </button>
             }

@@ -15,3 +15,11 @@
 .game_logo {
     height: 48px;
 }
+
+.button {
+    border: solid 8px;
+    border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
+    padding: 4px;
+    background-color: rgb(45, 17, 23);
+    color: white;
+}
