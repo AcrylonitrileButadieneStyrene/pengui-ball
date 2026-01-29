@@ -1,7 +1,7 @@
 use leptos::{
     prelude::window,
     web_sys::{
-        self,
+        js_sys::Reflect,
         wasm_bindgen::prelude::{Closure, JsValue, wasm_bindgen},
     },
 };
@@ -47,8 +47,6 @@ pub fn setup() {
 
     let window = window();
     for (key, callback) in callbacks {
-        use web_sys::js_sys::Reflect;
-
         Reflect::set(&window, &JsValue::from_str(key), callback).unwrap();
     }
 }

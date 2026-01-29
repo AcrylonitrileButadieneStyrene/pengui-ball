@@ -1,6 +1,7 @@
 use leptos::prelude::*;
 
 pub mod cors;
+pub mod login;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -13,7 +14,10 @@ pub enum Modals {
 
 #[component]
 pub fn Modals() -> impl IntoView {
-    view! { <cors::Modal /> }
+    view! {
+        <cors::Modal />
+        <login::Modal />
+    }
 }
 
 #[island]
