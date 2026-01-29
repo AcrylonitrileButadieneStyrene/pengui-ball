@@ -10,9 +10,9 @@ enum Filter {
 impl std::fmt::Display for Filter {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Filter::Map => f.write_str("Map"),
-            Filter::Global => f.write_str("Global"),
-            Filter::Party => f.write_str("Party"),
+            Self::Map => f.write_str("Map"),
+            Self::Global => f.write_str("Global"),
+            Self::Party => f.write_str("Party"),
         }
     }
 }

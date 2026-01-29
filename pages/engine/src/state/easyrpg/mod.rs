@@ -31,6 +31,7 @@ impl Default for Player {
 }
 
 impl Player {
+    #[allow(clippy::future_not_send)]
     pub async fn start(&self, config: Configuration) {
         let object = create_easyrpg_player(serde_wasm_bindgen::to_value(&config).unwrap()).await;
         object.init_api();
@@ -43,7 +44,7 @@ impl Player {
     {
         let object = self.object.read();
         if let Some(object) = &**object {
-            closure(object)
+            closure(object);
         }
     }
 
@@ -53,7 +54,7 @@ impl Player {
     {
         let object = self.object.read_untracked();
         if let Some(object) = &**object {
-            closure(object)
+            closure(object);
         }
     }
 }

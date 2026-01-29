@@ -40,6 +40,7 @@ fn setup_context() -> impl Fn() + Clone {
             .join(Env::prefixed("PENGUI_"))
             .join(Yaml::file("config.yaml"))
             .extract::<common::Config>()
+            .map_err(Box::new)
     };
 
     let config = std::sync::Arc::new(arc_swap::ArcSwap::from_pointee(load_config().unwrap()));
@@ -48,7 +49,7 @@ fn setup_context() -> impl Fn() + Clone {
         let config = config.clone();
         async move {
             let mut watcher = watch_config();
-            while let Some(()) = watcher.recv().await {
+            while watcher.recv().await == Some(()) {
                 tokio::time::sleep(std::time::Duration::from_secs(1)).await;
                 if !watcher.is_empty() {
                     continue;
@@ -57,7 +58,7 @@ fn setup_context() -> impl Fn() + Clone {
                 match load_config() {
                     Ok(new_config) => {
                         leptos::logging::log!("Configuration updated");
-                        config.store(std::sync::Arc::new(new_config))
+                        config.store(std::sync::Arc::new(new_config));
                     }
                     Err(reason) => {
                         println!("{reason:?}");

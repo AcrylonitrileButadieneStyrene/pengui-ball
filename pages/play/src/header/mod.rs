@@ -41,7 +41,7 @@ fn CurrentUser() -> impl IntoView {
             let modal = state.user.map(|user| match user {
                 Some(user) if user.registered => crate::modals::Modals::LogOut,
                 Some(_) => crate::modals::Modals::LogIn,
-                None => crate::modals::Modals::CORS,
+                None => crate::modals::Modals::Cors,
             });
             state.modal.set(modal);
         }
@@ -54,7 +54,7 @@ fn CurrentUser() -> impl IntoView {
             None => {
                 if once.get_untracked() {
                     set_once(false);
-                    state.modal.set(Some(crate::modals::Modals::CORS));
+                    state.modal.set(Some(crate::modals::Modals::Cors));
                 }
 
                 "Not Supported"

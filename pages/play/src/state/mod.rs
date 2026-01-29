@@ -2,8 +2,6 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-use crate::sidebar::session::CommandChannel;
-
 mod chat;
 mod engine;
 mod message;
@@ -15,6 +13,8 @@ pub use engine::EngineState;
 pub use message::{Message, MessageData};
 pub use player::{Player, PlayersState};
 
+use crate::sidebar::session::SessionState;
+
 #[island]
 pub fn Provider(children: Children) -> impl IntoView {
     provide_context(Arc::new(PlayState::new()));
@@ -23,7 +23,7 @@ pub fn Provider(children: Children) -> impl IntoView {
 
 pub struct PlayState {
     pub chat: ChatState,
-    pub session_command: CommandChannel,
+    pub session: SessionState,
     pub players: PlayersState,
     pub engine: EngineState,
     pub user: LocalResource<Option<user::User>>,
@@ -34,7 +34,7 @@ impl PlayState {
     fn new() -> Self {
         Self {
             chat: ChatState::default(),
-            session_command: CommandChannel::new(),
+            session: SessionState::default(),
             players: PlayersState::default(),
             engine: EngineState::default(),
             user: LocalResource::new(|| async {

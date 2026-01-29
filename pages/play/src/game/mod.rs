@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use leptos_use::core::ConnectionReadyState;
 
 mod controls;
 mod messages;
@@ -18,11 +19,19 @@ pub fn Game() -> impl IntoView {
 #[island]
 fn Engine() -> impl IntoView {
     let state = crate::state();
-    messages::setup_handler(state.clone());
+    let frame = state.engine.frame;
+    let status = state.session.status;
+    messages::setup_handler(state);
+
+    Effect::new(move || {
+        if status.get() == ConnectionReadyState::Open {
+            crate::state::EngineState::send_frame(frame, common::EngineMessage::Connect);
+        }
+    });
 
     view! {
         <iframe
-            node_ref=state.engine.frame
+            node_ref=frame
             class=style::player
             src="./engine"
             title="Game Engine"

@@ -59,15 +59,15 @@ impl ChatChannel {
             None
         };
 
-        let id: Arc<str> = message.id.clone().into();
-        buffer.push_front(id.clone());
+        buffer.push_front(message.id.clone());
+        drop(buffer);
 
         self.messages.update(|messages| {
             if let Some(id) = removed {
                 messages.shift_remove(&id);
             }
 
-            messages.insert(id, message);
+            messages.insert(message.id.clone(), message);
         });
     }
 }

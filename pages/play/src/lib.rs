@@ -15,9 +15,10 @@ mod state;
 stylance::import_style!(pub style, "lib.module.css");
 
 pub type CurrentGame = Arc<common::config::Game>;
+pub type State = Arc<state::PlayState>;
 
-pub fn state() -> Arc<state::PlayState> {
-    expect_context::<Arc<state::PlayState>>()
+pub fn state() -> State {
+    expect_context::<State>()
 }
 
 #[component]

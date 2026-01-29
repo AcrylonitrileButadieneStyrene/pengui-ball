@@ -3,7 +3,7 @@ use leptos::prelude::*;
 #[component]
 pub fn Modal() -> impl IntoView {
     view! {
-        <super::Modal when=super::Modals::CORS>
+        <super::Modal when=super::Modals::Cors>
             <div>Pengui Ball is not officially supported.</div>
             <div>
                 To have access to API features, install

@@ -7,6 +7,7 @@ nursery = { level = "warn", priority = -1 }
 pedantic = { level = "warn", priority = -1 }
 needless_pass_by_value = { level = "allow" }
 must_use_candidate = { level = "allow" }
+missing_panics_doc = { level = "allow" }
 
 [profile.wasm-release]
 inherits = "release"

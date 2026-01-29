@@ -22,7 +22,11 @@ impl Default for EngineState {
 
 impl EngineState {
     pub fn send(&self, message: common::EngineMessage) {
-        if let Some(frame) = self.frame.get_untracked() {
+        Self::send_frame(self.frame, message);
+    }
+
+    pub fn send_frame(frame: NodeRef<Iframe>, message: common::EngineMessage) {
+        if let Some(frame) = frame.get_untracked() {
             frame
                 .content_window()
                 .unwrap()

@@ -7,7 +7,7 @@ stylance::import_style!(pub style, "mod.module.css");
 
 #[derive(Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum Modals {
-    CORS,
+    Cors,
     LogIn,
     LogOut,
 }

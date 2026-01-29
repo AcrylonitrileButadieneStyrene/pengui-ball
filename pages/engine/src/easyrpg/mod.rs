@@ -46,7 +46,7 @@ fn StartPlayer(children: Children) -> impl IntoView {
                 websocket_url: format!("wss://connect.ynoproject.net/{}/", state.game),
                 game: state.game.clone(),
             };
-            state.easyrpg_player.start(config).await
+            state.easyrpg_player.start(config).await;
         });
     });
 

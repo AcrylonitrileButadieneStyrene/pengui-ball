@@ -1,5 +1,7 @@
+use std::{num::NonZeroUsize, sync::Arc};
+
 use common::messages::play::ConnectionStatus;
-use futures_util::{SinkExt as _, StreamExt as _};
+use futures_util::StreamExt as _;
 use leptos::{prelude::*, server::codee::string::FromToStringCodec};
 use leptos_use::{
     UseWebSocketOptions, UseWebSocketReturn, core::ConnectionReadyState, use_websocket_with_options,
@@ -7,8 +9,10 @@ use leptos_use::{
 
 mod command;
 mod handler;
+mod state;
 
-pub use command::{Command, CommandChannel};
+pub use command::Command;
+pub use state::State as SessionState;
 
 use crate::CurrentGame;
 
@@ -31,7 +35,9 @@ pub fn Session() -> impl IntoView {
 #[island]
 fn Connection(game: String, children: Children) -> impl IntoView {
     let state = crate::state();
-    let room_state = state.engine.status.clone();
+    let room_status = state.engine.status;
+    let session_status = state.session.status;
+    let session_target = state.session.target;
 
     // DIFF: forest-orb increases the interval by 5 seconds on each attempt
     // i don't think that's too necessary so it's not done here.
@@ -55,24 +61,13 @@ fn Connection(game: String, children: Children) -> impl IntoView {
                 }
             }),
     );
-    let reconnect = reconnect_handler(open, close);
 
-    Effect::new({
-        let state = state.clone();
-        move || {
-            if ready_state.get() != ConnectionReadyState::Open {
-                return;
-            }
-
-            state.engine.send(common::EngineMessage::Connect);
-        }
-    });
-
-    leptos::task::spawn(async move {
-        let mut receiver = state.session_command.take_receiver().unwrap();
-        while let Some(message) = receiver.next().await {
-            let Command::Unknown(vec) = message;
-            send(&vec.join("\u{FFFF}"));
+    leptos::task::spawn(send_messages(state, Arc::new(send)));
+    Effect::new(move || session_status.set(ready_state.get()));
+    Effect::new(move || {
+        close();
+        if session_target.get().is_some() {
+            open();
         }
     });
 
@@ -81,14 +76,9 @@ fn Connection(game: String, children: Children) -> impl IntoView {
             class=style::reconnect
             class:connected=move || ready_state.get() == ConnectionReadyState::Open
             class:connecting=move || ready_state.get() == ConnectionReadyState::Connecting
-            class:room-connected=move || room_state.get() == ConnectionStatus::Connected
-            class:room-connecting=move || room_state.get() == ConnectionStatus::Connecting
-            on:click=move |_| {
-                let mut reconnect = reconnect.clone();
-                leptos::task::spawn(async move {
-                    reconnect.send(()).await.unwrap();
-                });
-            }
+            class:room-connected=move || room_status.get() == ConnectionStatus::Connected
+            class:room-connecting=move || room_status.get() == ConnectionStatus::Connecting
+            on:click=move |_| reconnect(session_target)
         >
             {children()}
         </button>
@@ -102,17 +92,23 @@ fn Connection(game: String, children: Children) -> impl IntoView {
     }
 }
 
-// dumbest workaround
-fn reconnect_handler(
-    open: impl Fn() + Clone + Send + Sync + 'static,
-    close: impl Fn() + Clone + Send + Sync + 'static,
-) -> futures_channel::mpsc::Sender<()> {
-    let (reconnect, mut __reconnect) = futures_channel::mpsc::channel::<()>(1);
-    leptos::task::spawn(async move {
-        while __reconnect.next().await == Some(()) {
-            close();
-            open();
-        }
+async fn send_messages(
+    state: Arc<crate::state::PlayState>,
+    send: Arc<dyn Fn(&String) + Send + Sync>,
+) {
+    let mut receiver = state.session.channel.take_receiver().unwrap();
+    while let Some(message) = receiver.next().await {
+        let Command::Unknown(vec) = message;
+        send(&vec.join("\u{FFFF}"));
+    }
+}
+
+fn reconnect(target: RwSignal<Option<NonZeroUsize>>) {
+    target.update(|current| {
+        *current = Some(
+            current
+                .and_then(|val| val.checked_add(1))
+                .unwrap_or(NonZeroUsize::new(1).unwrap()),
+        );
     });
-    reconnect
 }

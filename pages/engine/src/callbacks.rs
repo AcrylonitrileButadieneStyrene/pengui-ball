@@ -136,6 +136,7 @@ pub fn on_player_disconnected(id: u32) {
 }
 
 #[wasm_bindgen]
+#[allow(clippy::missing_const_for_fn)]
 pub fn on_nametag_mode_updated(_mode: u32) {
     // why is this even a callback
 }

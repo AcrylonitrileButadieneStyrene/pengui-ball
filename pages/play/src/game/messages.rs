@@ -53,8 +53,10 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
                 let Some(uuid) = uuids.get(&id) else {
                     return;
                 };
+                let uuid = uuid.clone();
+                drop(uuids);
 
-                let Some(player) = players.get(uuid) else {
+                let Some(player) = players.get(&uuid) else {
                     return;
                 };
 

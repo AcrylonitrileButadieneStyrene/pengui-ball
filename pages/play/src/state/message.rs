@@ -18,7 +18,7 @@ impl Message {
         Self {
             id: id.map_or_else(
                 || timestamp.timestamp_millis().to_string().into(),
-                |id| id.into(),
+                Into::into,
             ),
             data,
             timestamp,
@@ -37,9 +37,9 @@ pub enum MessageData {
 impl MessageData {
     pub fn author(&self) -> Option<Arc<str>> {
         match self {
-            Self::Map { author, .. } => Some(author.clone()),
-            Self::Party { author, .. } => Some(author.clone()),
-            Self::Global { author, .. } => Some(author.clone()),
+            Self::Map { author, .. } | Self::Party { author, .. } | Self::Global { author, .. } => {
+                Some(author.clone())
+            }
         }
     }
 }

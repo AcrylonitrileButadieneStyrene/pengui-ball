@@ -28,7 +28,7 @@ impl Default for PlayersState {
 
 impl PlayersState {
     pub fn get_or_init(&self, uuid: &Arc<str>) -> RwSignal<Player> {
-        self.with_untracked(|players| players.get(uuid).cloned())
+        self.with_untracked(|players| players.get(uuid).copied())
             .unwrap_or_else(|| {
                 let signal = RwSignal::new(crate::state::Player::default());
                 self.update(|players| assert!(players.insert(uuid.clone(), signal).is_none()));
