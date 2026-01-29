@@ -16,10 +16,6 @@
     border: 0;
 }
 
-.controls button svg:hover {
-    transform: scale(1.25);
-}
-
 .controls button:not(:global(.stricken)) path:nth-child(2) {
     display: none;
 }

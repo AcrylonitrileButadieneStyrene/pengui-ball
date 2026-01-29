@@ -1,5 +1,7 @@
 :root {
-    --pop-out-transition: transform 0.125s cubic-bezier(0.7, 0, 0.7, 1.5)
+    --pop-out-scale: 1.25;
+    --ui-theme-border: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png");
+    --ui-theme-background: url("https://ynoproject.net/2kki/images/ui/2kki/system1/containerbg.png");
 }
 
 body.game {
@@ -13,7 +15,7 @@ body.game {
     background: linear-gradient(to bottom,
             rgb(0 0 0 / 32.5%),
             rgb(0 0 0 / 32.5%) calc(100% - 150px),
-            black), url("https://ynoproject.net/2kki/images/ui/2kki/system1/containerbg.png");
+            black), var(--ui-theme-background);
     background-size: 210px;
     background-position-y: 0, calc(-16px - var(--scroll) * 25%);
     background-attachment: fixed;
@@ -41,13 +43,13 @@ body.game {
 }
 
 button,
-:global(.clickable) {
-    transition: var(--pop-out-transition);
+[role="button"] {
+    transition: transform 0.125s cubic-bezier(0.7, 0, 0.7, 1.5);
 }
 
 button:hover,
-:global(.clickable):hover {
-    transform: scale(1.25);
+[role="button"]:hover {
+    transform: scale(var(--pop-out-scale));
 }
 
 .layout {
@@ -61,6 +63,6 @@ button:hover,
 
 .layout>* {
     border: solid 12px;
-    border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
+    border-image: var(--ui-theme-border) 4 repeat;
     padding: 12px;
 }

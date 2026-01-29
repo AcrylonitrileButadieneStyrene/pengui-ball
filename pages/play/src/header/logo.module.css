@@ -1,13 +1,6 @@
 .logo {
     display: flex;
     fill: white;
-    margin-left: 10px;
-    margin-right: 13px;
-    transition: var(--pop-out-transition)
-}
-
-.logo:hover {
-    transform: scale(1.1);
 }
 
 .logo :first-child {

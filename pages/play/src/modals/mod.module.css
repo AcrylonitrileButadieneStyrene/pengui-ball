@@ -1,7 +1,7 @@
 .modal {
-    background: url("https://ynoproject.net/2kki/images/ui/2kki/system1/containerbg.png");
+    background: var(--ui-theme-background);
     border: solid 12px;
-    border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
+    border-image: var(--ui-theme-border) 4 repeat;
     padding: 12px;
     inset: 0;
     color: white;

@@ -1,11 +1,11 @@
 .header {
     grid-area: header;
-
     display: flex;
     align-items: center;
     height: 60px;
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding: 6px 12px;
+    gap: 12px;
+    --pop-out-scale: 1.1;
 }
 
 .middle {
@@ -16,9 +16,14 @@
     height: 48px;
 }
 
+.project_logo,
+.project_logo img {
+    height: 100%;
+}
+
 .button {
     border: solid 8px;
-    border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
+    border-image: var(--ui-theme-border) 4 repeat;
     padding: 4px;
     background-color: rgb(45, 17, 23);
     color: white;

@@ -5,7 +5,7 @@
 
 .filters label {
     border: solid 4px;
-    border-image: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
+    border-image: var(--ui-theme-border) 4 repeat;
     user-select: none;
     color: red;
 }

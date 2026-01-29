@@ -15,6 +15,14 @@ pub fn Header() -> impl IntoView {
                 class=style::game_logo
                 src=format!("https://ynoproject.net/images/logo_{}.png", game.id)
             />
+            <a
+                class=style::project_logo
+                role="button"
+                href="https://github.com/AcrylonitrileButadieneStyrene/pengui-ball"
+                target="_blank"
+            >
+                <img src="https://cdn.jsdelivr.net/gh/acrylonitrilebutadienestyrene/yno-commumoji/assets/penguiBall2.png" />
+            </a>
 
             <div class=style::middle />
             <CurrentUser />

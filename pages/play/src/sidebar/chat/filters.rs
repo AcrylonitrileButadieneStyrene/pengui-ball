@@ -32,7 +32,7 @@ pub fn Filters() -> impl IntoView {
 
 #[component]
 fn Filter(of: Filter) -> impl IntoView {
-    view! { <label class="clickable">{of.to_string()} <Handler filter=of /></label> }
+    view! { <label role="button">{of.to_string()} <Handler filter=of /></label> }
 }
 
 #[island]
