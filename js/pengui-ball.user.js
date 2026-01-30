@@ -1,8 +1,9 @@
 // ==UserScript==
 // @name        PenguiBall Temporary Workarounds
 // @match       *://localhost:8080/*
+// @match       *://127.0.0.1:8080/*
 // @match       *://ynoproject.net/%F0%9F%A5%BA
-// @version     0.1.0
+// @version     0.1.1
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @downloadURL https://raw.githubusercontent.com/AcrylonitrileButadieneStyrene/pengui-ball/master/js/pengui-ball.user.js
