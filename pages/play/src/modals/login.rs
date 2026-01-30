@@ -37,4 +37,5 @@ fn on_auth_cookie_set() {
     let state = crate::state();
     state.user.refetch();
     state.modal.set(None);
+    state.session.reconnect();
 }

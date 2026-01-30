@@ -22,4 +22,4 @@ common.path = "../common"
 shared.path = "../shared"
 
 [features]
-ssr = ["leptos/ssr", "leptos_router/ssr", "leptos-use/ssr"]
+ssr = ["leptos/ssr", "leptos_router/ssr", "leptos-use/ssr", "leptos-use/axum"]

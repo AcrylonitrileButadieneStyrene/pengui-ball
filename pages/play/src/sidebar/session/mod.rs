@@ -1,4 +1,4 @@
-use std::{num::NonZeroUsize, sync::Arc};
+use std::sync::Arc;
 
 use common::messages::play::ConnectionStatus;
 use futures_util::StreamExt as _;
@@ -78,7 +78,7 @@ fn Connection(game: String, children: Children) -> impl IntoView {
             class:connecting=move || ready_state.get() == ConnectionReadyState::Connecting
             class:room-connected=move || room_status.get() == ConnectionStatus::Connected
             class:room-connecting=move || room_status.get() == ConnectionStatus::Connecting
-            on:click=move |_| reconnect(session_target)
+            on:click=move |_| state::State::connect_impl(session_target)
         >
             {children()}
         </button>
@@ -101,14 +101,4 @@ async fn send_messages(
         let Command::Unknown(vec) = message;
         send(&vec.join("\u{FFFF}"));
     }
-}
-
-fn reconnect(target: RwSignal<Option<NonZeroUsize>>) {
-    target.update(|current| {
-        *current = Some(
-            current
-                .and_then(|val| val.checked_add(1))
-                .unwrap_or(NonZeroUsize::new(1).unwrap()),
-        );
-    });
 }

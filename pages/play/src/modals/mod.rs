@@ -2,6 +2,7 @@ use leptos::prelude::*;
 
 pub mod cors;
 pub mod login;
+pub mod logout;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -17,6 +18,7 @@ pub fn Modals() -> impl IntoView {
     view! {
         <cors::Modal />
         <login::Modal />
+        <logout::Modal />
     }
 }
 
