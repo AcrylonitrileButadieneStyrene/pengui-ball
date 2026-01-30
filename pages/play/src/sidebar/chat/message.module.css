@@ -8,9 +8,19 @@
     border-image: var(--ui-theme-border) 4 repeat;
 }
 
+.message svg {
+    width: 12px;
+    height: 12px;
+    margin: 0 2px;
+    fill: white;
+}
+
 .header {
     display: flex;
-    justify-content: space-between;
+}
+
+.header :last-child {
+    margin-left: auto;
 }
 
 .author {
