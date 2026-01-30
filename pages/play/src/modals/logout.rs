@@ -1,4 +1,4 @@
-use leptos::{prelude::*, wasm_bindgen::prelude::JsValue, web_sys::js_sys::Reflect};
+use leptos::prelude::*;
 
 #[component]
 pub fn Modal() -> impl IntoView {
@@ -13,17 +13,18 @@ pub fn Modal() -> impl IntoView {
 #[island]
 fn LogoutButton() -> impl IntoView {
     let state = crate::state();
-    let on_click = move |_| {
-        Reflect::set(
-            &document(),
-            &JsValue::from_str("cookie"),
-            &JsValue::from_str("auth=; max-age=0; path=/"),
-        )
-        .unwrap();
 
-        state.user.refetch();
-        state.modal.set(None);
-        state.session.reconnect();
+    let on_click = move |_| {
+        let state = state.clone();
+        leptos::task::spawn_local(async move {
+            gloo_net::http::Request::get("/api/seiko/logout")
+                .send()
+                .await
+                .unwrap();
+            state.user.refetch();
+            state.modal.set(None);
+            state.session.reconnect();
+        });
     };
 
     view! {

@@ -3,7 +3,7 @@
 // @match       *://localhost:8080/*
 // @match       *://127.0.0.1:8080/*
 // @match       *://ynoproject.net/%F0%9F%A5%BA
-// @version     0.1.1
+// @version     0.1.2
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @downloadURL https://raw.githubusercontent.com/AcrylonitrileButadieneStyrene/pengui-ball/master/js/pengui-ball.user.js
@@ -33,7 +33,13 @@ if (location.host == "ynoproject.net") {
 </form>
 <script>
   loginForm.onsubmit = () => {
-    window.parent.postMessage(["login", new URLSearchParams(new FormData(loginForm)).toString()], "*");
+    fetch("https://connect.ynoproject.net/seiko/login", {
+      method: 'POST',
+      body: new URLSearchParams(new FormData(loginForm)),
+      credentials: "include",
+    }).then(() => {
+      window.parent.postMessage("auth cookie was set", "*");
+    });
     return false;
   }
 </script>
@@ -70,7 +76,8 @@ if (location.host == "ynoproject.net") {
       return originalFetch.apply(this, arguments);
     else return new Promise((resolve, reject) => {
       GM.xmlHttpRequest({
-        url, responseType: "arraybuffer",
+        url: url.replace(location.origin, "https://connect.ynoproject.net/"),
+        responseType: "arraybuffer",
         onload: resp => resolve(new Response(resp.response, {
           status: resp.status,
           statusText: resp.statusText,
@@ -87,25 +94,9 @@ if (location.host == "ynoproject.net") {
   };
 
   window.addEventListener("message", e => {
-    if (e.data.length != 2 || e.data[0] != "login")
+    if (e.data != "auth cookie was set")
       return;
 
-    GM.xmlHttpRequest({
-      url: "https://connect.ynoproject.net/seiko/login",
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      data: e.data[1],
-      onload: resp => {
-        const cookie = resp.responseHeaders
-          .split("\r\n")
-          .find(line => line.toLowerCase().startsWith("set-cookie"))
-          .split(":")[1]
-          .trim();
-        document.cookie = cookie.substring(0, cookie.indexOf(";")) + "; max-age=86400; path=/";
-        onAuthCookieSet()
-      }
-    });
+    onAuthCookieSet();
   });
 }
