@@ -18,28 +18,29 @@ pub fn ChatMessage(message: Message) -> impl IntoView {
     );
 
     view! {
-        <Show when=move || {
-            !message.filtered.map_or_default(|filter| filter.get())
-        }>
+        <div
+            class=style::message
+            style:display=move || {
+                if message.filtered.map_or_default(|filter| filter.get()) { "none" } else { "" }
+            }
+        >
             {match &message.data {
                 MessageData::Map { author, text }
                 | MessageData::Party { author, text }
                 | MessageData::Global { author, text } => {
                     view! {
-                        <div class=style::message>
-                            <div class=style::header>
-                                <span>Unknown Location</span>
-                                {timestamp.to_string()}
-                            </div>
-                            <div>
-                                <Author uuid=author.clone() />
-                                <span>{text.to_string()}</span>
-                            </div>
+                        <div class=style::header>
+                            <span>Unknown Location</span>
+                            {timestamp.to_string()}
+                        </div>
+                        <div>
+                            <Author uuid=author.clone() />
+                            <span>{text.to_string()}</span>
                         </div>
                     }
                 }
             }}
-        </Show>
+        </div>
     }
 }
 
