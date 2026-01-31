@@ -4,6 +4,7 @@ pub enum Message {
     ConnectionStatusUpdated(ConnectionStatus),
     PlayerSync(PlayerSyncData),
     PlayerConnect(PlayerConnectData),
+    RegainFocus(bool),
 }
 
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]

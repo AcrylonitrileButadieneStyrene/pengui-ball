@@ -8,6 +8,7 @@ use leptos::prelude::*;
 use crate::state::Message;
 
 pub struct ChatState {
+    pub input: NodeRef<leptos::html::Div>,
     pub messages: ReadSignal<indexmap::IndexMap<Arc<str>, Message>>,
 
     pub map: ChatChannel,
@@ -20,6 +21,7 @@ impl Default for ChatState {
         let (messages, set_messages) = signal(indexmap::IndexMap::new());
 
         Self {
+            input: NodeRef::new(),
             messages,
             map: ChatChannel::new(set_messages, 150, false),
             party: ChatChannel::new(set_messages, 150, false),

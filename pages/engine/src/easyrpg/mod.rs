@@ -12,7 +12,7 @@ pub fn EasyRPG(game: String, children: Children) -> impl IntoView {
 }
 
 #[derive(Clone)]
-pub struct Loaded(pub ReadSignal<bool>);
+struct Loaded(pub ReadSignal<bool>);
 
 #[island]
 fn LoadPlayer(game: String, children: Children) -> impl IntoView {
@@ -34,6 +34,7 @@ fn LoadPlayer(game: String, children: Children) -> impl IntoView {
 fn StartPlayer(children: Children) -> impl IntoView {
     let loaded = expect_context::<Loaded>();
     let state = expect_context::<crate::EngineState>();
+    let node_ref = state.easyrpg_player.canvas;
 
     Effect::new(move || {
         if !loaded.0.get() {
@@ -51,8 +52,14 @@ fn StartPlayer(children: Children) -> impl IntoView {
         });
     });
 
+    let on_keydown = move |event: leptos::ev::KeyboardEvent| {
+        if event.key() == "Tab" {
+            crate::send(common::PlayMessage::RegainFocus(event.shift_key()));
+        }
+    };
+
     view! {
-        <canvas id="canvas" tabindex=0 role="application" />
+        <canvas node_ref=node_ref id="canvas" tabindex=0 role="application" on:keydown=on_keydown />
         {children()}
     }
 }

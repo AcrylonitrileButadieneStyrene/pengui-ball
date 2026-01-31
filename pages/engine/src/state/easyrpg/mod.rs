@@ -10,6 +10,7 @@ pub use configuration::Configuration;
 pub struct Player {
     pub object: ReadSignal<SendOption<PlayerJSObject>>,
     set_object: WriteSignal<SendOption<PlayerJSObject>>,
+    pub canvas: NodeRef<leptos::html::Canvas>,
 }
 
 impl Default for Player {
@@ -26,7 +27,11 @@ impl Default for Player {
             .unwrap();
         });
 
-        Self { object, set_object }
+        Self {
+            object,
+            set_object,
+            canvas: NodeRef::new(),
+        }
     }
 }
 

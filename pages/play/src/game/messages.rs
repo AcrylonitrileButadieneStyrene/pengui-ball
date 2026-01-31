@@ -79,5 +79,10 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
                 });
             });
         }
+        PlayMessage::RegainFocus(_shift_held) => {
+            if let Some(element) = state.chat.input.get_untracked() {
+                element.focus().unwrap();
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ stylance::import_style!(pub style, "input.module.css");
 #[island]
 pub fn ChatInput() -> impl IntoView {
     let state = crate::state();
+    let node_ref = state.chat.input;
 
     // let on_input = move |event| {
     //     let this = event_target::<HtmlDivElement>(&event);
@@ -52,5 +53,5 @@ pub fn ChatInput() -> impl IntoView {
         }
     };
 
-    view! { <div contenteditable=true class=style::input on:keypress=on_keypress /> }
+    view! { <div contenteditable=true node_ref=node_ref class=style::input on:keypress=on_keypress /> }
 }
