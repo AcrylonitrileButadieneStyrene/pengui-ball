@@ -1,9 +1,13 @@
 use leptos::{prelude::*, web_sys::HtmlDivElement};
 
+use crate::sidebar::session::Command;
+
 stylance::import_style!(pub style, "input.module.css");
 
 #[island]
 pub fn ChatInput() -> impl IntoView {
+    let state = crate::state();
+
     // let on_input = move |event| {
     //     let this = event_target::<HtmlDivElement>(&event);
     //     let Some(content) = this.text_content() else {
@@ -34,7 +38,16 @@ pub fn ChatInput() -> impl IntoView {
         if event.key() == "Enter" {
             event.prevent_default();
             let this = event_target::<HtmlDivElement>(&event);
-            leptos::logging::log!("Sending '{:?}'", this.text_content());
+
+            if let Some(content) = this.text_content()
+                && !content.is_empty()
+            {
+                state
+                    .session
+                    .channel
+                    .send(Command::SayMap(content))
+                    .unwrap();
+            }
             this.set_text_content(None);
         }
     };

@@ -1,14 +1,15 @@
 pub enum Command {
+    SayMap(String),
     Unknown(Vec<String>),
 }
 
 pub struct Channel {
-    sender: futures_channel::mpsc::Sender<Command>,
-    receiver: std::sync::Mutex<Option<futures_channel::mpsc::Receiver<Command>>>,
+    sender: flume::Sender<Command>,
+    receiver: std::sync::Mutex<Option<flume::Receiver<Command>>>,
 }
 
 impl std::ops::Deref for Channel {
-    type Target = futures_channel::mpsc::Sender<Command>;
+    type Target = flume::Sender<Command>;
 
     fn deref(&self) -> &Self::Target {
         &self.sender
@@ -17,7 +18,7 @@ impl std::ops::Deref for Channel {
 
 impl Default for Channel {
     fn default() -> Self {
-        let (sender, receiver) = futures_channel::mpsc::channel(16);
+        let (sender, receiver) = flume::bounded(16);
 
         Self {
             sender,
@@ -27,7 +28,7 @@ impl Default for Channel {
 }
 
 impl Channel {
-    pub fn take_receiver(&self) -> Option<futures_channel::mpsc::Receiver<Command>> {
+    pub fn take_receiver(&self) -> Option<flume::Receiver<Command>> {
         self.receiver.lock().unwrap().take()
     }
 }

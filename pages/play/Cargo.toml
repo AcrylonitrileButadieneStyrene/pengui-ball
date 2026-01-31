@@ -8,8 +8,7 @@ workspace = true
 
 [dependencies]
 common.path = "../../common"
-futures-channel = "0.3.31"
-futures-util = "0.3.31"
+flume = "0.12.0"
 indexmap = "2.13.0"
 leptos.workspace = true
 leptos_meta.workspace = true
@@ -18,7 +17,12 @@ leptos-use.workspace = true
 serde.workspace = true
 stylance.workspace = true
 chrono = "0.4.43"
-gloo-net = { version = "0.6.0", default-features = false, features = ["http", "json", "serde", "serde_json"] }
+gloo-net = { version = "0.6.0", default-features = false, features = [
+    "http",
+    "json",
+    "serde",
+    "serde_json",
+] }
 
 [build-dependencies]
 stylance-cli.workspace = true

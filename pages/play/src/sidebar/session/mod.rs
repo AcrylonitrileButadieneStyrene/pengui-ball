@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
 use common::messages::play::ConnectionStatus;
-use futures_util::StreamExt as _;
 use leptos::{prelude::*, server::codee::string::FromToStringCodec};
 use leptos_use::{
     UseWebSocketOptions, UseWebSocketReturn, core::ConnectionReadyState, use_websocket_with_options,
@@ -96,9 +95,13 @@ async fn send_messages(
     state: Arc<crate::state::PlayState>,
     send: Arc<dyn Fn(&String) + Send + Sync>,
 ) {
-    let mut receiver = state.session.channel.take_receiver().unwrap();
-    while let Some(message) = receiver.next().await {
-        let Command::Unknown(vec) = message;
+    let receiver = state.session.channel.take_receiver().unwrap();
+    while let Ok(message) = receiver.recv_async().await {
+        let vec = match message {
+            Command::Unknown(vec) => vec,
+            Command::SayMap(msg) => vec!["say".to_string(), msg],
+        };
+
         send(&vec.join("\u{FFFF}"));
     }
 }
