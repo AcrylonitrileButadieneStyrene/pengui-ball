@@ -1,0 +1,7 @@
+.input {
+    border: solid 8px;
+    border-image: var(--ui-theme-border) 4 repeat;
+    background-color: rgb(45, 17, 23);
+    padding: 1px 2px;
+    overflow-wrap: break-word;
+}

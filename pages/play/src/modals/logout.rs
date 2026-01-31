@@ -27,7 +27,5 @@ fn LogoutButton() -> impl IntoView {
         });
     };
 
-    view! {
-        <button on:click=on_click>Log Out</button>
-    }
+    view! { <button on:click=on_click>Log Out</button> }
 }
