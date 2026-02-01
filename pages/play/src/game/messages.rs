@@ -53,6 +53,12 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
                 player.account = account;
                 player.badge = badge;
                 player.medals = medals;
+
+                if id == -1
+                    && let Some(Some(user)) = &*state.user.read_untracked()
+                {
+                    player.name = Some(user.name.clone().into());
+                }
             });
         }
         PlayMessage::PlayerConnect(PlayerConnectData { id, name, system }) => {

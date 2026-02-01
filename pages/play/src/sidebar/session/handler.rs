@@ -44,7 +44,7 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
                 };
                 player.medals = medals
                     .iter()
-                    .map(|medal| medal.parse().unwrap())
+                    .map(|medal| medal.parse().unwrap_or_default())
                     .collect::<Vec<_>>()
                     .try_into()
                     .unwrap();
