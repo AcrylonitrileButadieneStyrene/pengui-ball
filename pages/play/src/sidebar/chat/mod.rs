@@ -1,7 +1,6 @@
 use leptos::prelude::*;
 
 mod filters;
-mod icons;
 mod input;
 mod message;
 

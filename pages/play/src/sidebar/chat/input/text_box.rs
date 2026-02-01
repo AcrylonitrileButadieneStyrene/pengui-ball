@@ -1,11 +1,11 @@
 use leptos::{prelude::*, web_sys::HtmlDivElement};
 
-use crate::sidebar::session::Command;
+use crate::{sidebar::session::Command, state::chat::MessageDestination};
 
-stylance::import_style!(pub style, "input.module.css");
+stylance::import_style!(pub style, "text_box.module.css");
 
 #[island]
-pub fn ChatInput() -> impl IntoView {
+pub fn TextBox() -> impl IntoView {
     let state = crate::state();
     let node_ref = state.chat.input;
 
@@ -46,7 +46,11 @@ pub fn ChatInput() -> impl IntoView {
                 state
                     .session
                     .channel
-                    .send(Command::SayMap(content))
+                    .send(match state.chat.destination.get_untracked() {
+                        MessageDestination::Map => Command::SayMap(content),
+                        MessageDestination::Party => Command::SayParty(content),
+                        MessageDestination::Global => Command::SayGlobal(content),
+                    })
                     .unwrap();
             }
             this.set_text_content(None);

@@ -1,5 +1,7 @@
 pub enum Command {
     SayMap(String),
+    SayParty(String),
+    SayGlobal(String),
     Unknown(Vec<String>),
 }
 

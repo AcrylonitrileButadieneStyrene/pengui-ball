@@ -4,7 +4,9 @@ use leptos::prelude::*;
 
 use crate::state::{Message, MessageData};
 
-stylance::import_style!(pub style, "message.module.css");
+mod icons;
+
+stylance::import_style!(pub style, "mod.module.css");
 
 #[component]
 pub fn ChatMessage(message: Message) -> impl IntoView {
@@ -39,9 +41,9 @@ pub fn ChatMessage(message: Message) -> impl IntoView {
                         </div>
                         <div>
                             {match &message.data {
-                                MessageData::Party { .. } => Some(super::icons::People().into_any()),
+                                MessageData::Party { .. } => Some(icons::People().into_any()),
                                 MessageData::Global { .. } => {
-                                    Some(super::icons::Megaphone().into_any())
+                                    Some(icons::Megaphone().into_any())
                                 }
                                 _ => None,
                             }} <Author uuid=author.clone() /> <span>{text.to_string()}</span>

@@ -5,30 +5,7 @@ use std::{
 
 use leptos::prelude::*;
 
-use crate::state::Message;
-
-pub struct ChatState {
-    pub input: NodeRef<leptos::html::Div>,
-    pub messages: ReadSignal<indexmap::IndexMap<Arc<str>, Message>>,
-
-    pub map: ChatChannel,
-    pub party: ChatChannel,
-    pub global: ChatChannel,
-}
-
-impl Default for ChatState {
-    fn default() -> Self {
-        let (messages, set_messages) = signal(indexmap::IndexMap::new());
-
-        Self {
-            input: NodeRef::new(),
-            messages,
-            map: ChatChannel::new(set_messages, 150, false),
-            party: ChatChannel::new(set_messages, 150, false),
-            global: ChatChannel::new(set_messages, 150, false),
-        }
-    }
-}
+use super::Message;
 
 pub struct ChatChannel {
     pub capacity: RwSignal<usize>,

@@ -2,13 +2,13 @@ use std::{collections::HashMap, sync::Arc};
 
 use leptos::prelude::*;
 
-pub struct PlayersState {
+pub struct State {
     pub inner: RwSignal<HashMap<Arc<str>, RwSignal<Player>>>,
     pub count: RwSignal<Option<u32>>,
     pub uuids: RwSignal<HashMap<i32, Arc<str>>>,
 }
 
-impl std::ops::Deref for PlayersState {
+impl std::ops::Deref for State {
     type Target = RwSignal<HashMap<Arc<str>, RwSignal<Player>>>;
 
     fn deref(&self) -> &Self::Target {
@@ -16,7 +16,7 @@ impl std::ops::Deref for PlayersState {
     }
 }
 
-impl Default for PlayersState {
+impl Default for State {
     fn default() -> Self {
         Self {
             inner: RwSignal::new(HashMap::new()),
@@ -26,7 +26,7 @@ impl Default for PlayersState {
     }
 }
 
-impl PlayersState {
+impl State {
     pub fn get_or_init(&self, uuid: &Arc<str>) -> RwSignal<Player> {
         self.with_untracked(|players| players.get(uuid).copied())
             .unwrap_or_else(|| {

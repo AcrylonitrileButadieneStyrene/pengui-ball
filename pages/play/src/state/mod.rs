@@ -2,16 +2,13 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-mod chat;
-mod engine;
-mod message;
+pub mod chat;
+pub mod engine;
 mod player;
 mod user;
 
-pub use chat::ChatState;
-pub use engine::EngineState;
-pub use message::{Message, MessageData};
-pub use player::{Player, PlayersState};
+pub use chat::{Message, MessageData};
+pub use player::Player;
 
 use crate::sidebar::session::SessionState;
 
@@ -22,10 +19,10 @@ pub fn Provider(children: Children) -> impl IntoView {
 }
 
 pub struct PlayState {
-    pub chat: ChatState,
+    pub chat: chat::State,
     pub session: SessionState,
-    pub players: PlayersState,
-    pub engine: EngineState,
+    pub players: player::State,
+    pub engine: engine::State,
     pub user: LocalResource<Option<user::User>>,
     pub modal: RwSignal<Option<crate::modals::Modals>>,
 }
@@ -33,10 +30,10 @@ pub struct PlayState {
 impl PlayState {
     fn new() -> Self {
         Self {
-            chat: ChatState::default(),
+            chat: chat::State::default(),
             session: SessionState::default(),
-            players: PlayersState::default(),
-            engine: EngineState::default(),
+            players: player::State::default(),
+            engine: engine::State::default(),
             user: LocalResource::new(|| async {
                 gloo_net::http::Request::get("api/info")
                     .send()

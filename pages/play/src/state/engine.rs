@@ -1,7 +1,7 @@
 use common::messages::play::ConnectionStatus;
 use leptos::{html::Iframe, prelude::*};
 
-pub struct EngineState {
+pub struct State {
     pub frame: NodeRef<Iframe>,
     pub load_count: RwSignal<u32>,
     pub status: ReadSignal<ConnectionStatus>,
@@ -9,7 +9,7 @@ pub struct EngineState {
     set_status: WriteSignal<ConnectionStatus>,
 }
 
-impl Default for EngineState {
+impl Default for State {
     fn default() -> Self {
         let (status, set_status) = signal(ConnectionStatus::Disconnected);
 
@@ -22,7 +22,7 @@ impl Default for EngineState {
     }
 }
 
-impl EngineState {
+impl State {
     pub fn send(&self, message: common::EngineMessage) {
         Self::send_frame(self.frame, message);
     }

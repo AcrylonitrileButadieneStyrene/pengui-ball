@@ -15,6 +15,7 @@ leptos_meta.workspace = true
 leptos_router.workspace = true
 leptos-use.workspace = true
 serde.workspace = true
+strum = { version = "0.27.2", features = ["derive"] }
 stylance.workspace = true
 chrono = "0.4.43"
 gloo-net = { version = "0.6.0", default-features = false, features = [

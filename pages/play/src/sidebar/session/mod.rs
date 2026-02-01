@@ -100,6 +100,8 @@ async fn send_messages(
         let vec = match message {
             Command::Unknown(vec) => vec,
             Command::SayMap(msg) => vec!["say".to_string(), msg],
+            Command::SayParty(msg) => vec!["psay".to_string(), msg],
+            Command::SayGlobal(msg) => vec!["gsay".to_string(), msg],
         };
 
         send(&vec.join("\u{FFFF}"));

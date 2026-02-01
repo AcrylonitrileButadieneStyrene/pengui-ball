@@ -26,7 +26,7 @@ fn Engine() -> impl IntoView {
 
     Effect::new(move || {
         if status.get() == ConnectionReadyState::Open {
-            crate::state::EngineState::send_frame(frame, common::EngineMessage::Connect);
+            crate::state::engine::State::send_frame(frame, common::EngineMessage::Connect);
         }
     });
 
