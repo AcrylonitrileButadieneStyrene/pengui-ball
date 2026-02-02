@@ -9,7 +9,7 @@ stylance::import_style!(pub style, "destination.module.css");
 pub fn Destination() -> impl IntoView {
     view! {
         <div>
-            <span>Send to</span>
+            <span>"Send to "</span>
             <Selection />
         </div>
     }
