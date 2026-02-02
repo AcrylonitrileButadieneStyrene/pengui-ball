@@ -75,7 +75,7 @@ pub fn MessageOuter(message: Message) -> impl IntoView {
                 {..}
                 style:order="-1"
             >
-                <span>{text}</span>
+                <span class=style::sending>{text}</span>
             </Message>
         }
         .into_any(),

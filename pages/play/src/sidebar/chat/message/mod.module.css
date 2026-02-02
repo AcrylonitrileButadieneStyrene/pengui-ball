@@ -22,3 +22,18 @@
 .header :last-child {
     margin-left: auto;
 }
+
+.sending {
+    color: gray;
+    animation: 5s sending-message-fade linear forwards;
+}
+
+@keyframes sending-message-fade {
+    80% {
+        color: gray;
+    }
+
+    to {
+        color: red;
+    }
+}
