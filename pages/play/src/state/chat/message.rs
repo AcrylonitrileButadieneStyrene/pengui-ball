@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Message {
     pub id: Arc<str>,
     pub data: MessageData,
@@ -25,21 +25,21 @@ impl Message {
             filtered: None,
         }
     }
+
+    pub const fn text(&self) -> Option<&Arc<str>> {
+        match &self.data {
+            MessageData::Map { text, .. }
+            | MessageData::Party { text, .. }
+            | MessageData::Global { text, .. }
+            | MessageData::Local { text } => Some(text),
+        }
+    }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum MessageData {
     Map { author: Arc<str>, text: Arc<str> },
     Party { author: Arc<str>, text: Arc<str> },
     Global { author: Arc<str>, text: Arc<str> },
-}
-
-impl MessageData {
-    pub fn author(&self) -> Option<Arc<str>> {
-        match self {
-            Self::Map { author, .. } | Self::Party { author, .. } | Self::Global { author, .. } => {
-                Some(author.clone())
-            }
-        }
-    }
+    Local { text: Arc<str> },
 }

@@ -9,8 +9,8 @@ stylance::import_style!(pub style, "destination.module.css");
 pub fn Destination() -> impl IntoView {
     view! {
         <div>
-            <span>Send to </span>
-            <Selection/>
+            <span>Send to</span>
+            <Selection />
         </div>
     }
 }
@@ -26,20 +26,22 @@ fn Selection() -> impl IntoView {
             && let Some(dest) = MessageDestination::from_repr(repr)
         {
             destination.set(dest);
-        };
+        }
     };
 
     let options = MessageDestination::VARIANTS
         .iter()
         .map(|variant| {
-            view! {
-                <option value=*variant as u8>{variant.get_str("Name")}</option>
-            }
+            view! { <option value=*variant as u8>{variant.get_str("Name")}</option> }
         })
         .collect::<Vec<_>>();
 
     view! {
-        <select class=style::selection prop:value=move || destination.get() as u8 on:change=on_change>
+        <select
+            class=style::selection
+            prop:value=move || destination.get() as u8
+            on:change=on_change
+        >
             // the options must be inside of the island due to a hydration error
             {options}
         </select>

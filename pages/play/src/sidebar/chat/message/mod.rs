@@ -1,15 +1,14 @@
-use std::sync::Arc;
-
 use leptos::prelude::*;
 
 use crate::state::{Message, MessageData};
 
+mod author;
 mod icons;
 
 stylance::import_style!(pub style, "mod.module.css");
 
 #[component]
-pub fn ChatMessage(message: Message) -> impl IntoView {
+pub fn MessageOuter(message: Message) -> impl IntoView {
     // not reactive
     let timestamp = message.timestamp.format(
         if message.timestamp.date_naive() < chrono::Local::now().date_naive() {
@@ -19,69 +18,85 @@ pub fn ChatMessage(message: Message) -> impl IntoView {
         },
     );
 
+    match message.data {
+        MessageData::Map { author, text } => view! {
+            <Message
+                filtered=message.filtered
+                header=move || {
+                    view! { <span>{timestamp.to_string()}</span> }
+                }
+            >
+                <author::Author uuid=author.clone() />
+                <span>{text.to_string()}</span>
+            </Message>
+        }
+        .into_any(),
+        MessageData::Party { author, text } => view! {
+            <Message
+                filtered=message.filtered
+                header=move || {
+                    view! {
+                        <span>Unknown Location</span>
+                        <span>{timestamp.to_string()}</span>
+                    }
+                }
+            >
+                <icons::People />
+                <author::Author uuid=author.clone() />
+                <span>{text.to_string()}</span>
+            </Message>
+        }
+        .into_any(),
+        MessageData::Global { author, text } => view! {
+            <Message
+                filtered=message.filtered
+                header=move || {
+                    view! {
+                        <span>Unknown Location</span>
+                        <span>{timestamp.to_string()}</span>
+                    }
+                }
+            >
+                <icons::Megaphone />
+                <author::Author uuid=author.clone() />
+                <span>{text.to_string()}</span>
+            </Message>
+        }
+        .into_any(),
+        MessageData::Local { text } => view! {
+            <Message
+                filtered=message.filtered
+                header=move || {
+                    view! {
+                        <span>Sending...</span>
+                        <span>{timestamp.to_string()}</span>
+                    }
+                }
+                {..}
+                style:order="-1"
+            >
+                <span>{text}</span>
+            </Message>
+        }
+        .into_any(),
+    }
+}
+
+#[component]
+fn Message(
+    filtered: Option<ReadSignal<bool>>,
+    #[prop(optional, into)] header: ViewFnOnce,
+    children: Children,
+) -> impl IntoView {
     view! {
         <div
             class=style::message
             style:display=move || {
-                if message.filtered.map_or_default(|filter| filter.get()) { "none" } else { "" }
+                if filtered.map_or_default(|filter| filter.get()) { "none" } else { "" }
             }
         >
-            {match &message.data {
-                MessageData::Map { author, text }
-                | MessageData::Party { author, text }
-                | MessageData::Global { author, text } => {
-                    view! {
-                        <div class=style::header>
-                            {match &message.data {
-                                MessageData::Party { .. } | MessageData::Global { .. } => {
-                                    Some(view! { <span>Unknown Location</span> })
-                                }
-                                _ => None,
-                            }} <span>{timestamp.to_string()}</span>
-                        </div>
-                        <div>
-                            {match &message.data {
-                                MessageData::Party { .. } => Some(icons::People().into_any()),
-                                MessageData::Global { .. } => {
-                                    Some(icons::Megaphone().into_any())
-                                }
-                                _ => None,
-                            }} <Author uuid=author.clone() /> <span>{text.to_string()}</span>
-                        </div>
-                    }
-                }
-            }}
+            <div class=style::header>{header.run()}</div>
+            <div>{children()}</div>
         </div>
     }
-}
-
-#[island]
-fn Author(uuid: Arc<str>) -> impl IntoView {
-    let state = crate::state();
-    let author = state
-        .players
-        .with_untracked(|players| players.get(&uuid).copied());
-
-    author.map(|player| {
-        move || {
-            let player = player.get();
-
-            let (name_start, name_end) = if player.account {
-                ("[", "]")
-            } else {
-                ("<", ">")
-            };
-
-            let badge = player.badge.as_ref().map(|badge| {
-                view! {
-                    <img
-                        class=style::badge
-                        src=format!("https://ynoproject.net/2kki/images/badge/{badge}.png")
-                    />
-                }
-            });
-
-            view! { <div class=style::author>{name_start} {player.name.clone()} {badge} {name_end}</div> }
-        }
-    }).into_any()
 }

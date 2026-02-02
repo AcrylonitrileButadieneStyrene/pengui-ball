@@ -22,18 +22,3 @@
 .header :last-child {
     margin-left: auto;
 }
-
-.author {
-    display: inline-block;
-    padding-inline-end: 6px;
-}
-
-.badge {
-    image-rendering: auto;
-    height: 18.5px;
-    width: 18.5px;
-    margin-top: -4px;
-    margin-inline-start: 2px;
-    vertical-align: middle;
-    user-select: none;
-}

@@ -8,7 +8,7 @@ pub fn ChatInput() -> impl IntoView {
     view! {
         <div>
             <destination::Destination />
-            <text_box::TextBox/>
+            <text_box::TextBox />
         </div>
     }
 }

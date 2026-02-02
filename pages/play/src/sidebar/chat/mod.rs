@@ -34,7 +34,7 @@ pub fn ChatMessages() -> impl IntoView {
     };
     let render = move |id: std::sync::Arc<str>| {
         messages.read().get(&id).map(|message| {
-            view! { <message::ChatMessage message=message.clone() /> }
+            view! { <message::MessageOuter message=message.clone() /> }
         })
     };
 

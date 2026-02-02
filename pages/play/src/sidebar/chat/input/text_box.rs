@@ -1,6 +1,9 @@
 use leptos::{prelude::*, web_sys::HtmlDivElement};
 
-use crate::{sidebar::session::Command, state::chat::MessageDestination};
+use crate::{
+    sidebar::session::Command,
+    state::{Message, MessageData, chat::MessageDestination},
+};
 
 stylance::import_style!(pub style, "text_box.module.css");
 
@@ -43,15 +46,18 @@ pub fn TextBox() -> impl IntoView {
             if let Some(content) = this.text_content()
                 && !content.is_empty()
             {
-                state
-                    .session
-                    .channel
-                    .send(match state.chat.destination.get_untracked() {
-                        MessageDestination::Map => Command::SayMap(content),
-                        MessageDestination::Party => Command::SayParty(content),
-                        MessageDestination::Global => Command::SayGlobal(content),
-                    })
-                    .unwrap();
+                let message_data = MessageData::Local {
+                    text: content.clone().into(),
+                };
+
+                let (command, channel) = match state.chat.destination.get_untracked() {
+                    MessageDestination::Map => (Command::SayMap(content), &state.chat.map),
+                    MessageDestination::Party => (Command::SayParty(content), &state.chat.party),
+                    MessageDestination::Global => (Command::SayGlobal(content), &state.chat.global),
+                };
+
+                channel.add(Message::new(None::<std::sync::Arc<str>>, message_data));
+                state.session.channel.send(command).unwrap();
             }
             this.set_text_content(None);
         }
