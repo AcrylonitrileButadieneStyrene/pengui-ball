@@ -1,10 +1,7 @@
 set windows-shell := ["powershell.exe", "-c"]
 
+[linux]
 css:
-    just _css-{{os()}}
-_css-windows:
-    echo NOT YET IMPLEMENTED
-_css-linux:
     # linux tomfoolery
     trap "kill 0" EXIT; \
     stylance -w shared --output-file target/site/css/shared.css & \
@@ -13,18 +10,16 @@ _css-linux:
     stylance -w pages/play --output-file target/site/css/play.css & \
     wait
 
+[linux]
 fmt:
-    just _fmt-{{os()}}
-_fmt-windows:
-    echo NOT YET IMPLEMENTED
-_fmt-linux:
     leptosfmt shared pages/*
 
+[windows]
 serve:
-    just _serve-{{os()}}
-_serve-windows:
     New-Item -Path "./target/nginx/" -ItemType Directory -Force
     nginx -p nginx -c nginx.conf
-_serve-linux:
+
+[linux]
+serve:
     mkdir -p target/nginx
     nginx -p nginx -c nginx.conf
