@@ -49,7 +49,7 @@ pub fn Play() -> impl IntoView {
         <leptos_meta::Body {..} class=style::game />
 
         <state::Provider>
-            <main class=style::layout>
+            <main id="layout" class=style::layout>
                 <header::Header />
                 <game::Game />
                 <sidebar::Sidebar />

@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 
+mod full_screen;
 mod icon;
 mod mute;
 
@@ -24,7 +25,9 @@ pub fn Controls() -> impl IntoView {
                 <icon::LocationNeedle />
             </div>
             <div class=style::right>
-                <icon::Expand />
+                <full_screen::FullScreen>
+                    <icon::Expand />
+                </full_screen::FullScreen>
                 <icon::Compass />
                 <icon::FamilyTree />
                 <icon::Map />

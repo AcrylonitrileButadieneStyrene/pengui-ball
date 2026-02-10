@@ -66,3 +66,17 @@ button:hover,
     border-image: var(--ui-theme-border) 4 repeat;
     padding: 12px;
 }
+
+@media (display-mode: fullscreen) {
+    .layout {
+        grid-template-areas:
+            "game header"
+            "game chat  ";
+        grid-template-rows: auto 1fr;
+        padding: 0;
+    }
+
+    .layout>* {
+        border: 0;
+    }
+}

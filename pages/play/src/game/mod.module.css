@@ -20,13 +20,37 @@
     }
 }
 
+@media (display-mode: fullscreen) {
+    @media screen and (min-width: 1328px) and (min-height: 788px) {
+        :root {
+            --adaptive-scale: 3;
+        }
+    }
+
+    @media screen and (min-width: 1648px) and (min-height: 1028px) {
+        :root {
+            --adaptive-scale: 4;
+        }
+    }
+
+    @media screen and (min-width: 1968px) and (min-height: 1268px) {
+        :root {
+            --adaptive-scale: 5;
+        }
+    }
+}
+
 .game-window {
     grid-area: game;
     border-top: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .player {
-    border: 0;
     width: calc(320px * var(--adaptive-scale));
     height: calc(240px * var(--adaptive-scale));
+    display: block;
+    margin: auto;
+    border: 0;
 }
