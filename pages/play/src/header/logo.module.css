@@ -1,11 +1,11 @@
 .logo {
     display: flex;
     fill: white;
-    overflow: visible;
 }
 
-.logo :first-child {
-    margin-right: 6px;
+.logo :nth-child(2) {
+    margin-left: 6px;
+    overflow: visible;
 }
 
 .logo:hover .closed {
