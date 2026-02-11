@@ -7,20 +7,24 @@ edition = "2024"
 workspace = true
 
 [dependencies]
+anyhow = "1.0.101"
 arc-swap = "1.8.0"
 axum = "0.8.8"
+image = { version = "0.25.9", default-features = false, features = ["png"] }
 leptos.workspace = true
 leptos_axum = "0.8.7"
 leptos_router.workspace = true
 leptos-use.workspace = true
+log = "0.4.29"
 notify = "8.2.0"
+reqwest = "0.13.2"
 serde.workspace = true
 tokio = { version = "1", features = ["rt-multi-thread"] }
+tracing-subscriber = "0.3.22"
 yaml_serde = "0.10.3"
 
 common.path = "../common"
 shared.path = "../shared"
-anyhow = "1.0.101"
 
 [features]
 ssr = ["leptos/ssr", "leptos_router/ssr", "leptos-use/ssr", "leptos-use/axum"]

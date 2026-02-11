@@ -57,7 +57,7 @@ impl ChatChannel {
             let mut local = self.local.lock().unwrap();
             let removed_duplicate = local
                 .iter()
-                .position(|(_, text)| message.text().eq(&Some(text)))
+                .position(|(_, text)| message.text().eq(text))
                 .map(|index| local.swap_remove(index).0);
             drop(local);
 

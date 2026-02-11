@@ -1,7 +1,8 @@
 pub fn load() -> anyhow::Result<common::ServerConfiguration> {
-    let mut config: common::ServerConfiguration =
+    let config: common::ServerConfiguration =
         yaml_serde::from_reader(std::fs::File::open("config/config.yaml")?)?;
-    config.menu_themes = yaml_serde::from_reader(std::fs::File::open("config/menu_themes.yaml")?)?;
+
+    tokio::spawn(crate::theme_compiler::run());
 
     Ok(config)
 }
@@ -19,11 +20,11 @@ pub fn watch(
 
             match load() {
                 Ok(new_config) => {
-                    leptos::logging::log!("Configuration updated");
+                    log::info!("Configuration updated in place");
                     config.store(std::sync::Arc::new(new_config));
                 }
                 Err(reason) => {
-                    println!("{reason:?}");
+                    log::error!("Failed to update configuration: {reason:?}");
                 }
             }
         }

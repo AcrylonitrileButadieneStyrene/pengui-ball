@@ -38,6 +38,7 @@ pub fn Play() -> impl IntoView {
 
     leptos::either::Either::Right(view! {
         <leptos_meta::Link rel="stylesheet" href="/css/play.css" />
+        <leptos_meta::Link rel="stylesheet" href="/css/themes.css" />
         <leptos_meta::Title text=format!("{} Online - YNOproject", game.name) />
         <leptos_meta::Meta
             name="description"

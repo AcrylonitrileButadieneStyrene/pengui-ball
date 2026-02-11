@@ -26,12 +26,12 @@ impl Message {
         }
     }
 
-    pub const fn text(&self) -> Option<&Arc<str>> {
+    pub const fn text(&self) -> &Arc<str> {
         match &self.data {
             MessageData::Map { text, .. }
             | MessageData::Party { text, .. }
             | MessageData::Global { text, .. }
-            | MessageData::Local { text } => Some(text),
+            | MessageData::Local { text } => text,
         }
     }
 }
