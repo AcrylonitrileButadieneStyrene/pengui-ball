@@ -9,7 +9,6 @@ workspace = true
 [dependencies]
 arc-swap = "1.8.0"
 axum = "0.8.8"
-figment = { version = "0.10.19", features = ["env", "yaml"] }
 leptos.workspace = true
 leptos_axum = "0.8.7"
 leptos_router.workspace = true
@@ -17,9 +16,11 @@ leptos-use.workspace = true
 notify = "8.2.0"
 serde.workspace = true
 tokio = { version = "1", features = ["rt-multi-thread"] }
+yaml_serde = "0.10.3"
 
 common.path = "../common"
 shared.path = "../shared"
+anyhow = "1.0.101"
 
 [features]
 ssr = ["leptos/ssr", "leptos_router/ssr", "leptos-use/ssr", "leptos-use/axum"]

@@ -7,30 +7,45 @@ stylance::import_style!(pub style, "author.module.css");
 #[island]
 pub fn Author(uuid: Arc<str>) -> impl IntoView {
     let state = crate::state();
+    let current_game = expect_context::<crate::CurrentGame>();
     let author = state
         .players
         .with_untracked(|players| players.get(&uuid).copied());
 
-    author.map(|player| {
-        move || {
-            let player = player.get();
+    author
+        .map(|player| {
+            move || {
+                let player = player.get();
 
-            let (name_start, name_end) = if player.account {
-                ("[", "]")
-            } else {
-                ("<", ">")
-            };
+                let (name_start, name_end) = if player.account {
+                    ("[", "]")
+                } else {
+                    ("<", ">")
+                };
 
-            let badge = player.badge.as_ref().map(|badge| {
+                let badge = player.badge.as_ref().map(|badge| {
+                    view! {
+                        <img
+                            class=style::badge
+                            src=format!("https://ynoproject.net/2kki/images/badge/{badge}.png")
+                        />
+                    }
+                });
+
                 view! {
-                    <img
-                        class=style::badge
-                        src=format!("https://ynoproject.net/2kki/images/badge/{badge}.png")
-                    />
+                    <div class=style::author>
+                        {name_start}
+                        <span
+                            class=style::name
+                            style:background-image=player
+                                .system
+                                .map(|sys| format!("var(--{}-{sys}-gradient)", current_game.id))
+                        >
+                            {player.name.clone()}
+                        </span> {badge} {name_end}
+                    </div>
                 }
-            });
-
-            view! { <div class=style::author>{name_start} {player.name.clone()} {badge} {name_end}</div> }
-        }
-    }).into_any()
+            }
+        })
+        .into_any()
 }

@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use common::config::Game;
 use leptos::prelude::*;
 
 pub mod chat;
@@ -13,8 +14,9 @@ pub use player::Player;
 use crate::sidebar::session::SessionState;
 
 #[island]
-pub fn Provider(children: Children) -> impl IntoView {
+pub fn Provider(game: Arc<Game>, children: Children) -> impl IntoView {
     provide_context(Arc::new(PlayState::new()));
+    provide_context(game);
     children()
 }
 

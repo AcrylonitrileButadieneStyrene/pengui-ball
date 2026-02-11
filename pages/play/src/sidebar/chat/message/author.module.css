@@ -3,6 +3,12 @@
     padding-inline-end: 6px;
 }
 
+.name {
+    background-color: white;
+    background-clip: text;
+    color: transparent;
+}
+
 .badge {
     image-rendering: auto;
     height: 18.5px;

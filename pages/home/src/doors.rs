@@ -4,7 +4,7 @@ stylance::import_style!(pub style, "doors.module.css");
 
 #[component]
 pub fn Doors() -> impl IntoView {
-    let config = expect_context::<std::sync::Arc<common::Config>>();
+    let config = expect_context::<std::sync::Arc<common::ServerConfiguration>>();
     let games = config.games.clone();
 
     view! {

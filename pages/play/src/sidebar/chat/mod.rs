@@ -2,6 +2,7 @@ use leptos::prelude::*;
 
 mod filters;
 mod input;
+mod menu_themes;
 mod message;
 
 stylance::import_style!(pub style, "mod.module.css");
@@ -10,6 +11,7 @@ stylance::import_style!(pub style, "mod.module.css");
 pub fn Chat() -> impl IntoView {
     view! {
         <div class=style::messages>
+            <menu_themes::MenuThemes />
             <div class=style::scroll_view>
                 <ChatMessages />
             </div>

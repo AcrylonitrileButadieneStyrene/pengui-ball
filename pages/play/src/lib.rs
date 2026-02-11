@@ -24,7 +24,7 @@ pub fn state() -> State {
 #[component]
 pub fn Play() -> impl IntoView {
     let id = use_params_map().get().get("game").unwrap();
-    let config = expect_context::<Arc<common::Config>>();
+    let config = expect_context::<Arc<common::ServerConfiguration>>();
     let games = config.games.clone();
 
     let Some(game) = games.into_iter().find(|game| game.id == id) else {
@@ -48,7 +48,7 @@ pub fn Play() -> impl IntoView {
         />
         <leptos_meta::Body {..} class=style::game />
 
-        <state::Provider>
+        <state::Provider game>
             <main id="layout" class=style::layout>
                 <header::Header />
                 <game::Game />
