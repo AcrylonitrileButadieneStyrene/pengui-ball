@@ -20,6 +20,8 @@ fn Selection() -> impl IntoView {
     let state = crate::state();
     let destination = state.chat.destination;
 
+    let (none, set_none) = signal(false);
+
     let on_change = move |event| {
         let value = event_target_value(&event);
         if let Ok(repr) = value.parse::<u8>()
@@ -28,6 +30,30 @@ fn Selection() -> impl IntoView {
             destination.set(dest);
         }
     };
+
+    Effect::new(move || {
+        let dest = destination.get();
+        let filtered = dest.to_channel(&state.chat).filter.get();
+
+        if !filtered {
+            set_none(false);
+            return;
+        }
+
+        for variant in MessageDestination::VARIANTS {
+            if *variant == dest {
+                continue;
+            }
+
+            if !variant.to_channel(&state.chat).filter.get() {
+                destination.set(*variant);
+                set_none(false);
+                return;
+            }
+        }
+
+        set_none(true);
+    });
 
     let options = MessageDestination::VARIANTS
         .iter()
@@ -40,6 +66,7 @@ fn Selection() -> impl IntoView {
         <select
             class=style::selection
             prop:value=move || destination.get() as u8
+            prop:disabled=none
             on:change=on_change
         >
             // the options must be inside of the island due to a hydration error

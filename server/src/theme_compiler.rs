@@ -54,6 +54,7 @@ pub async fn run() {
     }
 }
 
+#[allow(clippy::cast_precision_loss)]
 async fn calculate_gradient(game: &str, system: &str) -> Option<String> {
     let request = reqwest::get(format!(
         "https://ynoproject.net/{game}/images/ui/{game}/{system}/font1.png"
