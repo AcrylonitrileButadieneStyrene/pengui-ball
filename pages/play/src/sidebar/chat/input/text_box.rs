@@ -63,5 +63,13 @@ pub fn TextBox() -> impl IntoView {
         }
     };
 
-    view! { <div contenteditable=true node_ref=node_ref class=style::input on:input=on_input on:keypress=on_keypress /> }
+    view! {
+        <div
+            contenteditable=true
+            node_ref=node_ref
+            class=style::input
+            on:input=on_input
+            on:keypress=on_keypress
+        />
+    }
 }

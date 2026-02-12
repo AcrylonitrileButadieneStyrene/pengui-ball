@@ -8,15 +8,19 @@ stylance::import_style!(pub style, "destination.module.css");
 #[component]
 pub fn Destination() -> impl IntoView {
     view! {
-        <div>
+        <div class=style::destination>
             <span>"Send to "</span>
-            <Selection />
+            <Selection>
+                <option value=-1 style:display="none">
+                    "nowhere"
+                </option>
+            </Selection>
         </div>
     }
 }
 
 #[island]
-fn Selection() -> impl IntoView {
+fn Selection(children: Children) -> impl IntoView {
     let state = crate::state();
     let destination = state.chat.destination;
 
@@ -31,22 +35,38 @@ fn Selection() -> impl IntoView {
         }
     };
 
+    let channels = MessageDestination::VARIANTS
+        .iter()
+        .map(|variant| (*variant, variant.to_channel(&state.chat).filter))
+        .collect::<Vec<(MessageDestination, RwSignal<bool>)>>();
+
+    let options = channels
+        .iter()
+        .map(move |(variant, filter)| {
+            view! {
+                <option value=*variant as u8 prop:disabled=*filter>
+                    {variant.get_str("Name")}
+                </option>
+            }
+        })
+        .collect::<Vec<_>>();
+
     Effect::new(move || {
         let dest = destination.get();
-        let filtered = dest.to_channel(&state.chat).filter.get();
 
+        let filtered = channels[dest as usize].1.get();
         if !filtered {
             set_none(false);
             return;
         }
 
-        for variant in MessageDestination::VARIANTS {
-            if *variant == dest {
+        for (index, filter) in channels.iter().enumerate() {
+            if index == dest as usize {
                 continue;
             }
 
-            if !variant.to_channel(&state.chat).filter.get() {
-                destination.set(*variant);
+            if !filter.1.get() {
+                destination.set(MessageDestination::from_repr(index as _).unwrap());
                 set_none(false);
                 return;
             }
@@ -55,21 +75,13 @@ fn Selection() -> impl IntoView {
         set_none(true);
     });
 
-    let options = MessageDestination::VARIANTS
-        .iter()
-        .map(|variant| {
-            view! { <option value=*variant as u8>{variant.get_str("Name")}</option> }
-        })
-        .collect::<Vec<_>>();
+    let value = move || {
+        if none() { -1 } else { destination.get() as _ }
+    };
 
     view! {
-        <select
-            class=style::selection
-            prop:value=move || destination.get() as u8
-            prop:disabled=none
-            on:change=on_change
-        >
-            // the options must be inside of the island due to a hydration error
+        <select prop:disabled=none on:change=on_change prop:value=value>
+            {children()}
             {options}
         </select>
     }

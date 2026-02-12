@@ -1,6 +1,14 @@
-.selection {
+.destination select {
     border: 0;
     padding: 0;
     background: 0;
     color: white;
+}
+
+.destination:has(select:disabled) span {
+    color: gray;
+}
+
+select:disabled {
+    color: gray;
 }
