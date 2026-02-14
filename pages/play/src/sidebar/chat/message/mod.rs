@@ -4,7 +4,6 @@ use crate::state::{Message, MessageData};
 
 mod author;
 mod icons;
-pub mod location;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -56,7 +55,7 @@ pub fn MessageOuter(message: Message) -> impl IntoView {
                 filtered=message.filtered
                 header=move || {
                     view! {
-                        <location::Location location/>
+                        <crate::sidebar::location::Location location/>
                         <span>{timestamp.to_string()}</span>
                     }
                 }

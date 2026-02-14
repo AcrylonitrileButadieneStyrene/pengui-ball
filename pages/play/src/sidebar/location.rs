@@ -4,6 +4,14 @@ use leptos::prelude::*;
 
 use crate::state::api::location::LocationItem;
 
+#[island]
+pub fn CurrentLocation() -> impl IntoView {
+    let state = crate::state();
+    view! {
+        <Location location=state.location />
+    }
+}
+
 #[component]
 pub fn Location(#[prop(into)] location: Signal<Option<(u16, u16, u16)>>) -> impl IntoView {
     move || {

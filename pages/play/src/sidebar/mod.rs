@@ -1,6 +1,7 @@
 use leptos::prelude::*;
 
 mod chat;
+mod location;
 mod player_count;
 pub mod session;
 
@@ -17,19 +18,11 @@ pub fn Sidebar() -> impl IntoView {
 
             <div class=style::location>
                 <div>Location:</div>
-                <WithLocation />
+                <location::CurrentLocation />
             </div>
 
             <chat::Chat />
         </div>
     }
     .into_any()
-}
-
-#[island]
-fn WithLocation() -> impl IntoView {
-    let state = crate::state();
-    view! {
-        <chat::message::location::Location location=state.location />
-    }
 }
