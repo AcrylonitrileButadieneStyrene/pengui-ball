@@ -34,6 +34,7 @@ fn LoadPlayer(game: String, children: Children) -> impl IntoView {
 fn StartPlayer(children: Children) -> impl IntoView {
     let loaded = expect_context::<Loaded>();
     let state = expect_context::<crate::EngineState>();
+    let ignore_next_blur = state.ignore_next_blur;
     let node_ref = state.easyrpg_player.canvas;
 
     Effect::new(move || {
@@ -54,6 +55,7 @@ fn StartPlayer(children: Children) -> impl IntoView {
 
     let on_keydown = move |event: leptos::ev::KeyboardEvent| {
         if event.key() == "Tab" {
+            ignore_next_blur.set(true);
             crate::send(common::PlayMessage::RegainFocus(event.shift_key()));
         }
     };

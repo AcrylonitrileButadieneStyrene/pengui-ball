@@ -2,4 +2,5 @@
 pub enum Message {
     Connect,
     Mute(bool),
+    Defocus,
 }

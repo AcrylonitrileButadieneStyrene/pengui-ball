@@ -66,7 +66,6 @@ pub fn TextBox() -> impl IntoView {
 
     let on_keydown = move |event: leptos::ev::KeyboardEvent| {
         if event.key() == "Tab" {
-            leptos::logging::log!("tab");
             event.prevent_default();
             if let Some(frame) = frame.get_untracked() {
                 drop(frame.focus());

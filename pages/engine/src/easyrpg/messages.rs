@@ -20,6 +20,15 @@ fn handle(state: &crate::EngineState, message: common::EngineMessage) {
         common::EngineMessage::Mute(muted) => {
             state.muted.set(muted);
         }
+        common::EngineMessage::Defocus => {
+            if document().has_focus().unwrap_or_default() {
+                return;
+            }
+
+            let _ = window()
+                .dispatch_event(&leptos::web_sys::Event::new("blur").unwrap())
+                .unwrap();
+        }
     }
 }
 

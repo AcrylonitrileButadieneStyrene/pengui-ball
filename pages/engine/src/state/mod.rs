@@ -12,6 +12,7 @@ pub fn Provider(game: String, children: Children) -> impl IntoView {
         music_volume: RwSignal::new(100),
         sound_volume: RwSignal::new(100),
         muted: RwSignal::new(false),
+        ignore_next_blur: RwSignal::new(false),
     }));
     children()
 }
@@ -23,4 +24,5 @@ pub struct EngineState {
     pub music_volume: RwSignal<u8>,
     pub sound_volume: RwSignal<u8>,
     pub muted: RwSignal<bool>,
+    pub ignore_next_blur: RwSignal<bool>,
 }
