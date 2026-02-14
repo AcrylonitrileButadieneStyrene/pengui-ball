@@ -38,7 +38,7 @@ fn CurrentUser() -> impl IntoView {
     let on_click = {
         let state = state.clone();
         move |_| {
-            let modal = state.user.map(|user| match user {
+            let modal = state.api.user.map(|user| match user {
                 Some(user) if user.registered => crate::modals::Modals::LogOut,
                 Some(_) => crate::modals::Modals::LogIn,
                 None => crate::modals::Modals::Cors,
@@ -48,7 +48,7 @@ fn CurrentUser() -> impl IntoView {
     };
 
     move || {
-        let content = state.user.map(|user| match user {
+        let content = state.api.user.map(|user| match user {
             Some(user) if user.registered => "Log Out",
             Some(_) => "Log In",
             None => {

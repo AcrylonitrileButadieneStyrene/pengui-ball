@@ -21,7 +21,7 @@ fn LogoutButton() -> impl IntoView {
                 .send()
                 .await
                 .unwrap();
-            state.user.refetch();
+            state.api.user.refetch();
             state.modal.set(None);
             state.session.reconnect();
         });

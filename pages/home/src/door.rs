@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use leptos::{
     prelude::*,
     web_sys::{self, HtmlAudioElement},
@@ -35,7 +37,7 @@ pub fn Door(index: usize, game: common::config::Game) -> impl IntoView {
 }
 
 #[island]
-fn DoorSound(id: String, index: usize, children: Children) -> impl IntoView {
+fn DoorSound(id: Arc<str>, index: usize, children: Children) -> impl IntoView {
     let node_ref = NodeRef::new();
     let selected = expect_context::<RwSignal<Option<usize>>>();
 
@@ -64,7 +66,7 @@ fn DoorSound(id: String, index: usize, children: Children) -> impl IntoView {
 }
 
 #[island]
-fn DoorClickable(id: String, index: usize, children: Children) -> impl IntoView {
+fn DoorClickable(id: Arc<str>, index: usize, children: Children) -> impl IntoView {
     let selected = expect_context::<RwSignal<Option<usize>>>();
 
     let href = format!("/{id}/");
@@ -101,7 +103,7 @@ fn DoorSpotlight(index: usize) -> impl IntoView {
 }
 
 #[island]
-fn DoorImage(id: String, index: usize) -> impl IntoView {
+fn DoorImage(id: Arc<str>, index: usize) -> impl IntoView {
     let selected = expect_context::<RwSignal<Option<usize>>>();
 
     view! {

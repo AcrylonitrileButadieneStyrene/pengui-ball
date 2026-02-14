@@ -55,7 +55,7 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
                 player.medals = medals;
 
                 if id == -1
-                    && let Some(Some(user)) = &*state.user.read_untracked()
+                    && let Some(Some(user)) = &*state.api.user.read_untracked()
                 {
                     player.name = Some(user.name.clone().into());
                 }

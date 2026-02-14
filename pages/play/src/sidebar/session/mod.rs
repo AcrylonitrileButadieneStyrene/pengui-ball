@@ -32,7 +32,7 @@ pub fn Session() -> impl IntoView {
 }
 
 #[island]
-fn Connection(game: String, children: Children) -> impl IntoView {
+fn Connection(game: Arc<str>, children: Children) -> impl IntoView {
     let state = crate::state();
     let room_status = state.engine.status;
     let session_status = state.session.status;

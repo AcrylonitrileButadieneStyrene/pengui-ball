@@ -21,12 +21,22 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
                 text: Arc::from(*text),
             },
         )),
-        ["gsay", uuid, _map, _, _, _x, _y, text, id] => {
+        ["gsay", uuid, map, _, _, x, y, text, id] => {
             state.chat.global.add(Message::new(
                 Some(*id),
                 MessageData::Global {
                     author: Arc::from(*uuid),
                     text: Arc::from(*text),
+                    location: {
+                        if let Ok(map) = map.parse()
+                            && let Ok(x) = x.parse()
+                            && let Ok(y) = y.parse()
+                        {
+                            Some((map, x, y))
+                        } else {
+                            None
+                        }
+                    },
                 },
             ));
         }

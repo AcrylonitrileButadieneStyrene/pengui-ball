@@ -1,8 +1,10 @@
 games:
   - id: "yume"
     name: "Yume Nikki"
+    permission: Yume1kki
   - id: "2kki"
     name: "Yume 2kki"
+    permission: Yume2kki
   - id: "flow"
     name: ".flow"
   - id: "unevendream"
@@ -42,6 +44,6 @@ games:
   - id: "fog"
     name: "FOG"
   - id: "cold"
-    name: "[Cold]"
+    name: "[COLD]"
   - id: "loveyou"
     name: "loveyou"

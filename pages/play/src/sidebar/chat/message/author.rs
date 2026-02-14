@@ -7,7 +7,6 @@ stylance::import_style!(pub style, "author.module.css");
 #[island]
 pub fn Author(uuid: Arc<str>) -> impl IntoView {
     let state = crate::state();
-    let current_game = expect_context::<crate::CurrentGame>();
     let author = state
         .players
         .with_untracked(|players| players.get(&uuid).copied());
@@ -39,7 +38,7 @@ pub fn Author(uuid: Arc<str>) -> impl IntoView {
                             class=style::name
                             style:background-image=player
                                 .system
-                                .map(|sys| format!("var(--{}-{sys}-gradient)", current_game.id))
+                                .map(|sys| format!("var(--{}-{sys}-gradient)", state.game_id))
                         >
                             {player.name.clone()}
                         </span> {badge} {name_end}

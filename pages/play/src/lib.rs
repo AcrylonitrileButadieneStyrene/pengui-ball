@@ -1,4 +1,6 @@
 #![feature(result_option_map_or_default)]
+#![feature(nonpoison_rwlock)]
+#![feature(sync_nonpoison)]
 #![allow(non_snake_case)]
 
 use std::sync::Arc;
@@ -27,16 +29,14 @@ pub fn Play() -> impl IntoView {
     let config = expect_context::<Arc<common::ServerConfiguration>>();
     let games = config.games.clone();
 
-    let Some(game) = games.into_iter().find(|game| game.id == id) else {
-        return leptos::either::Either::Left(
-            view! { <leptos_router::components::Redirect path="/" /> },
-        );
+    let Some(game) = games.into_iter().find(|game| &*game.id == &id) else {
+        return view! { <leptos_router::components::Redirect path="/" /> }.into_any();
     };
 
     let game = Arc::new(game);
     provide_context(game.clone());
 
-    leptos::either::Either::Right(view! {
+    view! {
         <leptos_meta::Link rel="stylesheet" href="/css/play.css" />
         <leptos_meta::Link rel="stylesheet" href="/css/themes.css" />
         <leptos_meta::Title text=format!("{} Online - YNOproject", game.name) />
@@ -49,7 +49,7 @@ pub fn Play() -> impl IntoView {
         />
         <leptos_meta::Body {..} class=style::game />
 
-        <state::Provider game>
+        <state::Provider game_id=game.id.clone()>
             <main id="layout" class=style::layout>
                 <header::Header />
                 <game::Game />
@@ -57,5 +57,19 @@ pub fn Play() -> impl IntoView {
             </main>
             <modals::Modals />
         </state::Provider>
-    })
+
+        <PermissionDisclaimer permission=game.permission />
+    }
+    .into_any()
+}
+
+#[component]
+fn PermissionDisclaimer(permission: common::config::PermissionStatus) -> impl IntoView {
+    use common::config::PermissionStatus;
+    match permission {
+        PermissionStatus::Yume1kki => "Pending approval from developer/publisher",
+        PermissionStatus::Yume2kki => "Hosted with permission from the Yume 2kki developers",
+        // PermissionStatus::CU => "Original disappointment by the YNOproject community",
+        PermissionStatus::Pending => "Hosted with permission from the developer(s)",
+    }
 }

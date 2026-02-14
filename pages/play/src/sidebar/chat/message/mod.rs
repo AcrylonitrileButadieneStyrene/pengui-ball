@@ -4,6 +4,7 @@ use crate::state::{Message, MessageData};
 
 mod author;
 mod icons;
+mod location;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -36,7 +37,6 @@ pub fn MessageOuter(message: Message) -> impl IntoView {
                 filtered=message.filtered
                 header=move || {
                     view! {
-                        <span>Unknown Location</span>
                         <span>{timestamp.to_string()}</span>
                     }
                 }
@@ -47,12 +47,16 @@ pub fn MessageOuter(message: Message) -> impl IntoView {
             </Message>
         }
         .into_any(),
-        MessageData::Global { author, text } => view! {
+        MessageData::Global {
+            author,
+            text,
+            location,
+        } => view! {
             <Message
                 filtered=message.filtered
                 header=move || {
                     view! {
-                        <span>Unknown Location</span>
+                        <location::Location location/>
                         <span>{timestamp.to_string()}</span>
                     }
                 }

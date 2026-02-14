@@ -38,8 +38,20 @@ impl Message {
 
 #[derive(Clone, Debug)]
 pub enum MessageData {
-    Map { author: Arc<str>, text: Arc<str> },
-    Party { author: Arc<str>, text: Arc<str> },
-    Global { author: Arc<str>, text: Arc<str> },
-    Local { text: Arc<str> },
+    Map {
+        author: Arc<str>,
+        text: Arc<str>,
+    },
+    Party {
+        author: Arc<str>,
+        text: Arc<str>,
+    },
+    Global {
+        author: Arc<str>,
+        text: Arc<str>,
+        location: Option<(u16, u16, u16)>,
+    },
+    Local {
+        text: Arc<str>,
+    },
 }
