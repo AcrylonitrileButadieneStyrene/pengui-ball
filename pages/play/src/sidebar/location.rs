@@ -7,9 +7,7 @@ use crate::state::api::location::LocationItem;
 #[island]
 pub fn CurrentLocation() -> impl IntoView {
     let state = crate::state();
-    view! {
-        <Location location=state.location />
-    }
+    view! { <Location location=state.location /> }
 }
 
 #[component]
@@ -32,14 +30,13 @@ fn location_inner(location: u16, x: u16, y: u16) -> impl IntoView {
         let url = locations.root.to_string() + &url.unwrap_or_else(|| name.clone());
 
         view! {
-            <a href=url>{name}</a>
+            <a href=url target="_blank">
+                {name}
+            </a>
         }
         .into_any()
     } else {
-        view! {
-            <span>Unknown Location</span>
-        }
-        .into_any()
+        view! { <span>Unknown Location</span> }.into_any()
     }
 }
 
@@ -51,14 +48,10 @@ fn find_map(map: &LocationItem, x: u16, y: u16) -> Option<(Arc<str>, Option<Arc<
             url_title,
             coords,
         } => {
-            if !coords
-                .as_ref()
-                .map(|coords| !coords.contains(x, y))
-                .unwrap_or_default()
-            {
-                Some((title.clone(), url_title.clone()))
-            } else {
+            if coords.as_ref().is_some_and(|coords| !coords.contains(x, y)) {
                 None
+            } else {
+                Some((title.clone(), url_title.clone()))
             }
         }
         LocationItem::Array(items) => items.iter().find_map(|item| find_map(item, x, y)),

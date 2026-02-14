@@ -25,7 +25,7 @@ pub enum LocationItem {
         url_title: Option<Arc<str>>,
         coords: Option<Coordinates>,
     },
-    Array(Vec<LocationItem>),
+    Array(Vec<Self>),
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -37,31 +37,32 @@ pub struct Coordinates {
 }
 
 impl Coordinates {
-    pub fn contains(&self, x: u16, y: u16) -> bool {
+    pub const fn contains(&self, x: u16, y: u16) -> bool {
         (if self.x1 == -1 {
             true
         } else {
-            self.x1 as u16 <= x
+            self.x1.cast_unsigned() <= x
         }) && if self.x2 == -1 {
             true
         } else {
-            x <= self.x2 as u16
+            x <= self.x2.cast_unsigned()
         } && if self.y1 == -1 {
             true
         } else {
-            self.y1 as u16 <= y
+            self.y1.cast_unsigned() <= y
         } && if self.y2 == -1 {
             true
         } else {
-            y <= self.y2 as u16
+            y <= self.y2.cast_unsigned()
         }
     }
 }
 
+type LocationsInner =
+    RwLock<HashMap<Arc<str>, LocalResource<Result<LocationData, gloo_net::Error>>>>;
+
 // maybe replace this with lazy_map
-pub struct Locations(
-    RwLock<HashMap<Arc<str>, LocalResource<Result<LocationData, gloo_net::Error>>>>,
-);
+pub struct Locations(LocationsInner);
 
 impl Locations {
     pub fn new_prefetch(game: Arc<str>) -> Self {
@@ -72,13 +73,14 @@ impl Locations {
     }
 
     pub fn get(&self, game: &str) -> LocalResource<Result<LocationData, gloo_net::Error>> {
-        if let Some(resource) = self.0.read().get(game) {
-            *resource
-        } else {
-            let resource = resource(game);
-            self.0.write().insert(Arc::from(game), resource);
-            resource
-        }
+        self.0.read().get(game).map_or_else(
+            || {
+                let resource = resource(game);
+                self.0.write().insert(Arc::from(game), resource);
+                resource
+            },
+            |resource| *resource,
+        )
     }
 }
 

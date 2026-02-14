@@ -29,7 +29,7 @@ pub fn Play() -> impl IntoView {
     let config = expect_context::<Arc<common::ServerConfiguration>>();
     let games = config.games.clone();
 
-    let Some(game) = games.into_iter().find(|game| &*game.id == &id) else {
+    let Some(game) = games.into_iter().find(|game| *game.id == id) else {
         return view! { <leptos_router::components::Redirect path="/" /> }.into_any();
     };
 

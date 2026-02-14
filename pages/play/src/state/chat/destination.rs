@@ -16,11 +16,11 @@ pub enum MessageDestination {
 }
 
 impl MessageDestination {
-    pub fn to_channel<'a>(&self, state: &'a chat::State) -> &'a ChatChannel {
+    pub const fn to_channel(self, state: &chat::State) -> &ChatChannel {
         match self {
-            MessageDestination::Map => &state.map,
-            MessageDestination::Party => &state.party,
-            MessageDestination::Global => &state.global,
+            Self::Map => &state.map,
+            Self::Party => &state.party,
+            Self::Global => &state.global,
         }
     }
 }

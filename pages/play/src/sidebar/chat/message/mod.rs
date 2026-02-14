@@ -35,9 +35,7 @@ pub fn MessageOuter(message: Message) -> impl IntoView {
             <Message
                 filtered=message.filtered
                 header=move || {
-                    view! {
-                        <span>{timestamp.to_string()}</span>
-                    }
+                    view! { <span>{timestamp.to_string()}</span> }
                 }
             >
                 <icons::People />
@@ -55,7 +53,7 @@ pub fn MessageOuter(message: Message) -> impl IntoView {
                 filtered=message.filtered
                 header=move || {
                     view! {
-                        <crate::sidebar::location::Location location/>
+                        <crate::sidebar::location::Location location />
                         <span>{timestamp.to_string()}</span>
                     }
                 }

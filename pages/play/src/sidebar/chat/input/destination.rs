@@ -66,7 +66,7 @@ fn Selection(children: Children) -> impl IntoView {
             }
 
             if !filter.1.get() {
-                destination.set(MessageDestination::from_repr(index as _).unwrap());
+                destination.set(MessageDestination::from_repr(index.try_into().unwrap()).unwrap());
                 set_none(false);
                 return;
             }

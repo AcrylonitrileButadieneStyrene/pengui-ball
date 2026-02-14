@@ -33,7 +33,10 @@ pub fn TextBox() -> impl IntoView {
         this.set_text_content(Some(&content[0..end]));
         let range = document().create_range().unwrap();
         range
-            .set_start(&this.first_child().unwrap(), offset.min(end as u32))
+            .set_start(
+                &this.first_child().unwrap(),
+                offset.min(u32::try_from(end).unwrap()),
+            )
             .unwrap();
         selection.remove_all_ranges().unwrap();
         selection.add_range(&range).unwrap();
