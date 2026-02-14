@@ -11,6 +11,7 @@ stylance::import_style!(pub style, "text_box.module.css");
 pub fn TextBox() -> impl IntoView {
     let state = crate::state();
     let node_ref = state.chat.input;
+    let frame = state.engine.frame;
 
     let on_input = move |event| {
         let this = event_target::<HtmlDivElement>(&event);
@@ -63,6 +64,16 @@ pub fn TextBox() -> impl IntoView {
         }
     };
 
+    let on_keydown = move |event: leptos::ev::KeyboardEvent| {
+        if event.key() == "Tab" {
+            leptos::logging::log!("tab");
+            event.prevent_default();
+            if let Some(frame) = frame.get_untracked() {
+                drop(frame.focus());
+            }
+        }
+    };
+
     view! {
         <div
             contenteditable=true
@@ -70,6 +81,7 @@ pub fn TextBox() -> impl IntoView {
             class=style::input
             on:input=on_input
             on:keypress=on_keypress
+            on:keydown=on_keydown
         />
     }
 }
