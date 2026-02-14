@@ -17,11 +17,19 @@ pub fn Sidebar() -> impl IntoView {
 
             <div class=style::location>
                 <div>Location:</div>
-                <div>Unknown Location</div>
+                <WithLocation />
             </div>
 
             <chat::Chat />
         </div>
     }
     .into_any()
+}
+
+#[island]
+fn WithLocation() -> impl IntoView {
+    let state = crate::state();
+    view! {
+        <chat::message::location::Location location=state.location />
+    }
 }

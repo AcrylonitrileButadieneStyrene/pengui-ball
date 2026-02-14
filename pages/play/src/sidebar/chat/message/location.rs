@@ -5,8 +5,12 @@ use leptos::prelude::*;
 use crate::state::api::location::LocationItem;
 
 #[component]
-pub fn Location(location: Option<(u16, u16, u16)>) -> impl IntoView {
-    move || location.map(|(location, x, y)| location_inner(location, x, y))
+pub fn Location(#[prop(into)] location: Signal<Option<(u16, u16, u16)>>) -> impl IntoView {
+    move || {
+        location
+            .get()
+            .map(|(location, x, y)| location_inner(location, x, y))
+    }
 }
 
 fn location_inner(location: u16, x: u16, y: u16) -> impl IntoView {

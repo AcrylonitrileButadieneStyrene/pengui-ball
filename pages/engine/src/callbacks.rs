@@ -87,8 +87,8 @@ pub fn on_player_sprite_updated(sprite: String, index: u32, id: i32) {
 }
 
 #[wasm_bindgen]
-pub fn on_player_teleported(map: u32, x: u32, y: u32) {
-    leptos::logging::log!("teleported to Map{map:<04} X:{x} Y:{y}");
+pub fn on_player_teleported(map: u16, x: u16, y: u16) {
+    crate::send(common::PlayMessage::PlayerTeleported(map, x, y));
 }
 
 #[wasm_bindgen]

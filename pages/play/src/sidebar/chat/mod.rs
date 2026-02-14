@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 mod filters;
 mod input;
-mod message;
+pub mod message;
 
 stylance::import_style!(pub style, "mod.module.css");
 

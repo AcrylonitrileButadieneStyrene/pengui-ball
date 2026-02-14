@@ -28,6 +28,7 @@ pub struct PlayState {
     pub modal: RwSignal<Option<crate::modals::Modals>>,
 
     pub game_id: Arc<str>,
+    pub location: RwSignal<Option<(u16, u16, u16)>>,
 }
 
 impl PlayState {
@@ -40,6 +41,7 @@ impl PlayState {
             api: api::State::new(game_id.clone()),
             modal: RwSignal::new(None),
             game_id,
+            location: RwSignal::new(None),
         }
     }
 }

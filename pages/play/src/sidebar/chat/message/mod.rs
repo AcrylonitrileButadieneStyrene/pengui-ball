@@ -4,7 +4,7 @@ use crate::state::{Message, MessageData};
 
 mod author;
 mod icons;
-mod location;
+pub mod location;
 
 stylance::import_style!(pub style, "mod.module.css");
 

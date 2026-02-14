@@ -90,5 +90,8 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
                 element.focus().unwrap();
             }
         }
+        PlayMessage::PlayerTeleported(map, x, y) => {
+            state.location.set(Some((map, x, y)));
+        }
     }
 }
