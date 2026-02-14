@@ -38,8 +38,9 @@ fn Connection(game: Arc<str>, children: Children) -> impl IntoView {
     let session_status = state.session.status;
     let session_target = state.session.target;
 
-    // DIFF: forest-orb increases the interval by 5 seconds on each attempt
-    // i don't think that's too necessary so it's not done here.
+    let (retry_count, set_retry_count) = signal(0);
+    let (retry_handle, set_retry_handle) = signal(None::<TimeoutHandle>);
+
     let UseWebSocketReturn {
         ready_state,
         send,
@@ -50,8 +51,7 @@ fn Connection(game: Arc<str>, children: Children) -> impl IntoView {
         &format!("wss://connect.ynoproject.net/{game}/session"),
         UseWebSocketOptions::default()
             .immediate(false)
-            .reconnect_interval(5000)
-            .reconnect_limit(leptos_use::ReconnectLimit::Infinite)
+            .reconnect_limit(leptos_use::ReconnectLimit::Limited(0))
             .on_message({
                 let state = state.clone();
                 move |message: &String| {
@@ -62,11 +62,40 @@ fn Connection(game: Arc<str>, children: Children) -> impl IntoView {
     );
 
     leptos::task::spawn(send_messages(state, Arc::new(send)));
-    Effect::new(move || session_status.set(ready_state.get()));
+    // manual reconnect and disconnect
+    Effect::new({
+        let open = open.clone();
+        move || {
+            close();
+            if session_target.get().is_some() {
+                open();
+            }
+        }
+    });
+    // auto reconnect
     Effect::new(move || {
-        close();
-        if session_target.get().is_some() {
-            open();
+        let ready_state = ready_state.get();
+        session_status.set(ready_state);
+
+        if let Some(handle) = retry_handle.get_untracked() {
+            handle.clear();
+        }
+
+        if ready_state == ConnectionReadyState::Closed {
+            if session_target.get().is_some() {
+                let value = retry_count.get_untracked();
+                set_retry_count(value + 1);
+
+                set_retry_handle(
+                    set_timeout_with_handle(
+                        open.clone(),
+                        std::time::Duration::from_secs(2_u64.pow(value.min(5))),
+                    )
+                    .ok(),
+                );
+            }
+        } else if ready_state == ConnectionReadyState::Open {
+            set_retry_count(0);
         }
     });
 
