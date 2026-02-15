@@ -43,6 +43,11 @@ pub fn setup() {
         callback!("onPlayerDisconnected", on_player_disconnected, dyn Fn(_)),
         callback!("onNametagModeUpdated", on_nametag_mode_updated, dyn Fn(_)),
         callback!("onSaveSlotUpdated", on_save_slot_updated, dyn Fn(_)),
+        callback!(
+            "onBadgeUpdateRequested",
+            on_badge_update_requested,
+            dyn Fn()
+        ),
     ];
 
     let window = window();
@@ -141,6 +146,12 @@ pub fn on_nametag_mode_updated(_mode: u32) {
     // why is this even a callback
 }
 
+#[wasm_bindgen]
 pub fn on_save_slot_updated(slot: u32) {
     leptos::logging::log!("saved to slot {slot}");
+}
+
+#[wasm_bindgen]
+pub fn on_badge_update_requested() {
+    leptos::logging::log!("maybe unlocked new badge");
 }
