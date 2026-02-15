@@ -21,3 +21,16 @@
 .location :nth-child(2) {
     text-align: end;
 }
+
+a[target="yumeWiki"] {
+    color: white;
+    text-decoration-color: #0000EE;
+}
+
+a[target="yumeWiki"]:visited {
+    text-decoration-color: #551A8B;
+}
+
+a[target="yumeWiki"]:active {
+    text-decoration-color: #FF0000;
+}
