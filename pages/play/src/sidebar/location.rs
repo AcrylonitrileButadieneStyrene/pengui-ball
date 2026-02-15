@@ -30,13 +30,16 @@ fn location_inner(location: u16, x: u16, y: u16) -> impl IntoView {
         let url = locations.root.to_string() + &url.unwrap_or_else(|| name.clone());
 
         view! {
-            <a href=url target="_blank">
+            <a href=url target="yumeWiki">
                 {name}
             </a>
         }
         .into_any()
     } else {
-        view! { <span>Unknown Location</span> }.into_any()
+        view! {
+            <span>Unknown Location: {format!("Map{location:>04}({x}, {y})")}</span>
+        }
+        .into_any()
     }
 }
 
