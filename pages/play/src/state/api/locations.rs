@@ -9,8 +9,8 @@ use leptos::prelude::*;
 pub struct LocationData {
     #[serde(rename = "ignoredMapIds")]
     pub ignored: Vec<Arc<str>>,
-    #[serde(rename = "urlRoot")]
-    pub root: Arc<str>,
+    #[serde(rename = "urlRoot", default)]
+    pub root: Option<Arc<str>>,
     #[serde(rename = "mapLocations")]
     pub maps: HashMap<Arc<str>, LocationItem>,
 }
@@ -85,6 +85,35 @@ impl Locations {
             |resource| *resource,
         )
     }
+
+    pub fn resolve(
+        &self,
+        game: &str,
+        location: super::super::game::Location,
+    ) -> Option<ResolvedLocation> {
+        let map = &*format!("{:>04}", location.map);
+
+        self.get(game)
+            .read()
+            .as_ref()
+            .map(Result::as_ref)
+            .and_then(Result::ok)
+            .and_then(|locations| locations.maps.get(map).zip(Some(locations.root.clone())))
+            .and_then(|(item, wiki)| {
+                resolve_recursive(item, location.previous, location.x, location.y).zip(Some(wiki))
+            })
+            .map(|((name, article), wiki)| ResolvedLocation {
+                wiki: wiki
+                    .as_ref()
+                    .map(|root| root.to_string() + article.as_ref().unwrap_or(&name)),
+                name,
+            })
+    }
+}
+
+pub struct ResolvedLocation {
+    pub name: Arc<str>,
+    pub wiki: Option<String>,
 }
 
 fn resource(game: &str) -> LocalResource<Result<LocationData, gloo_net::Error>> {
@@ -99,4 +128,38 @@ fn resource(game: &str) -> LocalResource<Result<LocationData, gloo_net::Error>> 
                 .await
         }
     })
+}
+
+fn resolve_recursive(
+    item: &LocationItem,
+    previous: Option<u16>,
+    x: u16,
+    y: u16,
+) -> Option<(Arc<str>, Option<Arc<str>>)> {
+    match item {
+        LocationItem::Literal(name) => Some((name.clone(), None)),
+        LocationItem::Object {
+            title,
+            url_title,
+            coords,
+            ..
+        } => {
+            if coords.as_ref().is_some_and(|coords| !coords.contains(x, y)) {
+                None
+            } else {
+                Some((title.clone(), url_title.clone()))
+            }
+        }
+        LocationItem::Array(items) => items
+            .iter()
+            .find_map(|item| resolve_recursive(item, previous, x, y)),
+        LocationItem::Dynamic(items) => items.iter().find_map(|(from, item)| {
+            let from = &**from;
+            if previous.map_or(from == "else", |prev| from == format!("{prev:>04}")) {
+                resolve_recursive(item, previous, x, y)
+            } else {
+                None
+            }
+        }),
+    }
 }

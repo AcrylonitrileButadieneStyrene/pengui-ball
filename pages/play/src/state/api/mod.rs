@@ -2,11 +2,11 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-pub mod location;
+pub mod locations;
 
 pub struct State {
     pub user: LocalResource<Option<super::user::User>>,
-    pub locations: location::Locations,
+    pub locations: locations::Locations,
 }
 
 impl State {
@@ -21,7 +21,7 @@ impl State {
                     .await
                     .ok()?
             }),
-            locations: location::Locations::new_prefetch(game),
+            locations: locations::Locations::new_prefetch(game),
         }
     }
 }
