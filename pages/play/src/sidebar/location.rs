@@ -39,9 +39,7 @@ fn location_inner(location: Location) -> impl IntoView {
         }
         .into_any()
     } else {
-        view! {
-            <span>Unknown Location: {format!("Map{map:>04}({x}, {y})")}</span>
-        }
+        view! { <span>Unknown Location: {format!("Map{map:>04}({x}, {y})")}</span> }
         .into_any()
     }
 }

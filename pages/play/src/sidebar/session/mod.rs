@@ -99,6 +99,14 @@ fn Connection(game: Arc<str>, children: Children) -> impl IntoView {
         }
     });
 
+    // feel free to change this, haven't decided on what should show as what
+    let text = move || match (ready_state.get(), room_status.get(), session_target.get()) {
+        (ConnectionReadyState::Open, _, _) => "Connected",
+        (_, _, Some(_)) => "Reconnecting",
+        (ConnectionReadyState::Connecting, _, _) => "Connecting", // unreachable
+        (ConnectionReadyState::Closing | ConnectionReadyState::Closed, _, _) => "Disconnected",
+    };
+
     view! {
         <button
             class=style::reconnect
@@ -110,13 +118,7 @@ fn Connection(game: Arc<str>, children: Children) -> impl IntoView {
         >
             {children()}
         </button>
-        <div>
-            {move || match ready_state.get() {
-                ConnectionReadyState::Open => "Connected",
-                ConnectionReadyState::Connecting => "Connecting",
-                ConnectionReadyState::Closing | ConnectionReadyState::Closed => "Disconnected",
-            }}
-        </div>
+        <div>{text}</div>
     }
 }
 
