@@ -7,6 +7,8 @@ use common::{
 use leptos::{ev, prelude::*};
 use leptos_use::core::ConnectionReadyState;
 
+use crate::state::game::Location;
+
 pub fn setup_handler(state: Arc<crate::state::PlayState>) {
     window_event_listener(ev::message, move |ev| {
         let Some(message) = common::PlayMessage::de(ev.data()) else {
@@ -91,7 +93,15 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
             }
         }
         PlayMessage::PlayerTeleported(map, x, y) => {
-            state.location.set(Some((map, x, y)));
+            state.game.location.update(|value| {
+                let previous = value.as_ref().map(|previous| previous.map);
+                *value = Some(Location {
+                    map,
+                    previous,
+                    x,
+                    y,
+                });
+            });
         }
     }
 }

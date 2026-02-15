@@ -2,6 +2,8 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
+use crate::state::game::Location;
+
 #[derive(Clone, Debug)]
 pub struct Message {
     pub id: Arc<str>,
@@ -49,7 +51,7 @@ pub enum MessageData {
     Global {
         author: Arc<str>,
         text: Arc<str>,
-        location: Option<(u16, u16, u16)>,
+        location: Option<Location>,
     },
     Local {
         text: Arc<str>,

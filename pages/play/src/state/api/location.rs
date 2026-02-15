@@ -24,8 +24,11 @@ pub enum LocationItem {
         #[serde(rename = "urlTitle")]
         url_title: Option<Arc<str>>,
         coords: Option<Coordinates>,
+        #[serde(default)]
+        explorer: bool,
     },
     Array(Vec<Self>),
+    Dynamic(HashMap<Arc<str>, Self>),
 }
 
 #[derive(Debug, serde::Deserialize)]

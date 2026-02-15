@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-use crate::state::{Message, MessageData};
+use crate::state::{Message, MessageData, game::Location};
 
 pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
     match parts {
@@ -21,7 +21,7 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
                 text: Arc::from(*text),
             },
         )),
-        ["gsay", uuid, map, _, _, x, y, text, id] => {
+        ["gsay", uuid, map, prev, _, x, y, text, id] => {
             state.chat.global.add(Message::new(
                 Some(*id),
                 MessageData::Global {
@@ -32,8 +32,16 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
                             && let Ok(x) = x.parse()
                             && let Ok(y) = y.parse()
                         {
-                            Some((map, x, y))
+                            Some(Location {
+                                map,
+                                previous: prev.parse().ok(),
+                                x,
+                                y,
+                            })
                         } else {
+                            leptos::logging::warn!(
+                                "Chat message parse error: {map},{prev},{x},{y}"
+                            );
                             None
                         }
                     },

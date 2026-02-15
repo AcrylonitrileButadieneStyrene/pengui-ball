@@ -38,7 +38,7 @@ pub fn Author(uuid: Arc<str>) -> impl IntoView {
                             class=style::name
                             style:background-image=player
                                 .system
-                                .map(|sys| format!("var(--{}-{sys}-gradient)", state.game_id))
+                                .map(|sys| format!("var(--{}-{sys}-gradient)", state.game.id))
                         >
                             {player.name.clone()}
                         </span> {badge} {name_end}

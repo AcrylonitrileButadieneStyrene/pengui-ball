@@ -5,6 +5,7 @@ use leptos::prelude::*;
 pub mod api;
 pub mod chat;
 pub mod engine;
+pub mod game;
 mod player;
 mod user;
 
@@ -26,9 +27,7 @@ pub struct PlayState {
     pub engine: engine::State,
     pub api: api::State,
     pub modal: RwSignal<Option<crate::modals::Modals>>,
-
-    pub game_id: Arc<str>,
-    pub location: RwSignal<Option<(u16, u16, u16)>>,
+    pub game: game::State,
 }
 
 impl PlayState {
@@ -40,8 +39,7 @@ impl PlayState {
             engine: engine::State::default(),
             api: api::State::new(game_id.clone()),
             modal: RwSignal::new(None),
-            game_id,
-            location: RwSignal::new(None),
+            game: game::State::new(game_id),
         }
     }
 }
