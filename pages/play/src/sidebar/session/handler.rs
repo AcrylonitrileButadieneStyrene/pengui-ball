@@ -33,6 +33,7 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
                             && let Ok(y) = y.parse()
                         {
                             Some(Location {
+                                game: state.game.id.clone(),
                                 map,
                                 previous: prev.parse().ok(),
                                 x,

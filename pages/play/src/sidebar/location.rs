@@ -15,8 +15,7 @@ pub fn Location(#[prop(into)] location: Signal<Option<Location>>) -> impl IntoVi
 
 fn location_inner(location: Location) -> impl IntoView {
     let Location { map, x, y, .. } = location;
-    let state = crate::state();
-    match state.api.locations.resolve(&state.game.id, location) {
+    match crate::state().api.locations.resolve(location) {
         Some(ResolvedLocation {
             name,
             wiki: Some(wiki),

@@ -86,14 +86,10 @@ impl Locations {
         )
     }
 
-    pub fn resolve(
-        &self,
-        game: &str,
-        location: super::super::game::Location,
-    ) -> Option<ResolvedLocation> {
+    pub fn resolve(&self, location: super::super::game::Location) -> Option<ResolvedLocation> {
         let map = &*format!("{:>04}", location.map);
 
-        self.get(game)
+        self.get(&location.game)
             .read()
             .as_ref()
             .map(Result::as_ref)

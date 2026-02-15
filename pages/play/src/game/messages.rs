@@ -96,6 +96,7 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
             state.game.location.update(|value| {
                 let previous = value.as_ref().map(|previous| previous.map);
                 *value = Some(Location {
+                    game: state.game.id.clone(),
                     map,
                     previous,
                     x,
