@@ -1,4 +1,4 @@
-use leptos::{prelude::*, web_sys::HtmlDivElement};
+use leptos::{prelude::*, wasm_bindgen::JsCast as _, web_sys::HtmlDivElement};
 
 use crate::{
     sidebar::session::Command,
@@ -13,33 +13,20 @@ pub fn TextBox() -> impl IntoView {
     let node_ref = state.chat.input;
     let frame = state.engine.frame;
 
-    let on_input = move |event| {
-        let this = event_target::<HtmlDivElement>(&event);
-        let Some(content) = this.text_content() else {
-            return;
-        };
-
-        if content.len() <= 150 {
+    let on_input = move |event: leptos::ev::Event| {
+        if event
+            .dyn_ref::<leptos::ev::InputEvent>()
+            .unwrap()
+            .is_composing()
+        {
             return;
         }
 
-        let selection = window().get_selection().unwrap().unwrap();
-        let offset = selection.focus_offset();
-        let end = content
-            .char_indices()
-            .map_while(|(index, _)| if index <= 150 { Some(index) } else { None })
-            .last()
-            .unwrap_or(content.len());
-        this.set_text_content(Some(&content[0..end]));
-        let range = document().create_range().unwrap();
-        range
-            .set_start(
-                &this.first_child().unwrap(),
-                offset.min(u32::try_from(end).unwrap()),
-            )
-            .unwrap();
-        selection.remove_all_ranges().unwrap();
-        selection.add_range(&range).unwrap();
+        clamp_input(&event);
+    };
+
+    let on_compositionend = |event: leptos::ev::CompositionEvent| {
+        clamp_input(&event.dyn_into().unwrap());
     };
 
     let on_keypress = move |event: leptos::ev::KeyboardEvent| {
@@ -82,8 +69,38 @@ pub fn TextBox() -> impl IntoView {
             node_ref=node_ref
             class=style::input
             on:input=on_input
+            on:compositionend=on_compositionend
             on:keypress=on_keypress
             on:keydown=on_keydown
         />
     }
+}
+
+fn clamp_input(event: &leptos::ev::Event) {
+    let target = event_target::<HtmlDivElement>(&event);
+    let Some(content) = target.text_content() else {
+        return;
+    };
+
+    if content.len() <= 150 {
+        return;
+    }
+
+    let selection = window().get_selection().unwrap().unwrap();
+    let offset = selection.focus_offset();
+    let end = content
+        .char_indices()
+        .map_while(|(index, _)| if index <= 150 { Some(index) } else { None })
+        .last()
+        .unwrap_or(content.len());
+    target.set_text_content(Some(&content[0..end]));
+    let range = document().create_range().unwrap();
+    range
+        .set_start(
+            &target.first_child().unwrap(),
+            offset.min(u32::try_from(end).unwrap()),
+        )
+        .unwrap();
+    selection.remove_all_ranges().unwrap();
+    selection.add_range(&range).unwrap();
 }
