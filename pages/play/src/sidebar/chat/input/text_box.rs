@@ -87,20 +87,36 @@ fn clamp_input(event: &leptos::ev::Event) {
     }
 
     let selection = window().get_selection().unwrap().unwrap();
-    let offset = selection.focus_offset();
-    let end = content
+    let offset = selection.focus_offset() as usize;
+
+    let caret = content
         .char_indices()
-        .map_while(|(index, _)| if index <= 150 { Some(index) } else { None })
-        .last()
+        .nth(offset)
+        .map(|(index, _)| index)
         .unwrap_or(content.len());
-    target.set_text_content(Some(&content[0..end]));
+    let (left, mut right) = content.split_at(caret);
+
+    if right.len() > 150 {
+        right = clamp(right, 150);
+    }
+
+    let remaining = 150 - right.len();
+    let left = clamp(left, remaining);
+
+    target.set_text_content(Some(&[left, right].concat()));
+
     let range = document().create_range().unwrap();
     range
-        .set_start(
-            &target.first_child().unwrap(),
-            offset.min(u32::try_from(end).unwrap()),
-        )
+        .set_start(&target.first_child().unwrap(), left.chars().count() as u32)
         .unwrap();
     selection.remove_all_ranges().unwrap();
     selection.add_range(&range).unwrap();
+}
+
+fn clamp(input: &str, length: usize) -> &str {
+    let mut end = input.len().min(length);
+    while !input.is_char_boundary(end) {
+        end -= 1;
+    }
+    &input[..end]
 }
