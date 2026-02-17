@@ -6,13 +6,14 @@ use std::{
 
 use leptos::prelude::*;
 
+pub type Container = Arc<Mutex<HashMap<(u16, Option<u16>), Value>>>;
+pub type LocationResponse = Arc<Result<Arc<[Location]>, gloo_net::Error>>;
+
 #[derive(Clone)]
 pub enum Value {
-    Pending(RwSignal<Option<Arc<Result<Arc<[Location]>, gloo_net::Error>>>>),
-    Resolved(Arc<Result<Arc<[Location]>, gloo_net::Error>>),
+    Pending(RwSignal<Option<LocationResponse>>),
+    Resolved(LocationResponse),
 }
-
-pub type Container = Arc<Mutex<HashMap<(u16, Option<u16>), Value>>>;
 
 #[derive(Debug, serde::Deserialize)]
 pub struct Location {
@@ -23,6 +24,8 @@ pub struct Location {
 
 pub fn fetch(explorer: Container, map: u16, previous: Option<u16>) {
     let pending = RwSignal::new(None);
+    pending.track();
+
     explorer
         .lock()
         .insert((map, previous), Value::Pending(pending));

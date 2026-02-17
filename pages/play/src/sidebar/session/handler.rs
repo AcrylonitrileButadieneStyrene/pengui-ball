@@ -67,7 +67,7 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
                     .collect::<Vec<_>>()
                     .try_into()
                     .inspect_err(|err| {
-                        leptos::logging::error!("Error while parsing player medals: {err:?}")
+                        leptos::logging::error!("Error while parsing player medals: {err:?}");
                     })
                     .unwrap_or([0, 0, 0, 0, 0]);
             });

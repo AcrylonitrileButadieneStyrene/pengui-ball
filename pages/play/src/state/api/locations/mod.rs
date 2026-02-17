@@ -27,7 +27,10 @@ impl Locations {
         }
     }
 
-    pub fn get(&self, game: &str) -> LocalResource<Result<classic::LocationData, gloo_net::Error>> {
+    pub fn get_or_init(
+        &self,
+        game: &str,
+    ) -> LocalResource<Result<classic::LocationData, gloo_net::Error>> {
         self.classic.read().get(game).map_or_else(
             || {
                 let resource = classic::fetch(game);
@@ -40,7 +43,7 @@ impl Locations {
 
     pub fn resolve(&self, location: &super::super::game::Location) -> Option<ResolvedLocation> {
         let resolved = self
-            .get(&location.game)
+            .get_or_init(&location.game)
             .read()
             .as_ref()
             .map(Result::as_ref)
@@ -73,13 +76,10 @@ impl Locations {
                     None
                 },
                 |entry| {
-                    let Some(entry) = (match entry {
+                    let entry = (match entry {
                         explorer::Value::Pending(val) => val.get(),
                         explorer::Value::Resolved(val) => Some(val),
-                    }) else {
-                        return None;
-                    };
-
+                    })?;
                     (*entry)
                         .as_ref()
                         .ok()

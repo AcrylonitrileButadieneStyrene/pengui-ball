@@ -77,7 +77,7 @@ pub fn TextBox() -> impl IntoView {
 }
 
 fn clamp_input(event: &leptos::ev::Event) {
-    let target = event_target::<HtmlDivElement>(&event);
+    let target = event_target::<HtmlDivElement>(event);
     let Some(content) = target.text_content() else {
         return;
     };
@@ -92,8 +92,7 @@ fn clamp_input(event: &leptos::ev::Event) {
     let caret = content
         .char_indices()
         .nth(offset)
-        .map(|(index, _)| index)
-        .unwrap_or(content.len());
+        .map_or(content.len(), |(index, _)| index);
     let (left, mut right) = content.split_at(caret);
 
     if right.len() > 150 {
@@ -107,7 +106,10 @@ fn clamp_input(event: &leptos::ev::Event) {
 
     let range = document().create_range().unwrap();
     range
-        .set_start(&target.first_child().unwrap(), left.chars().count() as u32)
+        .set_start(
+            &target.first_child().unwrap(),
+            u32::try_from(left.chars().count()).unwrap(),
+        )
         .unwrap();
     selection.remove_all_ranges().unwrap();
     selection.add_range(&range).unwrap();
