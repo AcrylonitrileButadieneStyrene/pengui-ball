@@ -14,6 +14,7 @@ pub fn Game() -> impl IntoView {
             <Engine />
         </div>
     }
+    .into_any()
 }
 
 #[island]

@@ -27,7 +27,7 @@ pub fn Header() -> impl IntoView {
             <div class=style::middle />
             <CurrentUser />
         </header>
-    }
+    }.into_any()
 }
 
 #[island]
