@@ -64,22 +64,30 @@ pub fn MessageOuter(message: Message) -> impl IntoView {
             </Message>
         }
         .into_any(),
-        MessageData::Local { text } => view! {
-            <Message
-                filtered=message.filtered
-                header=move || {
-                    view! {
-                        <span>Sending...</span>
-                        <span>{timestamp.to_string()}</span>
+        MessageData::Local { text } => {
+            // todo: this is a hack. it should be replaced with something that
+            // properly removes the message from the channel it is in and the
+            // primary message list.
+            let (dismissed, set_dismissed) = signal(false);
+            view! {
+                <Message
+                    filtered=message.filtered
+                    header=move || {
+                        view! {
+                            <span>Sending...</span>
+                            <button class=style::dismiss on:click=move |_| set_dismissed(true)>{"\u{2716}"}</button>
+                            <span>{timestamp.to_string()}</span>
+                        }
                     }
-                }
-                {..}
-                style:order="-1"
-            >
-                <span class=style::sending>{text}</span>
-            </Message>
+                    {..}
+                    class:hidden=dismissed
+                    style:order="-1"
+                >
+                    <span class=style::sending>{text}</span>
+                </Message>
+            }
+            .into_any()
         }
-        .into_any(),
     }
 }
 

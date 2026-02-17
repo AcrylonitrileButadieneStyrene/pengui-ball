@@ -3,6 +3,10 @@
     flex-direction: column;
 }
 
+.message:global(.hidden) {
+    display: none;
+}
+
 .message~.message {
     border-bottom: solid 4px;
     border-image: var(--ui-theme-border) 4 repeat;
@@ -21,6 +25,12 @@
 
 .header :last-child {
     margin-left: auto;
+}
+
+.dismiss {
+    background: 0;
+    border: 0;
+    color: white;
 }
 
 .sending {
