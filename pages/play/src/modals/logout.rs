@@ -1,4 +1,4 @@
-use leptos::prelude::*;
+use leptos::{prelude::*, web_sys::RequestCredentials};
 
 #[component]
 pub fn Modal() -> impl IntoView {
@@ -18,6 +18,7 @@ fn LogoutButton() -> impl IntoView {
         let state = state.clone();
         leptos::task::spawn_local(async move {
             gloo_net::http::Request::get("/api/seiko/logout")
+                .credentials(RequestCredentials::Include)
                 .send()
                 .await
                 .unwrap();

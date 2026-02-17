@@ -4,7 +4,7 @@
 // @match       *://127.0.0.1:8080/*
 // @match       *://ynoproject.net/%F0%9F%A5%BA
 // @match       *://connect.ynoproject.net/%F0%9F%A5%BA
-// @version     0.1.3
+// @version     0.1.4
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @downloadURL https://raw.githubusercontent.com/AcrylonitrileButadieneStyrene/pengui-ball/master/js/pengui-ball.user.js
@@ -87,7 +87,7 @@ if (location.host == "ynoproject.net") {
   iframe.style.display = "none";
   iframe.onload = () => {
     let items = queue;
-    queue = [];
+    queue = undefined;
     for (const item of items)
       iframe.contentWindow.postMessage(item, "*");
   };
