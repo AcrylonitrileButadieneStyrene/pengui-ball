@@ -2152,6 +2152,7 @@ dependencies = [
  "leptos_meta",
  "leptos_router",
  "serde",
+ "strsim",
  "strum",
  "stylance",
  "stylance-cli",

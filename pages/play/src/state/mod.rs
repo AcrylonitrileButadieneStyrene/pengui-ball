@@ -32,12 +32,20 @@ pub struct PlayState {
 
 impl PlayState {
     fn new(game_id: Arc<str>) -> Self {
+        let api = api::State::new(game_id.clone());
+
         Self {
-            chat: chat::State::default(),
+            chat: chat::State::new(Signal::derive(move || {
+                api.user
+                    .read()
+                    .as_ref()
+                    .flatten()
+                    .map(|user| user.uuid.clone())
+            })),
             session: SessionState::default(),
             players: player::State::default(),
             engine: engine::State::default(),
-            api: api::State::new(game_id.clone()),
+            api,
             modal: RwSignal::new(None),
             game: game::State::new(game_id),
         }

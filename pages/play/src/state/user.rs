@@ -1,6 +1,8 @@
+use std::sync::Arc;
+
 #[derive(serde::Deserialize)]
 pub struct User {
-    pub uuid: String,
+    pub uuid: Arc<str>,
     pub registered: bool,
     pub name: String,
     pub rank: u32,

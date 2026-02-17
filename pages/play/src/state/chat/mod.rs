@@ -21,15 +21,14 @@ pub struct State {
     pub destination: RwSignal<MessageDestination>,
 }
 
-impl Default for State {
-    fn default() -> Self {
+impl State {
+    pub fn new(my_id: Signal<Option<Arc<str>>>) -> Self {
         let (messages, set_messages) = signal(indexmap::IndexMap::new());
-
         Self {
             messages,
-            map: ChatChannel::new(set_messages, 150, false),
-            party: ChatChannel::new(set_messages, 150, false),
-            global: ChatChannel::new(set_messages, 150, false),
+            map: ChatChannel::new(set_messages, my_id, 150, false),
+            party: ChatChannel::new(set_messages, my_id, 150, false),
+            global: ChatChannel::new(set_messages, my_id, 150, false),
             input: NodeRef::new(),
             destination: RwSignal::default(),
         }
