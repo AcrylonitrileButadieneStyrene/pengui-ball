@@ -2,6 +2,7 @@ use leptos::prelude::*;
 
 mod full_screen;
 mod icon;
+mod maps;
 mod mute;
 
 stylance::import_style!(pub style, "mod.module.css");
@@ -30,7 +31,7 @@ pub fn Controls() -> impl IntoView {
                 </full_screen::FullScreen>
                 <icon::Compass />
                 <icon::FamilyTree />
-                <icon::Map />
+                <maps::Maps />
             </div>
         </div>
     }

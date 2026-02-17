@@ -9,7 +9,7 @@ use leptos::{prelude::*, reactive::graph::ReactiveNode};
 pub type Container =
     super::RwSignal<HashMap<(u16, Option<u16>), Arc<Mutex<Option<Arc<[Location]>>>>>>;
 
-#[derive(serde::Deserialize)]
+#[derive(Debug, serde::Deserialize)]
 pub struct Location {
     pub title: Arc<str>,
     // #[serde(rename = "titleJP", default)]

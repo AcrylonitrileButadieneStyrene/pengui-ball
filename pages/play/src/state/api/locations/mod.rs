@@ -83,6 +83,7 @@ impl Locations {
     }
 }
 
+#[derive(Debug)]
 pub enum ResolvedLocation {
     Single {
         name: Arc<str>,
