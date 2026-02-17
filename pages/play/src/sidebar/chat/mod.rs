@@ -25,19 +25,11 @@ pub fn ChatMessages() -> impl IntoView {
     let state = crate::state();
     let messages = state.chat.messages;
 
-    let each = move || {
-        messages
-            .read()
-            .iter()
-            .rev()
-            .map(|(key, _)| key.clone())
-            .collect::<Vec<_>>()
-    };
-    let render = move |id: std::sync::Arc<str>| {
-        messages.read().get(&id).map(|message| {
-            view! { <message::MessageOuter message=message.clone() /> }
-        })
-    };
+    let each = move || messages.get().into_iter().rev().collect::<Vec<_>>();
 
-    view! { <For each=each key=|key| std::sync::Arc::as_ptr(key) children=render /> }
+    view! {
+        <For each=each key=|(id, _)| std::sync::Arc::as_ptr(id) let((_, message))>
+            <message::MessageOuter message=message />
+        </For>
+    }
 }

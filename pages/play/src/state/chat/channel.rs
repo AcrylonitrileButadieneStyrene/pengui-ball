@@ -1,6 +1,6 @@
 use std::{
     collections::VecDeque,
-    sync::{Arc, Mutex},
+    sync::{Arc, nonpoison::Mutex},
 };
 
 use leptos::prelude::*;
@@ -46,15 +46,12 @@ impl ChatChannel {
         message.filtered = Some(self.filter.read_only());
 
         if let MessageData::Local { ref text } = message.data {
-            self.local
-                .lock()
-                .unwrap()
-                .push((message.id.clone(), text.clone()));
+            self.local.lock().push((message.id.clone(), text.clone()));
             self.messages.update(|messages| {
                 messages.insert(message.id.clone(), message);
             });
         } else {
-            let mut buffer = self.tracker.lock().unwrap();
+            let mut buffer = self.tracker.lock();
             let removed_overflow = if buffer.len() + 1 > self.capacity.get_untracked() {
                 buffer.pop_back()
             } else {
@@ -82,36 +79,40 @@ impl ChatChannel {
     }
 
     fn remove_local(&self, message: &Message) -> Option<Arc<str>> {
-        let author = match &message.data {
-            MessageData::Map { author, .. }
-            | MessageData::Party { author, .. }
-            | MessageData::Global { author, .. } => author,
-            _ => return None,
+        let (MessageData::Map { author, .. }
+        | MessageData::Party { author, .. }
+        | MessageData::Global { author, .. }) = &message.data
+        else {
+            return None;
         };
 
-        if !self
+        if self
             .my_id
             .read_untracked()
             .as_ref()
-            .is_some_and(|id| id == author)
+            .is_none_or(|id| id != author)
         {
             return None;
         }
 
         let message_text = message.text();
-        let mut local = self.local.lock().unwrap();
-        let identical = local
-            .iter()
-            .position(|(_, text)| message_text.eq(text))
-            .map(|index| local.swap_remove(index).0);
+        let identical = {
+            let mut local = self.local.lock();
+            local
+                .iter()
+                .position(|(_, text)| message_text.eq(text))
+                .map(|index| local.swap_remove(index).0)
+        };
         let similar = || {
-            let index = local
+            let index = self
+                .local
+                .lock()
                 .iter()
                 .enumerate()
                 .map(|(index, (_, text))| (index, strsim::levenshtein(message_text, text)))
                 .min_by_key(|(_, distance)| *distance)
                 .map(|(index, _)| index);
-            index.map(|index| local.swap_remove(index).0)
+            index.map(|index| self.local.lock().swap_remove(index).0)
         };
 
         identical.or_else(similar)
