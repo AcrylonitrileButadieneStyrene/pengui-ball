@@ -1,6 +1,9 @@
 use std::{
     collections::HashMap,
-    sync::{Arc, nonpoison::RwLock},
+    sync::{
+        Arc,
+        nonpoison::{Mutex, RwLock},
+    },
 };
 
 use leptos::prelude::*;
@@ -20,7 +23,7 @@ impl Locations {
         map.insert(game, resource);
         Self {
             classic: RwLock::new(map),
-            explorer: RwSignal::new(HashMap::new()),
+            explorer: Arc::new(Mutex::new(HashMap::new())),
         }
     }
 
@@ -61,22 +64,29 @@ impl Locations {
         if resolved.is_none() && &*location.game == "2kki" {
             let value = self
                 .explorer
-                .with_untracked(|explorer| {
-                    explorer.get(&(location.map, location.previous)).cloned()
-                })
-                .map_or_else(
-                    || {
-                        explorer::fetch(self.explorer, location.map, location.previous);
-                        None
-                    },
-                    |entry| entry.lock().clone().map(ResolvedLocation::Multiple),
-                );
+                .lock()
+                .get(&(location.map, location.previous))
+                .cloned();
+            value.map_or_else(
+                || {
+                    explorer::fetch(self.explorer.clone(), location.map, location.previous);
+                    None
+                },
+                |entry| {
+                    let Some(entry) = (match entry {
+                        explorer::Value::Pending(val) => val.get(),
+                        explorer::Value::Resolved(val) => Some(val),
+                    }) else {
+                        return None;
+                    };
 
-            if value.is_none() {
-                self.explorer.track();
-            }
-
-            value
+                    (*entry)
+                        .as_ref()
+                        .ok()
+                        .cloned()
+                        .map(ResolvedLocation::Multiple)
+                },
+            )
         } else {
             resolved
         }
