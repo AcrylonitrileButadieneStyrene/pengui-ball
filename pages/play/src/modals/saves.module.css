@@ -1,0 +1,38 @@
+.header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.header :first-child {
+    font-size: 32px;
+}
+
+.container {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+}
+
+.slot {
+    width: 214px;
+    height: 64px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: solid 4px;
+    border-image: var(--ui-theme-border) 4 repeat;
+}
+
+.controls {
+    display: flex;
+    gap: 8px;
+}
+
+.controls svg {
+    width: 18px;
+    stroke: white;
+    fill: none;
+}

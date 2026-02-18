@@ -75,7 +75,9 @@ pub fn MessageOuter(message: Message) -> impl IntoView {
                     header=move || {
                         view! {
                             <span>Sending...</span>
-                            <button class=style::dismiss on:click=move |_| set_dismissed(true)>{"\u{2716}"}</button>
+                            <button class=style::dismiss on:click=move |_| set_dismissed(true)>
+                                {"\u{2716}"}
+                            </button>
                             <span>{timestamp.to_string()}</span>
                         }
                     }
@@ -100,9 +102,7 @@ fn Message(
     view! {
         <div
             class=style::message
-            style:display=move || {
-                if filtered.get() { "none" } else { "" }
-            }
+            style:display=move || { if filtered.get() { "none" } else { "" } }
         >
             <div class=style::header>{header.run()}</div>
             <div>{children()}</div>

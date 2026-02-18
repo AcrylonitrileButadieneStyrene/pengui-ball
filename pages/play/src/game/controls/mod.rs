@@ -3,6 +3,7 @@ use leptos::prelude::*;
 mod full_screen;
 mod icon;
 mod maps;
+mod modal;
 mod mute;
 
 stylance::import_style!(pub style, "mod.module.css");
@@ -13,7 +14,9 @@ pub fn Controls() -> impl IntoView {
         <div class=style::controls>
             <div>
                 <icon::People />
-                <icon::FloppyDisk />
+                <modal::OpenModal modal=crate::modals::Modals::Saves>
+                    <icon::FloppyDisk />
+                </modal::OpenModal>
                 <icon::PaintPalette />
                 <icon::SpeechBubble />
                 <icon::SixLayerTerminal />
