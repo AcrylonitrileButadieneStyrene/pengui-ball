@@ -37,7 +37,7 @@ lib-features = ["hydrate"]
 lib-profile-release = "wasm-release"
 
 site-addr = "127.0.0.1:3000"
-site-root = "target/site"
+site-root = "public"
 site-pkg-dir = "pkg"
 assets-dir = "assets"
 
