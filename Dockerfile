@@ -1,14 +1,13 @@
 # from https://hub.docker.com/_/rust/
-FROM docker.io/library/rust:latest as builder
+FROM docker.io/library/rust:alpine as builder
 WORKDIR /usr/src/myapp
-COPY . .
 
-RUN apt-get update && apt-get install -y musl-tools clang
+RUN apk add --no-cache curl
+RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | sh
 RUN rustup default nightly
-RUN rustup target add x86_64-unknown-linux-musl
 RUN rustup target add wasm32-unknown-unknown
-RUN cargo install cargo-leptos
-RUN cargo install cargo-leptos
+RUN cargo binstall cargo-leptos
+COPY . .
 ENV LEPTOS_BIN_TARGET_TRIPLE x86_64-unknown-linux-musl
 RUN cargo leptos build --release
 
