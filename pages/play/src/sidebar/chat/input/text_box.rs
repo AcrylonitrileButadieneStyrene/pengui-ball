@@ -37,18 +37,7 @@ pub fn TextBox() -> impl IntoView {
             if let Some(content) = this.text_content()
                 && !content.is_empty()
             {
-                let message_data = MessageData::Local {
-                    text: content.clone().into(),
-                };
-
-                let (command, channel) = match state.chat.destination.get_untracked() {
-                    MessageDestination::Map => (Command::SayMap(content), &state.chat.map),
-                    MessageDestination::Party => (Command::SayParty(content), &state.chat.party),
-                    MessageDestination::Global => (Command::SayGlobal(content), &state.chat.global),
-                };
-
-                channel.add(Message::new(None::<std::sync::Arc<str>>, message_data));
-                state.session.channel.send(command).unwrap();
+                send(&state, content);
             }
             this.set_text_content(None);
         }
@@ -121,4 +110,23 @@ fn clamp(input: &str, length: usize) -> &str {
         end -= 1;
     }
     &input[..end]
+}
+
+fn send(state: &crate::State, content: String) {
+    let message_data = MessageData::Sending {
+        text: content.clone().into(),
+    };
+
+    let (command, filter) = match state.chat.destination.get_untracked() {
+        MessageDestination::Map => (Command::SayMap(content), &state.chat.map.filter),
+        MessageDestination::Party => (Command::SayParty(content), &state.chat.party.filter),
+        MessageDestination::Global => (Command::SayGlobal(content), &state.chat.global.filter),
+    };
+
+    state.chat.sending.add(Message::new(
+        None::<std::sync::Arc<str>>,
+        message_data,
+        filter.read_only(),
+    ));
+    state.session.channel.send(command).unwrap();
 }

@@ -92,7 +92,7 @@ pub fn on_player_sprite_updated(sprite: String, index: u32, id: i32) {
 }
 
 #[wasm_bindgen]
-pub fn on_player_teleported(map: u16, x: u16, y: u16) {
+pub fn on_player_teleported(map: u16, x: i16, y: i16) {
     crate::send(common::PlayMessage::PlayerTeleported(map, x, y));
 }
 

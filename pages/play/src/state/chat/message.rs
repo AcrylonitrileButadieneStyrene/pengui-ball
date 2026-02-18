@@ -9,11 +9,15 @@ pub struct Message {
     pub id: Arc<str>,
     pub data: MessageData,
     pub timestamp: chrono::DateTime<chrono::Local>,
-    pub filtered: Option<ReadSignal<bool>>,
+    pub filtered: ReadSignal<bool>,
 }
 
 impl Message {
-    pub fn new(id: Option<impl Into<Arc<str>>>, data: MessageData) -> Self {
+    pub fn new(
+        id: Option<impl Into<Arc<str>>>,
+        data: MessageData,
+        filtered: ReadSignal<bool>,
+    ) -> Self {
         leptos_use::use_timestamp();
 
         let timestamp = chrono::Local::now();
@@ -24,7 +28,7 @@ impl Message {
             ),
             data,
             timestamp,
-            filtered: None,
+            filtered,
         }
     }
 
@@ -33,7 +37,7 @@ impl Message {
             MessageData::Map { text, .. }
             | MessageData::Party { text, .. }
             | MessageData::Global { text, .. }
-            | MessageData::Local { text } => text,
+            | MessageData::Sending { text } => text,
         }
     }
 }
@@ -53,7 +57,7 @@ pub enum MessageData {
         text: Arc<str>,
         location: Option<Location>,
     },
-    Local {
+    Sending {
         text: Arc<str>,
     },
 }

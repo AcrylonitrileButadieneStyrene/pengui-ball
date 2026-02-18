@@ -43,24 +43,11 @@ pub struct Coordinates {
 }
 
 impl Coordinates {
-    pub const fn contains(&self, x: u16, y: u16) -> bool {
-        (if self.x1 == -1 {
-            true
-        } else {
-            self.x1.cast_unsigned() <= x
-        }) && if self.x2 == -1 {
-            true
-        } else {
-            x <= self.x2.cast_unsigned()
-        } && if self.y1 == -1 {
-            true
-        } else {
-            self.y1.cast_unsigned() <= y
-        } && if self.y2 == -1 {
-            true
-        } else {
-            y <= self.y2.cast_unsigned()
-        }
+    pub const fn contains(&self, x: i16, y: i16) -> bool {
+        (if self.x1 == -1 { true } else { self.x1 <= x })
+            && if self.x2 == -1 { true } else { x <= self.x2 }
+            && if self.y1 == -1 { true } else { self.y1 <= y }
+            && if self.y2 == -1 { true } else { y <= self.y2 }
     }
 }
 
@@ -81,8 +68,8 @@ pub fn fetch(game: &str) -> LocalResource<Result<LocationData, gloo_net::Error>>
 pub fn resolve(
     item: &LocationItem,
     previous: Option<u16>,
-    x: u16,
-    y: u16,
+    x: i16,
+    y: i16,
 ) -> Option<(Arc<str>, Option<Arc<str>>)> {
     match item {
         LocationItem::Literal(name) => Some((name.clone(), None)),

@@ -5,7 +5,7 @@ pub enum Message {
     PlayerSync(PlayerSyncData),
     PlayerConnect(PlayerConnectData),
     RegainFocus(bool),
-    PlayerTeleported(u16, u16, u16),
+    PlayerTeleported(u16, i16, i16),
 }
 
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]

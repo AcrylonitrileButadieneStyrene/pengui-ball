@@ -64,7 +64,7 @@ pub fn MessageOuter(message: Message) -> impl IntoView {
             </Message>
         }
         .into_any(),
-        MessageData::Local { text } => {
+        MessageData::Sending { text } => {
             // todo: this is a hack. it should be replaced with something that
             // properly removes the message from the channel it is in and the
             // primary message list.
@@ -93,7 +93,7 @@ pub fn MessageOuter(message: Message) -> impl IntoView {
 
 #[component]
 fn Message(
-    filtered: Option<ReadSignal<bool>>,
+    #[prop(into)] filtered: Signal<bool>,
     #[prop(optional, into)] header: ViewFnOnce,
     children: Children,
 ) -> impl IntoView {
@@ -101,7 +101,7 @@ fn Message(
         <div
             class=style::message
             style:display=move || {
-                if filtered.map_or_default(|filter| filter.get()) { "none" } else { "" }
+                if filtered.get() { "none" } else { "" }
             }
         >
             <div class=style::header>{header.run()}</div>
