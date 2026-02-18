@@ -27,6 +27,7 @@ pub async fn run() {
 
         let themes: std::collections::HashMap<String, Vec<String>> =
             yaml_serde::from_str(&themes).unwrap();
+        std::fs::create_dir_all("assets/css").unwrap();
         let output = std::fs::File::create("assets/css/themes.css").unwrap();
         let mut output = std::io::BufWriter::new(output);
         writeln!(output, "/*{hash}*/").unwrap();

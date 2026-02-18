@@ -14,12 +14,5 @@ css:
 fmt:
     leptosfmt shared pages/*
 
-[windows]
 serve:
-    New-Item -Path "./target/nginx/" -ItemType Directory -Force
-    nginx -p nginx -c nginx.conf
-
-[linux]
-serve:
-    mkdir -p target/nginx
     nginx -p nginx -c nginx.conf
