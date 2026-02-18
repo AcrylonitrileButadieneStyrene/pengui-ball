@@ -31,8 +31,12 @@ fn Engine() -> impl IntoView {
         }
     });
 
+    window_event_listener(leptos::ev::focus, move |_| {
+        crate::state::engine::State::send_frame(frame, common::EngineMessage::Focus(true));
+    });
+
     window_event_listener(leptos::ev::blur, move |_| {
-        crate::state::engine::State::send_frame(frame, common::EngineMessage::Defocus);
+        crate::state::engine::State::send_frame(frame, common::EngineMessage::Focus(false));
     });
 
     view! {

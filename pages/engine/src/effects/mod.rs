@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-mod events;
+pub mod events;
 mod volume;
 
 #[island]
