@@ -22,21 +22,40 @@ pub fn Modal() -> impl IntoView {
     }
 }
 
-#[component]
+#[island]
 fn Slot(index: usize) -> impl IntoView {
+    let state = crate::state();
+    let timestamps = state.engine.save_timestamps;
+
+    let timestamp = move || {
+        timestamps.get()[index - 1].as_ref().map_or_else(
+            || view! { <div>Empty</div> }.into_any(),
+            |timestamp| {
+                let formatted = chrono::DateTime::parse_from_rfc3339(timestamp)
+                    .unwrap()
+                    .with_timezone(&chrono::Local)
+                    .format("%-m/%-d/%y, %-I:%M %p")
+                    .to_string();
+                view! { <div>{formatted}</div> }.into_any()
+            },
+        )
+    };
+
     view! {
         <div class=style::slot>
             <div>File <span>{index}</span></div>
-            <div>Empty</div>
-            <Controls index />
+            {timestamp}
+            <Controls frame=state.engine.frame status=state.engine.status index />
         </div>
     }
 }
 
-#[island]
-fn Controls(index: usize) -> impl IntoView {
-    let state = crate::state();
-    let frame = state.engine.frame;
+#[component]
+fn Controls(
+    frame: NodeRef<leptos::html::Iframe>,
+    status: ReadSignal<ConnectionStatus>,
+    index: usize,
+) -> impl IntoView {
     let input = NodeRef::new();
 
     let on_upload = move |_| {
@@ -75,9 +94,10 @@ fn Controls(index: usize) -> impl IntoView {
     view! {
         <input node_ref=input type="file" style:display="none" on:change=on_file />
         <div class=style::controls>
-            <button on:click=on_upload prop:disabled=move || {
-                state.engine.status.get() != ConnectionStatus::Disconnected
-            }>
+            <button
+                on:click=on_upload
+                prop:disabled=move || { status.get() != ConnectionStatus::Disconnected }
+            >
                 <svg viewBox="0 0 18 18">
                     <path d="m12.75 18v-3.25h-2.25l3.75-4.25 3.75 4.25h-2.25v3.25h-3m-12.75-16.5q0-1.5 1.5-1.5h11.25l2.25 2.25v9.1m-2.25 5.15h-11.25q-1.5 0-1.5-1.5v-13.5m4.5-1.5v3.75q0 0.75 0.75 0.75h4.5q0.75 0 0.75-0.75v-3.75m-1.75 1v2.5h0.75v-2.5h-0.75m-5.75 15.5v-6.75q0-0.75 0.75-0.75h7.5q0.75 0 0.75 0.75v3.25m0 1.75v1.75m-7.5-6h6m-6 2.25h6m-6 2.25h6" />
                 </svg>

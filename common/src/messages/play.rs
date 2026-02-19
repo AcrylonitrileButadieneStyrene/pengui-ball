@@ -9,6 +9,7 @@ pub enum Message {
     RegainFocus(bool),
     PlayerTeleported(u16, i16, i16),
     SaveData(usize, SaveFile),
+    SaveTimestamps([Option<String>; 15]),
 }
 
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]

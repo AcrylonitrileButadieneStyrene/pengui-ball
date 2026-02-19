@@ -1,5 +1,7 @@
 #![allow(non_snake_case)]
 
+use std::sync::Arc;
+
 use leptos::prelude::*;
 use leptos_router::hooks::use_params_map;
 
@@ -16,7 +18,7 @@ stylance::import_style!(pub style, "lib.module.css");
 
 #[component]
 pub fn Engine() -> impl IntoView {
-    let game = use_params_map().get().get("game").unwrap();
+    let game = Arc::<str>::from(use_params_map().get().get("game").unwrap());
 
     view! {
         <leptos_meta::Body {..} class=style::engine />

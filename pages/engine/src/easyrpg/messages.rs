@@ -1,8 +1,9 @@
+use common::EngineMessage;
 use leptos::{ev, prelude::*};
 
 pub fn setup_handler(state: crate::EngineState) {
     window_event_listener(ev::message, move |ev| {
-        let Some(message) = common::EngineMessage::de(ev.data()) else {
+        let Some(message) = EngineMessage::de(ev.data()) else {
             return;
         };
 
@@ -10,26 +11,26 @@ pub fn setup_handler(state: crate::EngineState) {
     });
 }
 
-fn handle(state: &crate::EngineState, message: common::EngineMessage) {
+fn handle(state: &crate::EngineState, message: EngineMessage) {
     match message {
-        common::EngineMessage::Connect => {
+        EngineMessage::Connect => {
             state
                 .easyrpg_player
                 .call_untracked(|player| player.api().session_ready());
         }
-        common::EngineMessage::Mute(muted) => {
+        EngineMessage::Mute(muted) => {
             state.muted.set(muted);
         }
-        common::EngineMessage::Focus(active) => {
+        EngineMessage::Focus(active) => {
             if document().has_focus().unwrap_or_default() {
                 return;
             }
 
             crate::effects::events::control_timer(state.defocus_timeout, !active);
         }
-        common::EngineMessage::SetSave(id, data) => super::files::set_file(state, id, data),
-        common::EngineMessage::GetSave(id) => super::files::get_file(state, id),
-        common::EngineMessage::DeleteSave(id) => super::files::delete_file(state, id),
+        EngineMessage::SetSave(id, data) => super::files::set_file(state.game.clone(), id, data),
+        EngineMessage::GetSave(id) => super::files::get_file(state.game.clone(), id),
+        EngineMessage::DeleteSave(id) => super::files::delete_file(state.game.clone(), id),
     }
 }
 

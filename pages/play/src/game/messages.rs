@@ -118,11 +118,15 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
                 state.game.id,
                 &chrono::DateTime::parse_from_rfc3339(&String::from(save_file.timestamp))
                     .unwrap()
+                    .with_timezone(&chrono::Local)
                     .format("%Y-%m-%d-%Hh%Mm%Ss")
                     .to_string(),
             ));
             link.click();
             link.remove();
+        }
+        PlayMessage::SaveTimestamps(timestamps) => {
+            state.engine.save_timestamps.set(timestamps);
         }
     }
 }

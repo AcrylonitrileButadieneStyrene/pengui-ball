@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use leptos::prelude::*;
 
 pub mod easyrpg;
@@ -5,7 +7,7 @@ pub mod easyrpg;
 use easyrpg::Player;
 
 #[island]
-pub fn Provider(game: String, children: Children) -> impl IntoView {
+pub fn Provider(game: Arc<str>, children: Children) -> impl IntoView {
     provide_context(std::sync::Arc::new(EngineState {
         game,
         easyrpg_player: Player::default(),
@@ -18,7 +20,7 @@ pub fn Provider(game: String, children: Children) -> impl IntoView {
 }
 
 pub struct EngineState {
-    pub game: String,
+    pub game: Arc<str>,
     pub easyrpg_player: Player,
 
     pub music_volume: RwSignal<u8>,

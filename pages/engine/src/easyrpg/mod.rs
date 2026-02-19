@@ -1,10 +1,12 @@
+use std::sync::Arc;
+
 use leptos::prelude::*;
 
-mod files;
+pub mod files;
 pub mod messages;
 
 #[component]
-pub fn EasyRPG(game: String, children: Children) -> impl IntoView {
+pub fn EasyRPG(game: Arc<str>, children: Children) -> impl IntoView {
     view! {
         <LoadPlayer game>
             <StartPlayer>{children()}</StartPlayer>
@@ -16,7 +18,7 @@ pub fn EasyRPG(game: String, children: Children) -> impl IntoView {
 struct Loaded(pub ReadSignal<bool>);
 
 #[island]
-fn LoadPlayer(game: String, children: Children) -> impl IntoView {
+fn LoadPlayer(game: Arc<str>, children: Children) -> impl IntoView {
     let state = expect_context::<crate::EngineState>();
     messages::setup_handler(state);
 
