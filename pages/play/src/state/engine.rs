@@ -5,7 +5,7 @@ pub struct State {
     pub frame: NodeRef<Iframe>,
     pub load_count: RwSignal<u32>,
     pub status: ReadSignal<ConnectionStatus>,
-    pub save_timestamps: RwSignal<[Option<String>; 15]>,
+    pub save_timestamps: RwSignal<Box<[Option<String>; 15]>>,
 
     set_status: WriteSignal<ConnectionStatus>,
 }
@@ -19,7 +19,7 @@ impl Default for State {
             load_count: RwSignal::new(0),
             status,
             set_status,
-            save_timestamps: RwSignal::new(std::array::from_fn(|_| None)),
+            save_timestamps: RwSignal::new(Box::new(std::array::from_fn(|_| None))),
         }
     }
 }

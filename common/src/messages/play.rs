@@ -6,10 +6,10 @@ pub enum Message {
     ConnectionStatusUpdated(ConnectionStatus),
     PlayerSync(PlayerSyncData),
     PlayerConnect(PlayerConnectData),
-    RegainFocus(bool),
     PlayerTeleported(u16, i16, i16),
+    RegainFocus(bool),
     SaveData(usize, SaveFile),
-    SaveTimestamps([Option<String>; 15]),
+    SaveTimestamps(Box<[Option<String>; 15]>),
 }
 
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]

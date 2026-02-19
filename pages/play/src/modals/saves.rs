@@ -86,7 +86,7 @@ fn Controls(
                 let bytes = gloo_file::futures::read_as_bytes(&gloo_file::File::from(file))
                     .await
                     .unwrap();
-                engine::State::send_frame(frame, EngineMessage::SetSave(index, bytes.into()))
+                engine::State::send_frame(frame, EngineMessage::SetSave(index, bytes.into()));
             });
         }
     };

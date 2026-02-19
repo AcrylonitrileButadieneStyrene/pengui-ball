@@ -87,6 +87,7 @@ pub fn delete_file(game: Arc<str>, id: usize) {
     });
 }
 
+#[allow(clippy::future_not_send)]
 pub async fn get_timestamps(game: Arc<str>) -> [Option<String>; 15] {
     let (transaction, store) = get_store(&game).await;
 
@@ -110,6 +111,7 @@ pub async fn get_timestamps(game: Arc<str>) -> [Option<String>; 15] {
     values
 }
 
+#[allow(clippy::future_not_send)]
 async fn get_store_with_entry(
     game: &str,
     id: usize,
@@ -120,6 +122,7 @@ async fn get_store_with_entry(
     (transaction, store, key, exists)
 }
 
+#[allow(clippy::future_not_send)]
 async fn get_store(game: &str) -> (idb::Transaction, idb::ObjectStore) {
     let factory = idb::Factory::new().unwrap();
     let database = factory
@@ -134,6 +137,7 @@ async fn get_store(game: &str) -> (idb::Transaction, idb::ObjectStore) {
     (transaction, store)
 }
 
+#[allow(clippy::future_not_send)]
 async fn exists(store: &idb::ObjectStore, query: idb::Query) -> bool {
     store.count(Some(query)).unwrap().await.unwrap() != 0
 }

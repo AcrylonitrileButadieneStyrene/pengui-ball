@@ -39,9 +39,7 @@ pub fn control_timer(defocus_timeout: RwSignal<Option<TimeoutHandle>>, active: b
             )
             .ok(),
         );
-    } else {
-        if let Some(handle) = defocus_timeout.get_untracked() {
-            handle.clear();
-        }
+    } else if let Some(handle) = defocus_timeout.get_untracked() {
+        handle.clear();
     }
 }
