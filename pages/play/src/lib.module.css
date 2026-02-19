@@ -47,7 +47,7 @@ button,
     transition: transform 0.125s cubic-bezier(0.7, 0, 0.7, 1.5);
 }
 
-button:hover,
+button:not(:disabled):hover,
 [role="button"]:hover {
     transform: scale(var(--pop-out-scale));
 }

@@ -27,6 +27,9 @@ fn handle(state: &crate::EngineState, message: common::EngineMessage) {
 
             crate::effects::events::control_timer(state.defocus_timeout, !active);
         }
+        common::EngineMessage::SetSave(id, data) => super::files::set_file(state, id, data),
+        common::EngineMessage::GetSave(id) => super::files::get_file(state, id),
+        common::EngineMessage::DeleteSave(id) => super::files::delete_file(state, id),
     }
 }
 

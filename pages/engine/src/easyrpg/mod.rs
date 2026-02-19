@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 
+mod files;
 pub mod messages;
 
 #[component]

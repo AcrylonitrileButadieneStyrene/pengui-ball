@@ -1,4 +1,4 @@
-.header {
+.header .locked {
     display: flex;
     justify-content: center;
     margin-bottom: 16px;
@@ -6,6 +6,18 @@
 
 .header :first-child {
     font-size: 32px;
+}
+
+.locked :first-child {
+    font-size: 16px;
+}
+
+.locked {
+    display: none;
+}
+
+:has(.controls button:disabled)>.locked {
+    display: inherit;
 }
 
 .container {
@@ -31,8 +43,18 @@
     gap: 8px;
 }
 
+.controls button {
+    background: 0;
+    border: 0;
+    padding: 0;
+}
+
 .controls svg {
     width: 18px;
     stroke: white;
     fill: none;
+}
+
+.controls button:disabled svg {
+    stroke: gray;
 }
