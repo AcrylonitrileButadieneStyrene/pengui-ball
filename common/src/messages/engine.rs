@@ -1,9 +1,11 @@
+use std::sync::Arc;
+
 #[derive(serde::Serialize, serde::Deserialize)]
 pub enum Message {
     Connect,
     Mute(bool),
     Focus(bool),
-    SetSave(usize, Vec<u8>),
+    SetSave(usize, Arc<[u8]>),
     GetSave(usize),
     DeleteSave(usize),
 }
