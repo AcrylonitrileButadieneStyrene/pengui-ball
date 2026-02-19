@@ -21,6 +21,7 @@ leptos_meta.workspace = true
 leptos_router.workspace = true
 leptos-use.workspace = true
 serde.workspace = true
+serde-wasm-bindgen.workspace = true
 strum = { version = "0.27.2", features = ["derive"] }
 strsim = "0.11.1"
 stylance.workspace = true

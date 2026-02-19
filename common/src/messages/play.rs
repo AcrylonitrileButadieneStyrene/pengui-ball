@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 #[derive(serde::Serialize, serde::Deserialize)]
 pub enum Message {
     EngineLoaded,
@@ -6,6 +8,7 @@ pub enum Message {
     PlayerConnect(PlayerConnectData),
     RegainFocus(bool),
     PlayerTeleported(u16, i16, i16),
+    SaveData(usize, SaveFile),
 }
 
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
@@ -33,4 +36,10 @@ pub struct PlayerConnectData {
     pub system: String,
     pub name: String,
     pub id: i32,
+}
+
+#[derive(serde::Serialize, serde::Deserialize)]
+pub struct SaveFile {
+    pub timestamp: String,
+    pub contents: Arc<[u8]>,
 }

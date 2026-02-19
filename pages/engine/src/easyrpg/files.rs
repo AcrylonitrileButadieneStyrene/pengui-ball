@@ -1,3 +1,6 @@
+use std::sync::Arc;
+
+use idb::DatabaseEvent as _;
 use leptos::{
     wasm_bindgen::JsValue,
     web_sys::js_sys::{Reflect, Uint8Array},
@@ -6,38 +9,26 @@ use leptos::{
 pub fn get_file(state: &crate::EngineState, id: usize) {
     let game = state.game.clone();
     leptos::task::spawn_local(async move {
-        let factory = indexed_db::Factory::<std::io::Error>::get().unwrap();
+        let factory = idb::Factory::new().unwrap();
         let database = factory
-            .open_latest_version(&format!("/easyrpg/{game}/Save"))
+            .open(&format!("/easyrpg/{game}/Save"), None)
+            .unwrap()
             .await
             .unwrap();
-        // |event| async move {
-        //         event
-        //             .database()
-        //             .build_object_store("FILE_DATA")
-        //             .auto_increment()
-        //             .create()?;
-        //         Ok(())
-        //     }
-        database
-            .transaction(&["FILE_DATA"])
-            .rw()
-            .run(move |transaction| async move {
-                let object = transaction.object_store("FILE_DATA").unwrap();
-                let data = object
-                    .get(&JsValue::from_str(&format!(
-                        "/easyrpg/{game}/Save/Save{id:>02}.lsd"
-                    )))
-                    .await
-                    .unwrap()
-                    .unwrap();
-                let contents = Reflect::get(&data, &JsValue::from_str("contents")).unwrap();
-                let contents = Uint8Array::from(contents).to_vec();
-
-                Ok(())
-            })
-            .await
+        let transaction = database
+            .transaction(&["FILE_DATA"], idb::TransactionMode::ReadOnly)
             .unwrap();
+        let store = transaction.object_store("FILE_DATA").unwrap();
+        let value = store
+            .get(idb::Query::Key(
+                format!("/easyrpg/{game}/Save/Save{id:>02}.lsd").into(),
+            ))
+            .unwrap()
+            .await
+            .unwrap()
+            .unwrap();
+        let file: File = serde_wasm_bindgen::from_value(value).unwrap();
+        crate::send(common::PlayMessage::SaveData(id, file.into()));
     });
 }
 
@@ -46,3 +37,19 @@ pub fn set_file(state: &crate::EngineState, id: usize, data: Vec<u8>) {
 }
 
 pub fn delete_file(state: &crate::EngineState, id: usize) {}
+
+#[derive(serde::Deserialize)]
+struct File {
+    #[serde(with = "serde_wasm_bindgen::preserve")]
+    pub timestamp: leptos::web_sys::js_sys::Date,
+    pub contents: Arc<[u8]>,
+}
+
+impl From<File> for common::messages::play::SaveFile {
+    fn from(value: File) -> Self {
+        Self {
+            contents: value.contents,
+            timestamp: value.timestamp.to_iso_string().into(),
+        }
+    }
+}
