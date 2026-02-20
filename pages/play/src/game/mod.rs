@@ -38,12 +38,5 @@ fn Engine() -> impl IntoView {
         crate::state::engine::State::send_frame(frame, common::EngineMessage::Focus(false));
     });
 
-    view! {
-        <iframe
-            node_ref=frame
-            class=style::player
-            src="./engine"
-            title="Game Engine"
-        />
-    }
+    view! { <iframe node_ref=frame class=style::player src="./engine" title="Game Engine" /> }
 }

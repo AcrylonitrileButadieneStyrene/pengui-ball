@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-use crate::state::api::locations::ResolvedLocation;
+use crate::{game::controls::icon, state::api::locations::ResolvedLocation};
 
 #[derive(Debug, Clone)]
 enum Map {
@@ -103,7 +103,7 @@ pub fn Maps() -> impl IntoView {
 
                     view! {
                         <a role="button" href=wiki_link title=description target="yumeWikiMap">
-                            <super::icon::Map />
+                            <icon::Map />
                         </a>
                     }
                 })

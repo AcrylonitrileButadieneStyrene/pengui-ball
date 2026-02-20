@@ -1,10 +1,11 @@
 use leptos::prelude::*;
 
-mod full_screen;
+use crate::game::controls::buttons::{
+    full_screen::FullScreen, maps::Maps, modal::OpenModal, mute::Mute,
+};
+
+mod buttons;
 mod icon;
-mod maps;
-mod modal;
-mod mute;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -14,27 +15,27 @@ pub fn Controls() -> impl IntoView {
         <div class=style::controls>
             <div>
                 <icon::People />
-                <modal::OpenModal modal=crate::modals::Modals::Saves>
+                <OpenModal modal=crate::modals::Modals::Saves>
                     <icon::FloppyDisk />
-                </modal::OpenModal>
+                </OpenModal>
                 <icon::PaintPalette />
                 <icon::SpeechBubble />
                 <icon::SixLayerTerminal />
                 <icon::Camera />
                 <icon::Photograph />
                 <icon::Gear />
-                <mute::Mute>
+                <Mute>
                     <icon::Sound />
-                </mute::Mute>
+                </Mute>
                 <icon::LocationNeedle />
             </div>
             <div class=style::right>
-                <full_screen::FullScreen>
+                <FullScreen>
                     <icon::Expand />
-                </full_screen::FullScreen>
+                </FullScreen>
                 <icon::Compass />
                 <icon::FamilyTree />
-                <maps::Maps />
+                <Maps />
             </div>
         </div>
     }
