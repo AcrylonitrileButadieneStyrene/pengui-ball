@@ -14,7 +14,7 @@ pub fn Mute(children: Children) -> impl IntoView {
     let on_click = move |_| game_config.update(|config| config.muted ^= true);
 
     view! {
-        <button class:stricken=muted on:click=on_click>
+        <button class="strickable" class:stricken=muted on:click=on_click>
             {children()}
         </button>
     }

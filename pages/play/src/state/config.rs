@@ -14,6 +14,7 @@ pub struct GlobalConfig {}
 #[serde(default)]
 pub struct GameConfig {
     pub muted: bool,
+    pub private_mode: u8,
 }
 
 impl State {
@@ -46,8 +47,8 @@ where
     Effect::new(move || {
         let new = rw.get();
         if new != get.get_untracked() {
-            set.set(new)
-        };
+            set.set(new);
+        }
     });
     rw
 }

@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 
 use crate::game::controls::buttons::{
-    full_screen::FullScreen, maps::Maps, modal::OpenModal, mute::Mute,
+    full_screen::FullScreen, maps::Maps, modal::OpenModal, mute::Mute, private::Private,
 };
 
 mod buttons;
@@ -14,7 +14,9 @@ pub fn Controls() -> impl IntoView {
     view! {
         <div class=style::controls>
             <div>
-                <icon::People />
+                <Private>
+                    <icon::People />
+                </Private>
                 <OpenModal modal=crate::modals::Modals::Saves>
                     <icon::FloppyDisk />
                 </OpenModal>

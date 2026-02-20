@@ -29,6 +29,10 @@ impl State {
         target.update(|current| *current = current.and_then(|val| val.checked_add(1)));
     }
 
+    pub fn connect(&self) {
+        Self::connect_impl(self.target);
+    }
+
     pub fn connect_impl(target: RwSignal<Option<NonZeroUsize>>) {
         target.update(|current| {
             *current = Some(

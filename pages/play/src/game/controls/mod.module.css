@@ -16,7 +16,7 @@
     border: 0;
 }
 
-.controls button:not(:global(.stricken)) path:nth-child(2) {
+.controls button:global(.strickable):not(:global(.stricken)) path:nth-child(2) {
     display: none;
 }
 

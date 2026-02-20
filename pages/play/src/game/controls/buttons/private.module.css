@@ -1,0 +1,5 @@
+.button:global(.private) path:nth-child(1),
+.button:global(.single) path:nth-child(1),
+.button:global(.single) path:nth-child(2) {
+    stroke: gray;
+}

@@ -129,10 +129,12 @@ async fn send_messages(
     let receiver = state.session.channel.take_receiver().unwrap();
     while let Ok(message) = receiver.recv_async().await {
         let vec = match message {
-            Command::Unknown(vec) => vec,
             Command::SayMap(msg) => vec!["say".to_string(), msg],
             Command::SayParty(msg) => vec!["psay".to_string(), msg],
             Command::SayGlobal(msg) => vec!["gsay".to_string(), msg],
+            Command::PrivateMode(state) => {
+                vec!["pr".to_string(), state.to_string()]
+            }
         };
 
         send(&vec.join("\u{FFFF}"));

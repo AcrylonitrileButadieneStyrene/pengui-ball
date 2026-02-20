@@ -2,7 +2,7 @@ pub enum Command {
     SayMap(String),
     SayParty(String),
     SayGlobal(String),
-    Unknown(Vec<String>),
+    PrivateMode(u8),
 }
 
 pub struct Channel {
