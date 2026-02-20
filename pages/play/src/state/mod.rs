@@ -4,6 +4,7 @@ use leptos::prelude::*;
 
 pub mod api;
 pub mod chat;
+mod config;
 pub mod engine;
 pub mod game;
 mod player;
@@ -22,12 +23,13 @@ pub fn Provider(game_id: Arc<str>, children: Children) -> impl IntoView {
 
 pub struct PlayState {
     pub chat: chat::State,
+    pub api: api::State,
+    pub engine: engine::State,
     pub session: SessionState,
     pub players: player::State,
-    pub engine: engine::State,
-    pub api: api::State,
-    pub modal: RwSignal<Option<crate::modals::Modals>>,
     pub game: game::State,
+    pub config: config::State,
+    pub modal: RwSignal<Option<crate::modals::Modals>>,
 }
 
 impl PlayState {
@@ -47,6 +49,7 @@ impl PlayState {
             engine: engine::State::default(),
             api,
             modal: RwSignal::new(None),
+            config: config::State::new(&game_id),
             game: game::State::new(game_id),
         }
     }
