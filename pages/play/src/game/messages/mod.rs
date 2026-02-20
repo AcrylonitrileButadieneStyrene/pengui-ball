@@ -20,9 +20,8 @@ pub fn setup_handler(state: Arc<crate::state::PlayState>) {
 fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
     match message {
         PlayMessage::EngineLoaded => {
-            if state.engine.load_count.get_untracked() > 1
-                && state.session.status.get_untracked() == ConnectionReadyState::Open
-            {
+            state.engine.load_count.update(|count| *count += 1);
+            if state.session.status.get_untracked() == ConnectionReadyState::Open {
                 state.engine.send(common::EngineMessage::Connect);
             }
         }
