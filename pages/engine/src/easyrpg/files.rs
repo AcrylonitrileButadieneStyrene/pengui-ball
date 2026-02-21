@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use idb::DatabaseEvent;
 use leptos::{
     prelude::{location, window},
     web_sys::{
@@ -95,7 +96,7 @@ pub async fn get_timestamps(game: Arc<str>) -> [Option<String>; 15] {
     let values = store.get_all(None, None).unwrap().await.unwrap();
     let entries = keys.iter().zip(values);
 
-    let mut values = std::array::from_fn(|_| None);
+    let mut timestamps = std::array::from_fn(|_| None);
 
     for (key, value) in entries {
         let key = key.as_string().unwrap();
@@ -104,11 +105,11 @@ pub async fn get_timestamps(game: Arc<str>) -> [Option<String>; 15] {
         let timestamp = Reflect::get(&value, &"timestamp".into()).unwrap();
         let timestamp: String = Date::from(timestamp).to_iso_string().into();
 
-        values[id - 1] = Some(timestamp);
+        timestamps[id - 1] = Some(timestamp);
     }
 
     transaction.commit().unwrap().await.unwrap();
-    values
+    timestamps
 }
 
 #[allow(clippy::future_not_send)]
@@ -125,11 +126,17 @@ async fn get_store_with_entry(
 #[allow(clippy::future_not_send)]
 async fn get_store(game: &str) -> (idb::Transaction, idb::ObjectStore) {
     let factory = idb::Factory::new().unwrap();
-    let database = factory
+    let mut request = factory
         .open(&format!("/easyrpg/{game}/Save"), None)
-        .unwrap()
-        .await
         .unwrap();
+    request.on_upgrade_needed(|event| {
+        event
+            .database()
+            .unwrap()
+            .create_object_store("FILE_DATA", idb::ObjectStoreParams::new())
+            .unwrap();
+    });
+    let database = request.await.unwrap();
     let transaction = database
         .transaction(&["FILE_DATA"], idb::TransactionMode::ReadWrite)
         .unwrap();
