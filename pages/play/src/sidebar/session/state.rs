@@ -14,7 +14,12 @@ impl Default for State {
         Self {
             channel: super::command::Channel::default(),
             status: RwSignal::new(ConnectionReadyState::Closed),
-            target: RwSignal::default(),
+            target: RwSignal::new(
+                #[cfg(debug_assertions)]
+                None,
+                #[cfg(not(debug_assertions))]
+                NonZeroUsize::new(1),
+            ),
         }
     }
 }
