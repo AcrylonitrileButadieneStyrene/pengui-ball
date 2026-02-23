@@ -2,7 +2,7 @@
 // @name        PenguiBall Temporary Workarounds
 // @match       *://localhost:8080/*
 // @match       *://127.0.0.1:8080/*
-// @match       https://pengui-ball.jackssrt.com/
+// @match       https://pengui-ball.jackssrt.com/*
 // @match       https://ynoproject.net/%F0%9F%A5%BA
 // @match       https://connect.ynoproject.net/%F0%9F%A5%BA
 // @version     0.1.6
