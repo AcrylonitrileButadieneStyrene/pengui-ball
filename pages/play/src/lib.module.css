@@ -52,6 +52,10 @@ button:not(:disabled):hover,
     transform: scale(var(--pop-out-scale));
 }
 
+code {
+    font-family: monospace;
+}
+
 .layout {
     display: grid;
     grid-template-areas:

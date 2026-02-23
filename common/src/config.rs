@@ -3,6 +3,8 @@ use std::sync::Arc;
 #[derive(Debug, serde::Deserialize)]
 pub struct ServerConfiguration {
     pub games: Vec<Game>,
+    #[serde(default)]
+    pub motd: Option<Arc<str>>,
 }
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]

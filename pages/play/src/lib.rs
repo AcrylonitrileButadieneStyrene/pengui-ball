@@ -61,6 +61,7 @@ pub fn Play() -> impl IntoView {
         </state::Provider>
 
         <PermissionDisclaimer permission=game.permission />
+        {config.motd.clone().map(|motd| view! { <pre><code>{motd}</code></pre> })}
     }
     .into_any()
 }
@@ -68,10 +69,11 @@ pub fn Play() -> impl IntoView {
 #[component]
 fn PermissionDisclaimer(permission: common::config::PermissionStatus) -> impl IntoView {
     use common::config::PermissionStatus;
-    match permission {
+    let text = match permission {
         PermissionStatus::Yume1kki => "Pending approval from developer/publisher",
         PermissionStatus::Yume2kki => "Hosted with permission from the Yume 2kki developers",
         // PermissionStatus::CU => "Original disappointment by the YNOproject community",
         PermissionStatus::Pending => "Hosted with permission from the developer(s)",
-    }
+    };
+    view! { <div>{text}</div> }
 }
