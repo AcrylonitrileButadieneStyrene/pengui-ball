@@ -43,7 +43,10 @@ fn watcher() -> tokio::sync::mpsc::Receiver<()> {
         let holder = holder.clone();
         move |event: Result<notify::Event, notify::Error>| {
             if let Ok(event) = event
-                && matches!(event.kind, notify::EventKind::Modify(_))
+                && matches!(
+                    event.kind,
+                    notify::EventKind::Create(_) | notify::EventKind::Modify(_)
+                )
             {
                 let Ok(()) = sender.blocking_send(()) else {
                     // drop the watcher to stop it
