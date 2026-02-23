@@ -8,6 +8,8 @@ use std::{
 
 use leptos::prelude::*;
 
+use crate::state::game::Location;
+
 mod classic;
 mod explorer;
 
@@ -41,60 +43,77 @@ impl Locations {
         )
     }
 
-    pub fn resolve(&self, location: &super::super::game::Location) -> Option<ResolvedLocation> {
-        let resolved = self
-            .get_or_init(&location.game)
-            .read()
-            .as_ref()
-            .map(Result::as_ref)
-            .and_then(Result::ok)
-            .and_then(|locations| {
-                locations
-                    .maps
-                    .get(&*format!("{:>04}", location.map))
-                    .zip(Some(locations.root.clone()))
-            })
-            .and_then(|(item, wiki)| {
-                classic::resolve(item, location.previous, location.x, location.y).zip(Some(wiki))
-            })
-            .map(|((name, article), wiki)| ResolvedLocation::Single {
-                wiki: wiki
-                    .as_ref()
-                    .map(|root| root.to_string() + article.as_ref().unwrap_or(&name)),
-                name,
-            });
-
-        if resolved.is_none() && &*location.game == "2kki" {
-            let value = self
-                .explorer
-                .lock()
-                .get(&(location.map, location.previous))
-                .cloned();
-            value.map_or_else(
-                || {
-                    explorer::fetch(self.explorer.clone(), location.map, location.previous);
-                    None
-                },
-                |entry| {
-                    let entry = (match entry {
-                        explorer::Value::Pending(val) => val.get(),
-                        explorer::Value::Resolved(val) => Some(val),
-                    })?;
-                    (*entry)
-                        .as_ref()
-                        .ok()
-                        .cloned()
-                        .map(ResolvedLocation::Multiple)
-                },
-            )
+    pub fn resolve(&self, location: &super::super::game::Location) -> ResolvedLocation {
+        let resolved = self.resolve_wiki(location);
+        if matches!(resolved, ResolvedLocation::Unknown) && &*location.game == "2kki" {
+            self.resolve_2kki(location)
         } else {
             resolved
         }
+    }
+
+    fn resolve_wiki(&self, location: &Location) -> ResolvedLocation {
+        let Location {
+            ref game,
+            map,
+            previous,
+            x,
+            y,
+        } = *location;
+
+        let Some(Ok(ref locations)) = *self.get_or_init(game).read() else {
+            // waiting for the wiki data to download
+            return ResolvedLocation::Pending;
+        };
+
+        if let Some(map) = locations.maps.get(&*format!("{map:>04}"))
+            && let Some((name, article)) = classic::resolve(map, previous, x, y)
+        {
+            ResolvedLocation::Single {
+                wiki: locations
+                    .root
+                    .as_ref()
+                    .map(|root| root.to_string() + article.as_ref().unwrap_or(&name)),
+                name,
+            }
+        } else {
+            ResolvedLocation::Unknown
+        }
+    }
+
+    fn resolve_2kki(&self, location: &super::super::game::Location) -> ResolvedLocation {
+        let value = self
+            .explorer
+            .lock()
+            .get(&(location.map, location.previous))
+            .cloned();
+        value.map_or_else(
+            || {
+                explorer::fetch(self.explorer.clone(), location.map, location.previous);
+                ResolvedLocation::Pending
+            },
+            |entry| {
+                let Some(entry) = (match entry {
+                    explorer::Value::Pending(val) => val.get(),
+                    explorer::Value::Resolved(val) => Some(val),
+                }) else {
+                    return ResolvedLocation::Unknown;
+                };
+
+                (*entry)
+                    .as_ref()
+                    .ok()
+                    .cloned()
+                    .map_or(ResolvedLocation::Unknown, ResolvedLocation::Multiple)
+            },
+        )
     }
 }
 
 #[derive(Debug)]
 pub enum ResolvedLocation {
+    Pending,
+    Unknown,
     Single {
         name: Arc<str>,
         wiki: Option<String>,

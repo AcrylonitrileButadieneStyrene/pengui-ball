@@ -36,11 +36,8 @@ pub fn Maps() -> impl IntoView {
                 return vec![];
             };
 
-            let Some(location) = state.api.locations.resolve(&location) else {
-                return vec![];
-            };
-
-            let endpoint = match (is_2kki, location) {
+            let endpoint = match (is_2kki, state.api.locations.resolve(&location)) {
+                (_, ResolvedLocation::Pending | ResolvedLocation::Unknown) => return vec![],
                 (_, ResolvedLocation::Multiple(locations)) if locations.is_empty() => return vec![],
                 (true, ResolvedLocation::Single { name, .. }) => [EXPLORER_BASE, &name].concat(),
                 (true, ResolvedLocation::Multiple(locations)) => [

@@ -43,7 +43,5 @@ fn Input() -> impl IntoView {
         }
     });
 
-    view! {
-        <input on:keydown=on_keydown />
-    }
+    view! { <input on:keydown=on_keydown /> }
 }

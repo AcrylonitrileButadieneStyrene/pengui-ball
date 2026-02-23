@@ -10,35 +10,38 @@ pub fn CurrentLocation() -> impl IntoView {
 
 #[component]
 pub fn Location(#[prop(into)] location: Signal<Option<Location>>) -> impl IntoView {
-    move || location.get().map(location_inner)
+    let view = move || location.get().and_then(location_inner);
+    view! {
+        <Suspense fallback=|| ()>
+            {view}
+        </Suspense>
+    }
 }
 
-fn location_inner(location: Location) -> impl IntoView {
-    let Location {
-        ref game,
-        map,
-        x,
-        y,
-        ..
-    } = location;
-    match crate::state().api.locations.resolve(&location) {
-        Some(ResolvedLocation::Single {
+fn location_inner(location: Location) -> Option<impl IntoView> {
+    let view = match crate::state().api.locations.resolve(&location) {
+        ResolvedLocation::Pending => return None,
+        ResolvedLocation::Unknown => {
+            let Location { map, x, y, .. } = location;
+            view! { <span>Unknown Location: {format!("Map{map:>04}({x}, {y})")}</span> }.into_any()
+        }
+        ResolvedLocation::Single {
             name,
             wiki: Some(wiki),
-        }) => view! {
+        } => view! {
             <a href=wiki target="yumeWiki">
                 {name}
             </a>
         }
         .into_any(),
-        Some(ResolvedLocation::Single { name, wiki: None }) => {
+        ResolvedLocation::Single { name, wiki: None } => {
             view! { <span>{name}</span> }.into_any()
         }
-        Some(ResolvedLocation::Multiple(worlds)) => worlds
+        ResolvedLocation::Multiple(worlds) => worlds
             .iter()
             .map(|world| {
                 view! {
-                    <a href=format!("https://yume.wiki/{game}/{}", world.title) target="yumeWiki">
+                    <a href=format!("https://yume.wiki/{}/{}", location.game, world.title) target="yumeWiki">
                         {world.title.clone()}
                     </a>
                 }
@@ -47,8 +50,7 @@ fn location_inner(location: Location) -> impl IntoView {
             .intersperse_with(|| "|".into_any())
             .collect::<Vec<_>>()
             .into_any(),
-        None => {
-            view! { <span>Unknown Location: {format!("Map{map:>04}({x}, {y})")}</span> }.into_any()
-        }
-    }
+    };
+
+    Some(view)
 }

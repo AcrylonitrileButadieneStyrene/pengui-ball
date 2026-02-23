@@ -30,9 +30,5 @@ fn Wrapper(children: Children) -> impl IntoView {
         no_name && no_account
     };
 
-    view! {
-        <div class:unnamed=is_unnamed>
-            {children()}
-        </div>
-    }
+    view! { <div class:unnamed=is_unnamed>{children()}</div> }
 }
