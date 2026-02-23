@@ -49,7 +49,7 @@ pub async fn run() {
         writeln!(output, "}}").unwrap();
 
         output.flush().unwrap();
-        std::fs::copy("assets/css/themes.css", "target/site/css/themes.css").unwrap();
+        std::fs::copy("assets/css/themes.css", "public/css/themes.css").unwrap();
 
         log::info!("Theme compilation finished");
     }
