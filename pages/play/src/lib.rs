@@ -61,7 +61,16 @@ pub fn Play() -> impl IntoView {
         </state::Provider>
 
         <PermissionDisclaimer permission=game.permission />
-        {config.motd.clone().map(|motd| view! { <pre><code>{motd}</code></pre> })}
+        {config
+            .motd
+            .clone()
+            .map(|motd| {
+                view! {
+                    <pre>
+                        <code>{motd}</code>
+                    </pre>
+                }
+            })}
     }
     .into_any()
 }
