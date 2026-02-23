@@ -5,7 +5,7 @@
 // @match       https://pengui-ball.jackssrt.com/*
 // @match       https://ynoproject.net/%F0%9F%A5%BA
 // @match       https://connect.ynoproject.net/%F0%9F%A5%BA
-// @version     0.1.7
+// @version     0.1.8
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @downloadURL https://raw.githubusercontent.com/AcrylonitrileButadieneStyrene/pengui-ball/master/js/pengui-ball.user.js
@@ -73,6 +73,8 @@ if (location.host == "ynoproject.net") {
 } else if (location.host == "connect.ynoproject.net") {
   window.addEventListener("message", e => {
     if (e.data.length != 3) return;
+    if (e.data[0].startsWith("/api/"))
+      e.data[0] = e.data[0].replace("/api/", "/");
     fetch(e.data[0], e.data[1])
       .then(async resp => [resp.status, resp.statusText, await resp.arrayBuffer()])
       .then(resp => window.parent.postMessage([e.data[2], "resolve", resp], "*"))
