@@ -3,6 +3,7 @@ pub enum Command {
     SayParty(String),
     SayGlobal(String),
     PrivateMode(u8),
+    SetName(String),
 }
 
 pub struct Channel {

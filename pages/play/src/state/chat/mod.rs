@@ -21,8 +21,9 @@ pub struct State {
     pub input: NodeRef<leptos::html::Div>,
     pub destination: RwSignal<MessageDestination>,
 
+    pub guest_name: RwSignal<Option<Arc<str>>>,
     /// User ID of the currently signed in user.
-    my_id: Signal<Option<Arc<str>>>,
+    pub my_id: Signal<Option<Arc<str>>>,
 }
 
 impl State {
@@ -36,6 +37,7 @@ impl State {
             sending: ChatChannel::new(set_messages, 10, false),
             input: NodeRef::new(),
             destination: RwSignal::default(),
+            guest_name: RwSignal::default(),
             my_id,
         }
     }

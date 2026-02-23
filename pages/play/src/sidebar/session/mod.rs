@@ -135,6 +135,7 @@ async fn send_messages(
             Command::PrivateMode(state) => {
                 vec!["pr".to_string(), state.to_string()]
             }
+            Command::SetName(name) => vec!["name".to_string(), name],
         };
 
         send(&vec.join("\u{FFFF}"));

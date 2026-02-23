@@ -4,7 +4,7 @@ use leptos::prelude::*;
 
 stylance::import_style!(pub style, "author.module.css");
 
-#[island]
+#[component]
 pub fn Author(uuid: Arc<str>) -> impl IntoView {
     let state = crate::state();
     let author = state
