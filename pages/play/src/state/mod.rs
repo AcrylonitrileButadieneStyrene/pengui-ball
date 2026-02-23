@@ -8,7 +8,6 @@ mod config;
 pub mod engine;
 pub mod game;
 mod player;
-mod user;
 
 pub use chat::{Message, MessageData};
 pub use player::Player;
@@ -41,7 +40,8 @@ impl PlayState {
                 api.user
                     .read()
                     .as_ref()
-                    .flatten()
+                    .map(Result::as_ref)
+                    .and_then(Result::ok)
                     .map(|user| user.uuid.clone())
             })),
             session: SessionState::default(),

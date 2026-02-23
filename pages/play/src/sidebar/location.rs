@@ -11,11 +11,7 @@ pub fn CurrentLocation() -> impl IntoView {
 #[component]
 pub fn Location(#[prop(into)] location: Signal<Option<Location>>) -> impl IntoView {
     let view = move || location.get().and_then(location_inner);
-    view! {
-        <Suspense fallback=|| ()>
-            {view}
-        </Suspense>
-    }
+    view! { <Suspense fallback=|| ()>{view}</Suspense> }
 }
 
 fn location_inner(location: Location) -> Option<impl IntoView> {
@@ -41,7 +37,10 @@ fn location_inner(location: Location) -> Option<impl IntoView> {
             .iter()
             .map(|world| {
                 view! {
-                    <a href=format!("https://yume.wiki/{}/{}", location.game, world.title) target="yumeWiki">
+                    <a
+                        href=format!("https://yume.wiki/{}/{}", location.game, world.title)
+                        target="yumeWiki"
+                    >
                         {world.title.clone()}
                     </a>
                 }

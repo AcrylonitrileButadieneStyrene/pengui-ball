@@ -2197,6 +2197,7 @@ dependencies = [
  "strum",
  "stylance",
  "stylance-cli",
+ "thiserror 2.0.18",
 ]
 
 [[package]]

@@ -39,9 +39,9 @@ fn CurrentUser() -> impl IntoView {
         let state = state.clone();
         move |_| {
             let modal = state.api.user.map(|user| match user {
-                Some(user) if user.registered => crate::modals::Modals::LogOut,
-                Some(_) => crate::modals::Modals::LogIn,
-                None => crate::modals::Modals::Cors,
+                Ok(user) if user.registered => crate::modals::Modals::LogOut,
+                Ok(_) => crate::modals::Modals::LogIn,
+                Err(_) => crate::modals::Modals::Cors,
             });
             state.modal.set(modal);
         }
@@ -49,9 +49,9 @@ fn CurrentUser() -> impl IntoView {
 
     move || {
         let content = state.api.user.map(|user| match user {
-            Some(user) if user.registered => "Log Out",
-            Some(_) => "Log In",
-            None => {
+            Ok(user) if user.registered => "Log Out",
+            Ok(_) => "Log In",
+            Err(_) => {
                 if once.get_untracked() {
                     set_once(false);
                     state.modal.set(Some(crate::modals::Modals::Cors));

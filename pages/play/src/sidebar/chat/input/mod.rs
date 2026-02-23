@@ -26,7 +26,7 @@ fn Wrapper(children: Children) -> impl IntoView {
         let no_account = user
             .read()
             .as_ref()
-            .is_none_or(|response| response.as_ref().is_none_or(|user| !user.registered));
+            .is_none_or(|response| response.as_ref().ok().is_none_or(|user| !user.registered));
         no_name && no_account
     };
 

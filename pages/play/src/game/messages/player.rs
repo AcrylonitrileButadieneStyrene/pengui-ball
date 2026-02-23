@@ -33,7 +33,7 @@ pub fn sync(state: &crate::state::PlayState, data: PlayerSyncData) {
         player.medals = medals;
 
         if id == -1
-            && let Some(Some(user)) = &*state.api.user.read_untracked()
+            && let Some(Ok(user)) = &*state.api.user.read_untracked()
         {
             player.name = Some(user.name.clone().into());
         }

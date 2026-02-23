@@ -3,24 +3,17 @@ use std::sync::Arc;
 use leptos::prelude::*;
 
 pub mod locations;
+pub mod user;
 
 pub struct State {
-    pub user: LocalResource<Option<super::user::User>>,
+    pub user: LocalResource<Result<user::User, user::UserError>>,
     pub locations: locations::Locations,
 }
 
 impl State {
     pub fn new(game: Arc<str>) -> Self {
         Self {
-            user: LocalResource::new(|| async {
-                gloo_net::http::Request::get("api/info")
-                    .send()
-                    .await
-                    .ok()?
-                    .json()
-                    .await
-                    .ok()?
-            }),
+            user: user::resource(),
             locations: locations::Locations::new_prefetch(game),
         }
     }
