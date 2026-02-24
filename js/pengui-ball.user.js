@@ -5,7 +5,7 @@
 // @match       https://pengui-ball.jackssrt.com/*
 // @match       https://ynoproject.net/%F0%9F%A5%BA
 // @match       https://connect.ynoproject.net/%F0%9F%A5%BA
-// @version     0.1.8
+// @version     0.1.10
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @downloadURL https://raw.githubusercontent.com/AcrylonitrileButadieneStyrene/pengui-ball/master/js/pengui-ball.user.js
@@ -35,13 +35,8 @@ if (location.host == "ynoproject.net") {
 </form>
 <script>
   loginForm.onsubmit = () => {
-    fetch("https://connect.ynoproject.net/seiko/login", {
-      method: 'POST',
-      body: new URLSearchParams(new FormData(loginForm)),
-      credentials: "include",
-    }).then(() => {
-      window.parent.postMessage("auth cookie was set", "*");
-    });
+    const body = new URLSearchParams(new FormData(loginForm)).toString();
+    window.parent.postMessage(["login", body], "*");
     return false;
   }
 </script>
@@ -72,13 +67,19 @@ if (location.host == "ynoproject.net") {
   document.close();
 } else if (location.host == "connect.ynoproject.net") {
   window.addEventListener("message", e => {
-    if (e.data.length != 3) return;
-    if (e.data[0].startsWith("/api/"))
-      e.data[0] = e.data[0].replace("/api/", "/");
-    fetch(e.data[0], e.data[1])
-      .then(async resp => [resp.status, resp.statusText, await resp.arrayBuffer()])
-      .then(resp => window.parent.postMessage([e.data[2], "resolve", resp], "*"))
-      .catch(err => window.parent.postMessage([e.data[2], "reject", err.toString()], "*"));
+    if (e.data.length == 2) {
+      if (e.data[0] == "set-auth")
+        document.cookie = e.data[1];
+    } else if (e.data.length == 3) {
+      if (e.data[0].startsWith("/api/"))
+        e.data[0] = e.data[0].replace("/api/", "/");
+      if (e.data[0] == "/seiko/logout")
+        document.cookie = "auth=; Max-Age=0; Path=/; SameSite=none; Secure";
+      fetch(e.data[0], e.data[1])
+        .then(async resp => [resp.status, resp.statusText, await resp.arrayBuffer()])
+        .then(resp => window.parent.postMessage([e.data[2], "resolve", resp], "*"))
+        .catch(err => window.parent.postMessage([e.data[2], "reject", err.toString()], "*"));
+    }
   });
 } else if (window.self == window.top) {
   let queue = [];
@@ -112,9 +113,24 @@ if (location.host == "ynoproject.net") {
   };
 
   window.addEventListener("message", e => {
-    if (e.data == "auth cookie was set")
-      onAuthCookieSet()
-    else if (e.data.length == 3) {
+    if (e.data?.length == 2) {
+      GM.xmlHttpRequest({
+        method: "POST",
+        url: "https://connect.ynoproject.net/seiko/login",
+        data: e.data[1],
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+        },
+        anonymous: true,
+        onload: response => {
+          if (response.status != 200)
+            return alert(response.responseText);
+          const auth = response.responseHeaders.split("auth=")[1].replace("HttpOnly; ", "SameSite=None; ").split("Secure")[0];
+          iframe.contentWindow.postMessage(["set-auth", "auth=" + auth + "Secure"], "*");
+          onAuthCookieSet();
+        },
+      });
+    } else if (e.data?.length == 3) {
       let [resolve, reject] = ongoing[e.data[0]];
       if (e.data[1] == "resolve")
         resolve(new Response(e.data[2][2], {
@@ -125,3 +141,4 @@ if (location.host == "ynoproject.net") {
     }
   });
 }
+
