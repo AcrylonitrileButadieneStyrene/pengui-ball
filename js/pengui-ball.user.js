@@ -1,17 +1,18 @@
 // ==UserScript==
 // @name        PenguiBall Temporary Workarounds
+// @version     0.1.11
+// @description Temporary workarounds to make pengui-ball work before official support is added.
+// @grant       GM.xmlHttpRequest
+// @homepageURL https://github.com/AcrylonitrileButadieneStyrene/pengui-ball/
 // @match       *://localhost:8080/*
 // @match       *://127.0.0.1:8080/*
 // @match       https://pengui-ball.jackssrt.com/*
 // @match       https://ynoproject.net/%F0%9F%A5%BA
 // @match       https://connect.ynoproject.net/%F0%9F%A5%BA
-// @version     0.1.10
-// @description Temporary workarounds to make pengui-ball work before official support is added.
-// @grant       GM.xmlHttpRequest
+// @run-at      document-start
+// @connect     connect.ynoproject.net
 // @downloadURL https://raw.githubusercontent.com/AcrylonitrileButadieneStyrene/pengui-ball/master/js/pengui-ball.user.js
 // @supportURL  https://github.com/AcrylonitrileButadieneStyrene/pengui-ball/issues
-// @homepageURL https://github.com/AcrylonitrileButadieneStyrene/pengui-ball/
-// @run-at      document-start
 // ==/UserScript==
 
 if (location.host == "ynoproject.net") {
