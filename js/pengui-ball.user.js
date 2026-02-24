@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        PenguiBall Temporary Workarounds
-// @version     0.1.11
+// @version     0.1.12
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @homepageURL https://github.com/AcrylonitrileButadieneStyrene/pengui-ball/
@@ -70,7 +70,14 @@ if (location.host == "ynoproject.net") {
   window.addEventListener("message", e => {
     if (e.data.length == 2) {
       if (e.data[0] == "set-auth")
-        document.cookie = e.data[1];
+        cookieStore.set({
+          name: "auth",
+          value: e.data[1],
+          domain: "ynoproject.net",
+          sameSite: "none",
+          expires: Date.now() + 86400000,
+          partitioned: true,
+        });
     } else if (e.data.length == 3) {
       if (e.data[0].startsWith("/api/"))
         e.data[0] = e.data[0].replace("/api/", "/");
@@ -126,8 +133,8 @@ if (location.host == "ynoproject.net") {
         onload: response => {
           if (response.status != 200)
             return alert(response.responseText);
-          const auth = response.responseHeaders.split("auth=")[1].replace("HttpOnly; ", "SameSite=None; ").split("Secure")[0];
-          iframe.contentWindow.postMessage(["set-auth", "auth=" + auth + "Secure"], "*");
+          const auth = response.responseHeaders.split("auth=")[1].split(";")[0];
+          iframe.contentWindow.postMessage(["set-auth", auth], "*");
           onAuthCookieSet();
         },
       });
