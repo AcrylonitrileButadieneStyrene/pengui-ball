@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-mod chat;
+pub mod chat;
 mod location;
 mod player_count;
 pub mod session;

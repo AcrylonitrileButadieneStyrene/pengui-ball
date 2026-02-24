@@ -38,7 +38,7 @@ pub fn resource() -> LocalResource<Result<User, UserError>> {
     });
 
     Effect::new(move || {
-        if let Some(Err(UserError::BadUser)) = user.read().as_ref() {
+        if matches!(user.read().as_ref(), Some(Err(UserError::BadUser))) {
             leptos::task::spawn_local_scoped(async move {
                 let response = gloo_net::http::Request::get("/api/seiko/logout")
                     .credentials(leptos::web_sys::RequestCredentials::Include)

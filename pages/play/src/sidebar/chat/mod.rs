@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 mod filters;
 mod input;
-mod message;
+pub mod message;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -28,8 +28,8 @@ pub fn ChatMessages() -> impl IntoView {
     let each = move || messages.get().into_iter().rev().collect::<Vec<_>>();
 
     view! {
-        <For each=each key=|(id, _)| std::sync::Arc::as_ptr(id) let((_, message))>
-            <message::MessageOuter message=message />
+        <For each=each key=|(id, _)| std::sync::Arc::as_ptr(id) let((_, (data, message)))>
+            {message.render(&data)}
         </For>
     }
 }

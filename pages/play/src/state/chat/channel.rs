@@ -5,7 +5,9 @@ use std::{
 
 use leptos::prelude::*;
 
-use super::Message;
+use crate::state::chat::message::MessageType;
+
+use super::MessageItem;
 
 pub struct ChatChannel {
     pub capacity: RwSignal<usize>,
@@ -14,24 +16,20 @@ pub struct ChatChannel {
     /// If true then this channel is not shown to the user
     pub filter: RwSignal<bool>,
     /// Shared message list, all channels interact with it.
-    messages: WriteSignal<indexmap::IndexMap<Arc<str>, Message>>,
+    messages: WriteSignal<super::MessageList>,
 }
 
 impl ChatChannel {
-    pub fn new(
-        messages: WriteSignal<indexmap::IndexMap<Arc<str>, Message>>,
-        capacity: usize,
-        filtered: bool,
-    ) -> Self {
+    pub fn new(messages: WriteSignal<super::MessageList>) -> Self {
         Self {
-            capacity: RwSignal::new(capacity),
-            tracker: Mutex::new(VecDeque::with_capacity(capacity)),
-            filter: RwSignal::new(filtered),
+            capacity: RwSignal::new(150),
+            tracker: Mutex::new(VecDeque::with_capacity(150)),
+            filter: RwSignal::new(false),
             messages,
         }
     }
 
-    pub fn add(&self, message: Message) {
+    pub fn add(&self, message: MessageItem, data: Arc<dyn MessageType>) {
         let mut buffer = self.tracker.lock();
         let removed_overflow = if buffer.len() + 1 > self.capacity.get_untracked() {
             buffer.pop_back()
@@ -39,7 +37,7 @@ impl ChatChannel {
             None
         };
 
-        buffer.push_front((message.id.clone(), message.text().clone()));
+        buffer.push_front((message.id.clone(), message.text.clone()));
         drop(buffer);
 
         self.messages.update(|messages| {
@@ -47,17 +45,16 @@ impl ChatChannel {
                 messages.shift_remove(&id).unwrap();
             }
 
-            messages.insert(message.id.clone(), message);
+            messages.insert(message.id.clone(), (message, data));
         });
     }
 
-    pub fn remove(&self, message: &Message) {
-        let message_text = message.text();
+    pub fn remove(&self, message: &MessageItem) {
         let identical = {
             let mut local = self.tracker.lock();
             local
                 .iter()
-                .position(|(_, text)| message_text.eq(text))
+                .position(|(_, text)| message.text.eq(text))
                 .and_then(|index| local.swap_remove_back(index))
                 .map(|(id, _)| id)
         };
@@ -67,7 +64,7 @@ impl ChatChannel {
                 .lock()
                 .iter()
                 .enumerate()
-                .map(|(index, (_, text))| (index, strsim::levenshtein(message_text, text)))
+                .map(|(index, (_, text))| (index, strsim::levenshtein(&message.text, text)))
                 .min_by_key(|(_, distance)| *distance)
                 .map(|(index, _)| index);
             index

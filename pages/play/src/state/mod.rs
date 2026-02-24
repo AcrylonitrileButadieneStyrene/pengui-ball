@@ -9,7 +9,6 @@ pub mod engine;
 pub mod game;
 mod player;
 
-pub use chat::{Message, MessageData};
 pub use player::Player;
 
 use crate::sidebar::session::SessionState;

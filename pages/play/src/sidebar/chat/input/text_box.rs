@@ -1,8 +1,13 @@
 use leptos::{prelude::*, wasm_bindgen::JsCast as _, web_sys::HtmlDivElement};
 
 use crate::{
-    sidebar::session::Command,
-    state::{Message, MessageData, chat::MessageDestination},
+    sidebar::{
+        chat::message::types::{
+            global::GlobalMessage, map::MapMessage, party::PartyMessage, sending::SendingMessage,
+        },
+        session::Command,
+    },
+    state::chat::{MessageDestination, message::MessageItem},
 };
 
 stylance::import_style!(pub style, "text_box.module.css");
@@ -113,20 +118,25 @@ fn clamp(input: &str, length: usize) -> &str {
 }
 
 fn send(state: &crate::State, content: String) {
-    let message_data = MessageData::Sending {
-        text: content.clone().into(),
-    };
-
+    let text = content.clone();
     let (command, filter) = match state.chat.destination.get_untracked() {
-        MessageDestination::Map => (Command::SayMap(content), &state.chat.map.filter),
-        MessageDestination::Party => (Command::SayParty(content), &state.chat.party.filter),
-        MessageDestination::Global => (Command::SayGlobal(content), &state.chat.global.filter),
+        MessageDestination::Map => (
+            Command::SayMap(content),
+            &state.chat.channel::<MapMessage>().filter,
+        ),
+        MessageDestination::Party => (
+            Command::SayParty(content),
+            &state.chat.channel::<PartyMessage>().filter,
+        ),
+        MessageDestination::Global => (
+            Command::SayGlobal(content),
+            &state.chat.channel::<GlobalMessage>().filter,
+        ),
     };
 
-    state.chat.sending.add(Message::new(
-        None::<std::sync::Arc<str>>,
-        message_data,
-        filter.read_only(),
-    ));
+    state.chat.add(
+        MessageItem::new(None::<std::sync::Arc<str>>, text.into(), filter.read_only()),
+        SendingMessage,
+    );
     state.session.channel.send(command).unwrap();
 }

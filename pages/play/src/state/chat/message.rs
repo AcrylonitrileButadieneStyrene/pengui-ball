@@ -2,20 +2,18 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-use crate::state::game::Location;
-
-#[derive(Clone, Debug)]
-pub struct Message {
+#[derive(Clone)]
+pub struct MessageItem {
     pub id: Arc<str>,
-    pub data: MessageData,
+    pub text: Arc<str>,
     pub timestamp: chrono::DateTime<chrono::Local>,
     pub filtered: ReadSignal<bool>,
 }
 
-impl Message {
+impl MessageItem {
     pub fn new(
         id: Option<impl Into<Arc<str>>>,
-        data: MessageData,
+        text: Arc<str>,
         filtered: ReadSignal<bool>,
     ) -> Self {
         leptos_use::use_timestamp();
@@ -26,38 +24,14 @@ impl Message {
                 || timestamp.timestamp_millis().to_string().into(),
                 Into::into,
             ),
-            data,
+            text,
             timestamp,
             filtered,
         }
     }
-
-    pub const fn text(&self) -> &Arc<str> {
-        match &self.data {
-            MessageData::Map { text, .. }
-            | MessageData::Party { text, .. }
-            | MessageData::Global { text, .. }
-            | MessageData::Sending { text } => text,
-        }
-    }
 }
 
-#[derive(Clone, Debug)]
-pub enum MessageData {
-    Map {
-        author: Arc<str>,
-        text: Arc<str>,
-    },
-    Party {
-        author: Arc<str>,
-        text: Arc<str>,
-    },
-    Global {
-        author: Arc<str>,
-        text: Arc<str>,
-        location: Option<Location>,
-    },
-    Sending {
-        text: Arc<str>,
-    },
+pub trait MessageType: Send + Sync {
+    fn on_add(&self, _this: &MessageItem, _chat: &crate::state::chat::State) {}
+    fn render(&self, this: &MessageItem) -> AnyView;
 }

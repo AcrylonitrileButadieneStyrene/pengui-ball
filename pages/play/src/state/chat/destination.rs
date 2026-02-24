@@ -1,4 +1,9 @@
-use crate::state::chat::{self, ChatChannel};
+use std::sync::Arc;
+
+use crate::{
+    sidebar::chat::message::types::{global::GlobalMessage, map::MapMessage, party::PartyMessage},
+    state::chat::{self, ChatChannel},
+};
 
 #[derive(
     Clone, Copy, Default, PartialEq, Eq, strum::EnumProperty, strum::FromRepr, strum::VariantArray,
@@ -16,11 +21,11 @@ pub enum MessageDestination {
 }
 
 impl MessageDestination {
-    pub const fn to_channel(self, state: &chat::State) -> &ChatChannel {
+    pub fn to_channel(self, state: &chat::State) -> Arc<ChatChannel> {
         match self {
-            Self::Map => &state.map,
-            Self::Party => &state.party,
-            Self::Global => &state.global,
+            Self::Map => state.channel::<MapMessage>(),
+            Self::Party => state.channel::<PartyMessage>(),
+            Self::Global => state.channel::<GlobalMessage>(),
         }
     }
 }

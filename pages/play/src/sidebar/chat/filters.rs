@@ -1,5 +1,9 @@
 use leptos::prelude::*;
 
+use crate::sidebar::chat::message::types::{
+    global::GlobalMessage, map::MapMessage, party::PartyMessage,
+};
+
 #[derive(serde::Serialize, serde::Deserialize)]
 enum Filter {
     Map,
@@ -39,9 +43,9 @@ fn Filter(of: Filter) -> impl IntoView {
 fn Handler(filter: Filter) -> impl IntoView {
     let state = crate::state();
     let filter = match filter {
-        Filter::Map => state.chat.map.filter,
-        Filter::Global => state.chat.global.filter,
-        Filter::Party => state.chat.party.filter,
+        Filter::Map => state.chat.channel::<MapMessage>().filter,
+        Filter::Global => state.chat.channel::<GlobalMessage>().filter,
+        Filter::Party => state.chat.channel::<PartyMessage>().filter,
     };
 
     let on_change = move |ev: leptos::ev::Event| {

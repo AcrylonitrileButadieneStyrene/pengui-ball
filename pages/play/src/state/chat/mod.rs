@@ -1,22 +1,22 @@
-use std::sync::Arc;
+use std::{any::TypeId, collections::HashMap, sync::Arc};
 
 use leptos::prelude::*;
 
 mod channel;
 mod destination;
-mod message;
+pub mod message;
 
 pub use channel::ChatChannel;
 pub use destination::MessageDestination;
-pub use message::{Message, MessageData};
+
+use crate::state::chat::message::{MessageItem, MessageType};
+
+type MessageList = indexmap::IndexMap<Arc<str>, (MessageItem, Arc<dyn MessageType>)>;
 
 pub struct State {
-    pub messages: ReadSignal<indexmap::IndexMap<Arc<str>, Message>>,
-
-    pub map: ChatChannel,
-    pub party: ChatChannel,
-    pub global: ChatChannel,
-    pub sending: ChatChannel,
+    pub messages: ReadSignal<MessageList>,
+    set_messages: WriteSignal<MessageList>,
+    channels: RwSignal<HashMap<TypeId, Arc<ChatChannel>>>,
 
     pub input: NodeRef<leptos::html::Div>,
     pub destination: RwSignal<MessageDestination>,
@@ -31,10 +31,8 @@ impl State {
         let (messages, set_messages) = signal(indexmap::IndexMap::new());
         Self {
             messages,
-            map: ChatChannel::new(set_messages, 150, false),
-            party: ChatChannel::new(set_messages, 150, false),
-            global: ChatChannel::new(set_messages, 150, false),
-            sending: ChatChannel::new(set_messages, 10, false),
+            set_messages,
+            channels: RwSignal::default(),
             input: NodeRef::new(),
             destination: RwSignal::default(),
             guest_name: RwSignal::default(),
@@ -42,36 +40,24 @@ impl State {
         }
     }
 
-    pub fn add(&self, message: Message) {
-        match &message.data {
-            MessageData::Map { author, .. } => {
-                if self.is_self(author) {
-                    self.sending.remove(&message);
-                }
-                self.map.add(message);
-            }
-            MessageData::Party { author, .. } => {
-                if self.is_self(author) {
-                    self.sending.remove(&message);
-                }
-                self.party.add(message);
-            }
-            MessageData::Global { author, .. } => {
-                if self.is_self(author) {
-                    self.sending.remove(&message);
-                }
-                self.global.add(message);
-            }
-            MessageData::Sending { .. } => {
-                self.sending.add(message);
-            }
-        }
+    pub fn channel<T: MessageType + 'static>(&self) -> Arc<ChatChannel> {
+        let id = TypeId::of::<T>();
+        let channel = {
+            let channels = self.channels.read_untracked();
+            channels.get(&id).cloned()
+        };
+        channel.unwrap_or_else(|| {
+            let channel = Arc::new(ChatChannel::new(self.set_messages));
+            self.channels.update(|channels| {
+                channels.insert(id, channel.clone());
+            });
+            channel
+        })
     }
 
-    fn is_self(&self, author: &str) -> bool {
-        self.my_id
-            .read_untracked()
-            .as_ref()
-            .is_some_and(|id| &**id == author)
+    pub fn add<T: MessageType + 'static>(&self, message: MessageItem, data: T) {
+        data.on_add(&message, self);
+
+        self.channel::<T>().add(message, Arc::new(data));
     }
 }

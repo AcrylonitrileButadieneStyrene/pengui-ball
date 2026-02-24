@@ -2,33 +2,43 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-use crate::state::{Message, MessageData, game::Location};
+use crate::{
+    sidebar::chat::message::types::{global::GlobalMessage, map::MapMessage, party::PartyMessage},
+    state::{chat::message::MessageItem, game::Location},
+};
 
 pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
     match parts {
         ["pc", count] => state.players.count.set(count.parse::<u32>().ok()),
-        ["say", uuid, text] => state.chat.add(Message::new(
-            None::<&str>,
-            MessageData::Map {
+        ["say", uuid, text] => state.chat.add(
+            MessageItem::new(
+                None::<&str>,
+                Arc::from(*text),
+                state.chat.channel::<MapMessage>().filter.read_only(),
+            ),
+            MapMessage {
                 author: Arc::from(*uuid),
-                text: Arc::from(*text),
             },
-            state.chat.map.filter.read_only(),
-        )),
-        ["psay", uuid, text, id] => state.chat.add(Message::new(
-            Some(*id),
-            MessageData::Party {
-                author: Arc::from(*uuid),
-                text: Arc::from(*text),
-            },
-            state.chat.party.filter.read_only(),
-        )),
-        ["gsay", uuid, map, prev, _, x, y, text, id] => {
-            state.chat.add(Message::new(
+        ),
+        ["psay", uuid, text, id] => state.chat.add(
+            MessageItem::new(
                 Some(*id),
-                MessageData::Global {
+                Arc::from(*text),
+                state.chat.channel::<PartyMessage>().filter.read_only(),
+            ),
+            PartyMessage {
+                author: Arc::from(*uuid),
+            },
+        ),
+        ["gsay", uuid, map, prev, _, x, y, text, id] => {
+            state.chat.add(
+                MessageItem::new(
+                    Some(*id),
+                    Arc::from(*text),
+                    state.chat.channel::<GlobalMessage>().filter.read_only(),
+                ),
+                GlobalMessage {
                     author: Arc::from(*uuid),
-                    text: Arc::from(*text),
                     location: {
                         if let Ok(map) = map.parse()
                             && let Ok(x) = x.parse()
@@ -49,8 +59,7 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
                         }
                     },
                 },
-                state.chat.global.filter.read_only(),
-            ));
+            );
         }
         ["p", uuid, name, system, rank, account, badge, medals @ ..] => {
             let uuid = Arc::from(*uuid);
