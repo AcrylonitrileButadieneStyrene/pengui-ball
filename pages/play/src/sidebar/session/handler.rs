@@ -4,7 +4,8 @@ use leptos::prelude::*;
 
 use crate::{
     sidebar::chat::message::types::{global::GlobalMessage, map::MapMessage, party::PartyMessage},
-    state::{chat::message::MessageItem, game::Location},
+    state::chat::message::MessageItem,
+    states::locations::Location,
 };
 
 pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
@@ -45,7 +46,7 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
                             && let Ok(y) = y.parse()
                         {
                             Some(Location {
-                                game: state.game.id.clone(),
+                                game: state.locations.game.clone(),
                                 map,
                                 previous: prev.parse().ok(),
                                 x,

@@ -1,11 +1,11 @@
 use leptos::prelude::*;
 
-use crate::state::{api::locations::ResolvedLocation, game::Location};
+use crate::states::locations::{Location, LocationResolved};
 
 #[island]
 pub fn CurrentLocation() -> impl IntoView {
     let state = crate::state();
-    view! { <Location location=state.game.location /> }
+    view! { <Location location=state.locations.current /> }
 }
 
 #[component]
@@ -15,13 +15,13 @@ pub fn Location(#[prop(into)] location: Signal<Option<Location>>) -> impl IntoVi
 }
 
 fn location_inner(location: Location) -> Option<impl IntoView> {
-    let view = match crate::state().api.locations.resolve(&location) {
-        ResolvedLocation::Pending => return None,
-        ResolvedLocation::Unknown => {
+    let view = match crate::state().locations.resolver.resolve(&location) {
+        LocationResolved::Pending => return None,
+        LocationResolved::Unknown => {
             let Location { map, x, y, .. } = location;
             view! { <span>Unknown Location: {format!("Map{map:>04}({x}, {y})")}</span> }.into_any()
         }
-        ResolvedLocation::Single {
+        LocationResolved::Single {
             name,
             wiki: Some(wiki),
         } => view! {
@@ -30,10 +30,8 @@ fn location_inner(location: Location) -> Option<impl IntoView> {
             </a>
         }
         .into_any(),
-        ResolvedLocation::Single { name, wiki: None } => {
-            view! { <span>{name}</span> }.into_any()
-        }
-        ResolvedLocation::Multiple(worlds) => worlds
+        LocationResolved::Single { name, wiki: None } => view! { <span>{name}</span> }.into_any(),
+        LocationResolved::Multiple(worlds) => worlds
             .iter()
             .map(|world| {
                 view! {

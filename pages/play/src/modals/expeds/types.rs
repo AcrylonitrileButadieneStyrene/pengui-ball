@@ -45,7 +45,6 @@ impl From<i8> for ExpedLocationType {
     }
 }
 
-// {"id":593,"game":"2kki","exp":4,"endDate":"2026-02-27T00:00:00Z","complete":false}
 #[derive(Clone, Debug, serde::Deserialize)]
 pub struct ExpedVM {
     pub id: u32,

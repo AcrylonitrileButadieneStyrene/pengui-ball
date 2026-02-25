@@ -6,7 +6,6 @@ pub mod api;
 pub mod chat;
 mod config;
 pub mod engine;
-pub mod game;
 mod player;
 
 pub use player::Player;
@@ -25,15 +24,16 @@ pub struct PlayState {
     pub engine: engine::State,
     pub session: SessionState,
     pub players: player::State,
-    pub game: game::State,
     pub config: config::State,
     pub modal: RwSignal<Option<crate::modals::Modals>>,
     pub expeds: RwSignal<Option<crate::modals::expeds::types::Expeds>>,
+
+    pub locations: crate::states::Locations,
 }
 
 impl PlayState {
     fn new(game_id: Arc<str>) -> Self {
-        let api = api::State::new(game_id.clone());
+        let api = api::State::new();
 
         Self {
             chat: chat::State::new(Signal::derive(move || {
@@ -49,9 +49,10 @@ impl PlayState {
             engine: engine::State::default(),
             api,
             config: config::State::new(&game_id),
-            game: game::State::new(game_id),
             modal: RwSignal::new(None),
             expeds: RwSignal::new(None),
+
+            locations: Arc::new(crate::states::locations::Locations::new(game_id)),
         }
     }
 }

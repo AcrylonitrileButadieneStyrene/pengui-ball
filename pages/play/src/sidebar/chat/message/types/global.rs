@@ -2,9 +2,9 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-use crate::state::{
-    chat::message::{MessageItem, MessageType},
-    game::Location,
+use crate::{
+    state::chat::message::{MessageItem, MessageType},
+    states::locations::Location,
 };
 
 #[derive(Clone)]

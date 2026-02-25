@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-use crate::{game::controls::icon, state::api::locations::ResolvedLocation};
+use crate::{game::controls::icon, states::locations::LocationResolved};
 
 #[derive(Debug, Clone)]
 enum Map {
@@ -26,21 +26,20 @@ const WIKI_BASE: &str = "https://wrapper.yume.wiki/maps?game=2kki&location=";
 #[island]
 pub fn Maps() -> impl IntoView {
     let state = crate::state();
-    let location = state.game.location;
-    let is_2kki = &*state.game.id.clone() == "2kki";
+    let is_2kki = &*state.locations.game.clone() == "2kki";
 
     let maps = LocalResource::<Vec<Map>>::new(move || {
         let state = state.clone();
         async move {
-            let Some(location) = location.get() else {
+            let Some(location) = state.locations.current_resolved.get() else {
                 return vec![];
             };
 
-            let endpoint = match (is_2kki, state.api.locations.resolve(&location)) {
-                (_, ResolvedLocation::Pending | ResolvedLocation::Unknown) => return vec![],
-                (_, ResolvedLocation::Multiple(locations)) if locations.is_empty() => return vec![],
-                (true, ResolvedLocation::Single { name, .. }) => [EXPLORER_BASE, &name].concat(),
-                (true, ResolvedLocation::Multiple(locations)) => [
+            let endpoint = match (is_2kki, location) {
+                (_, LocationResolved::Pending | LocationResolved::Unknown) => return vec![],
+                (_, LocationResolved::Multiple(locations)) if locations.is_empty() => return vec![],
+                (true, LocationResolved::Single { name, .. }) => [EXPLORER_BASE, &name].concat(),
+                (true, LocationResolved::Multiple(locations)) => [
                     EXPLORER_BASE,
                     &locations
                         .iter()
@@ -49,8 +48,8 @@ pub fn Maps() -> impl IntoView {
                         .join("&locationNames="),
                 ]
                 .concat(),
-                (false, ResolvedLocation::Single { name, .. }) => [WIKI_BASE, &name].concat(),
-                (false, ResolvedLocation::Multiple(locations)) => [
+                (false, LocationResolved::Single { name, .. }) => [WIKI_BASE, &name].concat(),
+                (false, LocationResolved::Multiple(locations)) => [
                     WIKI_BASE,
                     &locations
                         .first()
