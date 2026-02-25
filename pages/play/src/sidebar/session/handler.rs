@@ -84,6 +84,9 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
                     .unwrap_or([0, 0, 0, 0, 0]);
             });
         }
+        ["e", json] => {
+            state.expeds.set(serde_json::from_str(json).ok());
+        }
         [cmd, args @ ..] => {
             leptos::logging::warn!("Received unknown command \"{cmd}\" with args {args:?}");
         }

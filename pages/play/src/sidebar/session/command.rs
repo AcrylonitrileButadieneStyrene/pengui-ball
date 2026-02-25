@@ -4,6 +4,7 @@ pub enum Command {
     SayGlobal(String),
     PrivateMode(u8),
     SetName(String),
+    GetExpeds,
 }
 
 pub struct Channel {

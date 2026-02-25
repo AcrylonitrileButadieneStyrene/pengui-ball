@@ -136,6 +136,7 @@ async fn send_messages(
                 vec!["pr".to_string(), state.to_string()]
             }
             Command::SetName(name) => vec!["name".to_string(), name],
+            Command::GetExpeds => vec!["e".to_string()],
         };
 
         send(&vec.join("\u{FFFF}"));

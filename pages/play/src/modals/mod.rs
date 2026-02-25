@@ -1,6 +1,7 @@
 use leptos::prelude::*;
 
 pub mod cors;
+pub mod expeds;
 pub mod login;
 pub mod logout;
 pub mod saves;
@@ -13,6 +14,7 @@ pub enum Modals {
     LogIn,
     LogOut,
     Saves,
+    Expeds,
 }
 
 #[component]
@@ -22,6 +24,7 @@ pub fn Modals() -> impl IntoView {
         <login::Modal />
         <logout::Modal />
         <saves::Modal />
+        <expeds::Modal />
     }
 }
 

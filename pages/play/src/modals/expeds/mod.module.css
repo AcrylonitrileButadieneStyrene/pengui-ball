@@ -1,0 +1,60 @@
+.expeds-header {
+    font-size: 32px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.location-header {
+    font-size: 18px;
+    margin: 18px 0;
+}
+
+.location {
+    display: grid;
+    grid-template-areas:
+        "title available experience checkbox"
+        "stars ends-at   experience checkbox";
+    grid-template-columns: 1fr min-content 72px 38px;
+    width: 470px;
+    height: 38px;
+    border: solid 4px;
+    border-image: var(--ui-theme-border) 4 repeat;
+    padding: 1px;
+}
+
+.location a {
+    grid-area: title;
+    width: min-content;
+    white-space: nowrap;
+}
+
+.stars {
+    grid-area: stars;
+}
+
+.available {
+    grid-area: available;
+    text-align: right;
+}
+
+.ends-at {
+    grid-area: ends-at;
+    white-space: nowrap;
+}
+
+.experience {
+    grid-area: experience;
+    text-align: center;
+    line-height: 38px;
+}
+
+.checkbox {
+    grid-area: checkbox;
+    padding: 4px 6px;
+    border: 6px solid;
+    border-image: var(--ui-theme-border) 4 repeat;
+}
+
+.checkbox:global(.toggled)::after {
+    content: "✔";
+}

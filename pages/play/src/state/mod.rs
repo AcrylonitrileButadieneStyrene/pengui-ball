@@ -28,6 +28,7 @@ pub struct PlayState {
     pub game: game::State,
     pub config: config::State,
     pub modal: RwSignal<Option<crate::modals::Modals>>,
+    pub expeds: RwSignal<Option<crate::modals::expeds::types::Expeds>>,
 }
 
 impl PlayState {
@@ -47,9 +48,10 @@ impl PlayState {
             players: player::State::default(),
             engine: engine::State::default(),
             api,
-            modal: RwSignal::new(None),
             config: config::State::new(&game_id),
             game: game::State::new(game_id),
+            modal: RwSignal::new(None),
+            expeds: RwSignal::new(None),
         }
     }
 }
