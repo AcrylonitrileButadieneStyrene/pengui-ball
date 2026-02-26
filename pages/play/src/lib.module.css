@@ -24,6 +24,9 @@ body.game {
     /* Chrome only. Firefox needs JavaScript emulation. */
     animation: scroll-progress linear;
     animation-timeline: scroll(root);
+
+    -webkit-text-stroke: 2px black;
+    paint-order: stroke;
 }
 
 @property --scroll {
@@ -54,6 +57,10 @@ button:not(:disabled):hover,
 
 code {
     font-family: monospace;
+}
+
+svg {
+    paint-order: initial;
 }
 
 .layout {
