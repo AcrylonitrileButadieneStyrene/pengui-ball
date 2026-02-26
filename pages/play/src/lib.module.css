@@ -60,6 +60,7 @@ code {
 }
 
 svg {
+    overflow: visible;
     paint-order: initial;
 }
 

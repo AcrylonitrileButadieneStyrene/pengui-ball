@@ -10,6 +10,7 @@ workspace = true
 anyhow = "1.0.101"
 arc-swap = "1.8.0"
 axum = "0.8.8"
+futures = "0.3.32"
 image = { version = "0.25.9", default-features = false, features = ["png"] }
 leptos.workspace = true
 leptos_axum = "0.8.7"

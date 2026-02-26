@@ -21,7 +21,13 @@ pub fn Header() -> impl IntoView {
                 href="https://github.com/AcrylonitrileButadieneStyrene/pengui-ball"
                 target="_blank"
             >
-                <img src="https://cdn.jsdelivr.net/gh/acrylonitrilebutadienestyrene/yno-commumoji/assets/penguiBall2.png" />
+                <img src=format!(
+                    "https://cdn.jsdelivr.net/gh/AcrylonitrileButadieneStyrene/yno-commumoji/assets/penguiBall{}.png",
+                    match std::random::random::<u8>(..) % 3 + 1 {
+                        1 => String::new(),
+                        x => x.to_string(),
+                    },
+                ) />
             </a>
 
             <div class=style::middle />

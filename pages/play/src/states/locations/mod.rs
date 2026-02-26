@@ -20,7 +20,7 @@ impl Locations {
         let resolver = Arc::new(resolver::LocationResolver::new_prefetch(game.clone()));
         let current = RwSignal::new(None);
 
-        Locations {
+        Self {
             game,
             resolver: resolver.clone(),
             current,

@@ -3,6 +3,7 @@
 #![feature(nonpoison_mutex)]
 #![feature(sync_nonpoison)]
 #![feature(iter_intersperse)]
+#![feature(random)]
 #![allow(non_snake_case)]
 
 use std::sync::Arc;

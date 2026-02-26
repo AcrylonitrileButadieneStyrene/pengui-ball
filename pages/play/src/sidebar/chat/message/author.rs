@@ -31,16 +31,23 @@ pub fn Author(uuid: Arc<str>) -> impl IntoView {
                     }
                 });
 
+                let (gradient, shadow) = player
+                    .system
+                    .map(|sys| {
+                        (
+                            format!("var(--{}-{sys}-gradient)", state.locations.game),
+                            format!("var(--{}-{sys}-shadow)", state.locations.game),
+                        )
+                    })
+                    .unzip();
+
                 view! {
                     <div class=style::author>
                         {name_start}
                         <span
                             class=style::name
-                            style:background-image=player
-                                .system
-                                .map(|sys| {
-                                    format!("var(--{}-{sys}-gradient)", state.locations.game)
-                                })
+                            style:background-image=gradient
+                            style=("--shadow-color", shadow)
                         >
                             {player.name.clone()}
                         </span> {badge} {name_end}
