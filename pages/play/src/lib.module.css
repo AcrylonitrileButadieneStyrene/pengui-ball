@@ -68,7 +68,7 @@ svg {
     grid-template-areas:
         "header header"
         "game   chat  ";
-    grid-template-columns: 1fr minmax(320px, 640px);
+    grid-template-columns: 1fr 320px;
     padding: 8px;
 }
 
