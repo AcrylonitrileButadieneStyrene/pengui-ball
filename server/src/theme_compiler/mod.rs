@@ -19,10 +19,16 @@ pub async fn run() {
         let mut reader = std::io::BufReader::new(file);
         let mut line = String::new();
         reader.read_line(&mut line).unwrap();
-        let fragment = &line[2..(line.len() - 3)];
-        let is_eq = fragment
-            .parse::<u64>()
-            .is_ok_and(|fragment| fragment == hash);
+        if line.len() != 24 {
+            return true;
+        }
+
+        let fragment = line.get(2..(line.len() - 3));
+        let is_eq = fragment.is_some_and(|fragment| {
+            fragment
+                .parse::<u64>()
+                .is_ok_and(|fragment| fragment == hash)
+        });
         !is_eq
     });
 
