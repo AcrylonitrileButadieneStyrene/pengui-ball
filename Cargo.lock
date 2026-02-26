@@ -788,8 +788,6 @@ dependencies = [
  "leptos_router",
  "serde",
  "serde-wasm-bindgen",
- "stylance",
- "stylance-cli",
  "wasm-bindgen",
  "wasm-bindgen-futures",
 ]

@@ -48,13 +48,5 @@ fn Engine() -> impl IntoView {
     //         .to_string()
     // };
 
-    view! {
-        <iframe
-            node_ref=frame
-            class=style::player
-            src="./engine"
-            title="Game Engine"
-            // style=("--adaptive-scale", adaptive_scale)
-        />
-    }
+    view! { <iframe node_ref=frame class=style::player src="./engine" title="Game Engine" /> }
 }
