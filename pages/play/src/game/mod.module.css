@@ -5,10 +5,15 @@
     flex-direction: column;
 }
 
+:fullscreen .game-window {
+    padding: 0;
+}
+
 .player {
     --reserved-width: 384px;
     --reserved-height: 192px;
-    --adaptive-scale: round(down, min(calc((100dvw - var(--reserved-width)) / 320), calc((100dvh - var(--reserved-height)) / 240)), 1px);
+    /* The 1/60 constant is for firefox to round in the correct direction, probably due to floating point inprecision. */
+    --adaptive-scale: round(down, min(calc((100dvw - var(--reserved-width)) / 320), calc((100dvh - var(--reserved-height)) / 240)) + 0.01666667px, 1px);
     width: calc(320 * var(--adaptive-scale));
     height: calc(240 * var(--adaptive-scale));
     display: block;

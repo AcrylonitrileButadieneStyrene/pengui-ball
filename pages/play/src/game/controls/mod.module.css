@@ -5,6 +5,11 @@
     justify-content: space-between;
 }
 
+:fullscreen .controls {
+    position: fixed;
+    inset: 0 320px 32px 0;
+}
+
 .controls div {
     display: flex;
     gap: 8px;
