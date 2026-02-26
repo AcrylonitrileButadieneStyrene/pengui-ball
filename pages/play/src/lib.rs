@@ -50,7 +50,6 @@ pub fn Play() -> impl IntoView {
                 game.name,
             )
         />
-        <leptos_meta::Body {..} class=style::game />
 
         <state::Provider game_id=game.id.clone()>
             <main id="layout" class=style::layout>

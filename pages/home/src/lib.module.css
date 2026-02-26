@@ -5,7 +5,7 @@
     --fade-in-opacity: 0.001;
 }
 
-body.home {
+body {
     background: url("https://ynoproject.net/images/bg.png");
     background-size: cover;
     background-attachment: fixed;

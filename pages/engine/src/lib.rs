@@ -21,7 +21,6 @@ pub fn Engine() -> impl IntoView {
     let game = Arc::<str>::from(use_params_map().get().get("game").unwrap());
 
     view! {
-        <leptos_meta::Body {..} class=style::engine />
         <leptos_meta::Link rel="stylesheet" href="/css/engine.css" />
         <leptos_meta::Meta name="robots" content="noindex" />
 

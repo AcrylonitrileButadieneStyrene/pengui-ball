@@ -38,5 +38,23 @@ fn Engine() -> impl IntoView {
         crate::state::engine::State::send_frame(frame, common::EngineMessage::Focus(false));
     });
 
-    view! { <iframe node_ref=frame class=style::player src="./engine" title="Game Engine" /> }
+    // let UseWindowSizeReturn { height, width } = use_window_size();
+    // let adaptive_scale = move || {
+    //     let remaining_width = width.get() - 384.;
+    //     let remaining_height = height.get() - 192.;
+    //     (remaining_width / 320.)
+    //         .min(remaining_height / 240.)
+    //         .trunc()
+    //         .to_string()
+    // };
+
+    view! {
+        <iframe
+            node_ref=frame
+            class=style::player
+            src="./engine"
+            title="Game Engine"
+            // style=("--adaptive-scale", adaptive_scale)
+        />
+    }
 }

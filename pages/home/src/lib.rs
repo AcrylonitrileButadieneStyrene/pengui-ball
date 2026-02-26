@@ -16,7 +16,6 @@ pub fn Home() -> impl IntoView {
             name="description"
             content="Play multiplayer Yume Nikki and Yume Nikki fangames for free! Ad-free and no registration required."
         />
-        <leptos_meta::Body {..} class=style::home />
 
         <img
             src="https://ynoproject.net/images/logo_yno.png"

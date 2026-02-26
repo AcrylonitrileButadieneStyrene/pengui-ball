@@ -4,7 +4,7 @@
     --ui-theme-background: url("https://ynoproject.net/2kki/images/ui/2kki/system1/containerbg.png");
 }
 
-body.game {
+body {
     display: flex;
     flex-direction: column;
     align-items: center;
