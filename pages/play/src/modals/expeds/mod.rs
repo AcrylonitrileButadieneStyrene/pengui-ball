@@ -43,7 +43,7 @@ fn Inner() -> impl IntoView {
 
     move || {
         expeds.get().map(|expeds| {
-            expeds
+            let locations = expeds
                 .locations
                 .iter()
                 .chunk_by(|location| location.r#type)
@@ -57,17 +57,30 @@ fn Inner() -> impl IntoView {
                         types::ExpedLocationType::Special => "Special",
                     };
 
-                    let view = locations
+                    let views = locations
                         .map(|location| {
                             view! { <Location location=location.clone() /> }
                         })
                         .collect::<Vec<_>>();
                     view! {
-                        <div class=style::location_header>{header}</div>
-                        {view}
+                        <div class=style::header>{header}</div>
+                        {views}
                     }
                 })
-                .collect::<Vec<_>>()
+                .collect::<Vec<_>>();
+            let vms = expeds
+                .vms
+                .iter()
+                .map(|vm| {
+                    view! { <VM vm=vm.clone() /> }
+                })
+                .collect::<Vec<_>>();
+
+            view! {
+                {locations}
+                <div class=style::header>Vending Machine Finder</div>
+                {vms}
+            }
         })
     }
 }
@@ -103,10 +116,61 @@ fn Location(location: types::ExpedLocation) -> impl IntoView {
                     clip-path=format!("inset(0 {}px 0 0)", (10 - depth) * 9)
                 />
             </svg>
-            <div class=style::available>Available Until</div>
-            <div class=style::ends_at>{ends_at.format("%-m/%d/%y, %-I:%M %p").to_string()}</div>
-            <div class=style::experience>{format!("{experience} ExP")}</div>
-            <div class=style::checkbox class:toggled=complete />
+            <Details ends_at experience complete />
         </div>
+    }
+}
+
+#[component]
+fn VM(vm: types::ExpedVM) -> impl IntoView {
+    let types::ExpedVM {
+        id,
+        experience,
+        ends_at,
+        complete,
+        ..
+    } = vm;
+
+    let node_ref = NodeRef::new();
+    let image = LocalResource::new(move || async move {
+        gloo_net::http::Request::get(&format!("api/vm?id={id}"))
+            .send()
+            .await
+            .ok()?
+            .binary()
+            .await
+            .ok()
+    });
+
+    Effect::new(move || {
+        if let Some(response) = image.read().as_ref().flatten()
+            && let Some(node) = node_ref.get()
+        {
+            let blob = gloo_file::Blob::new(&**response);
+            let url = gloo_file::ObjectUrl::from(blob);
+            let node: leptos::web_sys::HtmlImageElement = node;
+            node.set_src(&url);
+        }
+    });
+
+    view! {
+        <div class=style::vm>
+            <img node_ref=node_ref />
+            <Details ends_at experience complete />
+        </div>
+    }
+}
+
+#[component]
+fn Details(
+    ends_at: chrono::DateTime<chrono::Local>,
+    experience: u8,
+    complete: bool,
+) -> impl IntoView {
+    view! {
+        <div class=style::available>Available Until</div>
+        <div class=style::ends_at>{ends_at.format("%-m/%d/%y, %-I:%M %p").to_string()}</div>
+        <div class=style::experience>{format!("{experience} ExP")}</div>
+        <div class=style::checkbox class:toggled=complete />
     }
 }

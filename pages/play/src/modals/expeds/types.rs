@@ -52,6 +52,6 @@ pub struct ExpedVM {
     #[serde(rename = "exp")]
     pub experience: u8,
     #[serde(rename = "endDate")]
-    pub ends_at: String,
+    pub ends_at: chrono::DateTime<chrono::Local>,
     pub complete: bool,
 }

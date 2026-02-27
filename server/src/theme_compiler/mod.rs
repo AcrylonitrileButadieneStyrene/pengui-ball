@@ -19,7 +19,7 @@ pub async fn run() {
         let mut reader = std::io::BufReader::new(file);
         let mut line = String::new();
         reader.read_line(&mut line).unwrap();
-        if line.len() != 24 {
+        if line.len() <= 4 {
             return true;
         }
 
