@@ -18,15 +18,12 @@ pub fn ChatInput() -> impl IntoView {
 #[island]
 fn Wrapper(children: Children) -> impl IntoView {
     let state = crate::state();
-    let user = state.api.user;
+    let has_account = state.api.has_account;
     let guest_name = state.chat.guest_name;
 
     let is_unnamed = move || {
         let no_name = guest_name.get().is_none();
-        let no_account = user
-            .read()
-            .as_ref()
-            .is_none_or(|response| response.as_ref().ok().is_none_or(|user| !user.registered));
+        let no_account = !has_account.get();
         no_name && no_account
     };
 

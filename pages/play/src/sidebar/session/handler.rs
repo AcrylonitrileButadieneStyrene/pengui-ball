@@ -88,6 +88,26 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
         ["e", json] => {
             state.expeds.set(serde_json::from_str(json).ok());
         }
+        ["eec", experience, is_ok] => {
+            if *is_ok != "0" {
+                leptos::logging::log!("completed exped for {experience} xp");
+                state
+                    .session
+                    .channel
+                    .send(crate::sidebar::session::Command::GetExpeds)
+                    .unwrap();
+            } else {
+                leptos::logging::warn!("received error when claiming exped");
+            }
+        }
+        ["vm", experience] => {
+            leptos::logging::log!("completed vm for {experience} xp");
+            state
+                .session
+                .channel
+                .send(crate::sidebar::session::Command::GetExpeds)
+                .unwrap();
+        }
         [cmd, args @ ..] => {
             leptos::logging::warn!("Received unknown command \"{cmd}\" with args {args:?}");
         }

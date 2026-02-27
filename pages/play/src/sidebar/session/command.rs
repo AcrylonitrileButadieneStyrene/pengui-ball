@@ -5,6 +5,7 @@ pub enum Command {
     PrivateMode(u8),
     SetName(String),
     GetExpeds,
+    ClaimExpedLocation(String, bool),
 }
 
 pub struct Channel {

@@ -2,7 +2,7 @@ use itertools::Itertools;
 use leptos::prelude::*;
 use leptos_use::core::ConnectionReadyState;
 
-use crate::{sidebar::session::Command, state};
+use crate::{sidebar::session::Command, state, states::locations::LocationResolved};
 
 pub mod types;
 
@@ -35,10 +35,57 @@ fn Inner() -> impl IntoView {
     let state = state();
     let expeds = state.expeds;
 
-    Effect::new(move || {
-        if state.session.status.get() == ConnectionReadyState::Open {
-            state.session.channel.send(Command::GetExpeds).unwrap();
+    Effect::new({
+        let state = state.clone();
+        move || {
+            if state.session.status.get() == ConnectionReadyState::Open {
+                state.session.channel.send(Command::GetExpeds).unwrap();
+            }
         }
+    });
+
+    Effect::new(move || {
+        if !state.api.has_account.get() {
+            return;
+        }
+
+        let Some(expeds) = expeds.get() else {
+            return;
+        };
+
+        let locations = match state.locations.current_resolved.get() {
+            Some(LocationResolved::Single { name, .. }) => vec![name],
+            Some(LocationResolved::Multiple(locations)) => locations
+                .iter()
+                .map(|location| location.title.clone())
+                .collect(),
+            _ => return,
+        };
+
+        let mut locations = locations.into_iter().map(|location| {
+            location
+                .split_once(":")
+                .map_or(location.clone(), |pair| pair.0.into())
+        });
+
+        let Some(exped) = locations.find_map(|location| {
+            expeds
+                .locations
+                .iter()
+                .filter(|exped| !exped.complete)
+                .find(|exped| exped.title == location)
+        }) else {
+            return;
+        };
+
+        state
+            .session
+            .channel
+            .send(Command::ClaimExpedLocation(
+                exped.title.to_string(),
+                exped.r#type == types::ExpedLocationType::Free,
+            ))
+            .unwrap();
     });
 
     move || {
