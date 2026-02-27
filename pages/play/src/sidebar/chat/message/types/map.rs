@@ -10,11 +10,9 @@ pub struct MapMessage {
 }
 
 impl MessageType for MapMessage {
-    fn on_add(&self, message: &MessageItem, chat: &crate::state::chat::State) {
-        super::remove_if_self(chat, message, &self.author);
-    }
+    fn render(&self, message: &MessageItem, state: &crate::state::PlayState) -> AnyView {
+        super::remove_if_self(&state.chat, message, &self.author);
 
-    fn render(&self, message: &MessageItem) -> AnyView {
         let timestamp = super::timestamp(message.timestamp);
         let uuid = self.author.clone();
         let text = message.text.to_string();

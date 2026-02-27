@@ -32,6 +32,5 @@ impl MessageItem {
 }
 
 pub trait MessageType: Send + Sync {
-    fn on_add(&self, _this: &MessageItem, _chat: &crate::state::chat::State) {}
-    fn render(&self, this: &MessageItem) -> AnyView;
+    fn render(&self, this: &MessageItem, state: &crate::state::PlayState) -> AnyView;
 }

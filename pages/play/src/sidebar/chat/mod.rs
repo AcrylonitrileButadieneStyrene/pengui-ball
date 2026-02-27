@@ -29,7 +29,7 @@ pub fn ChatMessages() -> impl IntoView {
 
     view! {
         <For each=each key=|(id, _)| std::sync::Arc::as_ptr(id) let((_, (data, message)))>
-            {message.render(&data)}
+            {message.render(&data, &state)}
         </For>
     }
 }

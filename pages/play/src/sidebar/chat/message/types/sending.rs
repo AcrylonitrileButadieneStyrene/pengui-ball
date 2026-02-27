@@ -5,7 +5,7 @@ use crate::state::chat::message::{MessageItem, MessageType};
 pub struct SendingMessage;
 
 impl MessageType for SendingMessage {
-    fn render(&self, message: &MessageItem) -> AnyView {
+    fn render(&self, message: &MessageItem, _state: &crate::state::PlayState) -> AnyView {
         let timestamp = super::timestamp(message.timestamp);
         let text = message.text.to_string();
 

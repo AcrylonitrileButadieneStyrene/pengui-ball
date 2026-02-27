@@ -56,8 +56,6 @@ impl State {
     }
 
     pub fn add<T: MessageType + 'static>(&self, message: MessageItem, data: T) {
-        data.on_add(&message, self);
-
         self.channel::<T>().add(message, Arc::new(data));
     }
 }
