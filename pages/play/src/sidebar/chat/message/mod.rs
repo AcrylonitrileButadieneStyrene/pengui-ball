@@ -1,8 +1,8 @@
 use leptos::prelude::*;
 
 mod author;
-mod icons;
 pub mod components;
+mod icons;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -15,7 +15,7 @@ fn Message(
     view! {
         <div
             class=style::message
-            style:display=move || { if filtered.get() { "none" } else { "" } }
+            prop:hidden=filtered
         >
             <div class=style::header>{header.run()}</div>
             <div>{children()}</div>

@@ -53,7 +53,7 @@ impl<T: ChatMessageComponent + Send + Sync> MessageComponent for T {
                     }
                 }
                 {..}
-                class:highlighted=pinged
+                class:highlight=pinged
             >
                 {icon}
                 <super::super::author::Author uuid=author />

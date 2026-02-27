@@ -3,13 +3,17 @@
     flex-direction: column;
 }
 
-.message:global(.hidden) {
+.message[hidden] {
     display: none;
 }
 
-.message~.message {
+.message:not([hidden])~.message {
     border-bottom: solid 4px;
     border-image: var(--ui-theme-border) 4 repeat;
+}
+
+.message:global(.highlight) {
+    background: #ffffff2f;
 }
 
 .message svg {
