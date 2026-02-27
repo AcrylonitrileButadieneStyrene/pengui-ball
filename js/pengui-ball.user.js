@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        PenguiBall Temporary Workarounds
-// @version     0.1.12
+// @version     0.1.13
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @homepageURL https://github.com/AcrylonitrileButadieneStyrene/pengui-ball/
@@ -82,7 +82,11 @@ if (location.host == "ynoproject.net") {
       if (e.data[0].startsWith("/api/"))
         e.data[0] = e.data[0].replace("/api/", "/");
       if (e.data[0] == "/seiko/logout")
-        document.cookie = "auth=; Max-Age=0; Path=/; SameSite=none; Secure";
+        cookieStore.delete({
+          name: "auth",
+          domain: "ynoproject.net",
+          partitioned: true
+        });
       fetch(e.data[0], e.data[1])
         .then(async resp => [resp.status, resp.statusText, await resp.arrayBuffer()])
         .then(resp => window.parent.postMessage([e.data[2], "resolve", resp], "*"))
