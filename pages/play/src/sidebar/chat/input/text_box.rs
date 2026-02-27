@@ -2,7 +2,7 @@ use leptos::{prelude::*, wasm_bindgen::JsCast as _, web_sys::HtmlDivElement};
 
 use crate::{
     sidebar::{
-        chat::message::types::{
+        chat::message::components::{
             global::GlobalMessage, map::MapMessage, party::PartyMessage, sending::SendingMessage,
         },
         session::Command,

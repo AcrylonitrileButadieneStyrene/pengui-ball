@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-use crate::sidebar::chat::message::types::{
+use crate::sidebar::chat::message::components::{
     global::GlobalMessage, map::MapMessage, party::PartyMessage,
 };
 

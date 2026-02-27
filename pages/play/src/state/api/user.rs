@@ -6,7 +6,7 @@ use leptos::prelude::*;
 pub struct User {
     pub uuid: Arc<str>,
     pub registered: bool,
-    pub name: String,
+    pub name: Arc<str>,
     pub rank: u32,
     pub badge: String,
     #[serde(rename = "badgeSlotRows")]

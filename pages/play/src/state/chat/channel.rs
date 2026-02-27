@@ -5,7 +5,7 @@ use std::{
 
 use leptos::prelude::*;
 
-use crate::state::chat::message::MessageType;
+use crate::state::chat::message::MessageComponent;
 
 use super::MessageItem;
 
@@ -29,7 +29,7 @@ impl ChatChannel {
         }
     }
 
-    pub fn add(&self, message: MessageItem, data: Arc<dyn MessageType>) {
+    pub fn add(&self, message: MessageItem, data: Arc<dyn MessageComponent>) {
         let mut buffer = self.tracker.lock();
         let removed_overflow = if buffer.len() + 1 > self.capacity.get_untracked() {
             buffer.pop_back()

@@ -1,6 +1,6 @@
 use std::{any::TypeId, collections::HashMap, sync::Arc};
 
-use leptos::prelude::*;
+use leptos::{prelude::*, reactive::send_wrapper_ext::SendOption};
 
 mod channel;
 mod destination;
@@ -9,9 +9,9 @@ pub mod message;
 pub use channel::ChatChannel;
 pub use destination::MessageDestination;
 
-use crate::state::chat::message::{MessageItem, MessageType};
+use crate::state::chat::message::{MessageComponent, MessageItem};
 
-type MessageList = indexmap::IndexMap<Arc<str>, (MessageItem, Arc<dyn MessageType>)>;
+type MessageList = indexmap::IndexMap<Arc<str>, (MessageItem, Arc<dyn MessageComponent>)>;
 
 pub struct State {
     pub messages: ReadSignal<MessageList>,
@@ -24,6 +24,7 @@ pub struct State {
     pub guest_name: RwSignal<Option<Arc<str>>>,
     /// User ID of the currently signed in user.
     pub my_id: Signal<Option<Arc<str>>>,
+    pub mention_audio: SendOption<leptos::web_sys::HtmlAudioElement>,
 }
 
 impl State {
@@ -37,10 +38,16 @@ impl State {
             destination: RwSignal::default(),
             guest_name: RwSignal::default(),
             my_id,
+            mention_audio: SendOption::new_local(is_browser().then(|| {
+                let audio =
+                    leptos::web_sys::HtmlAudioElement::new_with_src("/audio/mention.wav").unwrap();
+                audio.set_preload("auto");
+                audio
+            })),
         }
     }
 
-    pub fn channel<T: MessageType + 'static>(&self) -> Arc<ChatChannel> {
+    pub fn channel<T: MessageComponent + 'static>(&self) -> Arc<ChatChannel> {
         let id = TypeId::of::<T>();
         let channel = {
             let channels = self.channels.read_untracked();
@@ -55,7 +62,7 @@ impl State {
         })
     }
 
-    pub fn add<T: MessageType + 'static>(&self, message: MessageItem, data: T) {
+    pub fn add<T: MessageComponent + 'static>(&self, message: MessageItem, data: T) {
         self.channel::<T>().add(message, Arc::new(data));
     }
 }

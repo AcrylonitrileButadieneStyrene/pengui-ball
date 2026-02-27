@@ -1,10 +1,10 @@
 use leptos::prelude::*;
 
-use crate::state::chat::message::{MessageItem, MessageType};
+use crate::state::chat::message::{MessageComponent, MessageItem};
 
 pub struct SendingMessage;
 
-impl MessageType for SendingMessage {
+impl MessageComponent for SendingMessage {
     fn render(&self, message: &MessageItem, _state: &crate::state::PlayState) -> AnyView {
         let timestamp = super::timestamp(message.timestamp);
         let text = message.text.to_string();

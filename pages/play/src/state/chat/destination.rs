@@ -1,7 +1,9 @@
 use std::sync::Arc;
 
 use crate::{
-    sidebar::chat::message::types::{global::GlobalMessage, map::MapMessage, party::PartyMessage},
+    sidebar::chat::message::components::{
+        global::GlobalMessage, map::MapMessage, party::PartyMessage,
+    },
     state::chat::{self, ChatChannel},
 };
 

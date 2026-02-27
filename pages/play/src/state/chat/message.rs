@@ -31,6 +31,6 @@ impl MessageItem {
     }
 }
 
-pub trait MessageType: Send + Sync {
-    fn render(&self, this: &MessageItem, state: &crate::state::PlayState) -> AnyView;
+pub trait MessageComponent: Send + Sync {
+    fn render(&self, message: &MessageItem, state: &crate::state::PlayState) -> AnyView;
 }

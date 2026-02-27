@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 mod author;
 mod icons;
-pub mod types;
+pub mod components;
 
 stylance::import_style!(pub style, "mod.module.css");
 
