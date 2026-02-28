@@ -50,11 +50,15 @@ impl ChatChannel {
     }
 
     pub fn remove(&self, message: &MessageItem) {
+        self.remove_by_text(&message.text);
+    }
+
+    pub fn remove_by_text(&self, message: &str) {
         let identical = {
             let mut local = self.tracker.lock();
             local
                 .iter()
-                .position(|(_, text)| message.text.eq(text))
+                .position(|(_, text)| message == text.as_ref())
                 .and_then(|index| local.swap_remove_back(index))
                 .map(|(id, _)| id)
         };
@@ -64,7 +68,7 @@ impl ChatChannel {
                 .lock()
                 .iter()
                 .enumerate()
-                .map(|(index, (_, text))| (index, strsim::levenshtein(&message.text, text)))
+                .map(|(index, (_, text))| (index, strsim::levenshtein(&message, text)))
                 .min_by_key(|(_, distance)| *distance)
                 .map(|(index, _)| index);
             index

@@ -7,26 +7,27 @@ pub struct SendingMessage;
 impl MessageComponent for SendingMessage {
     fn render(&self, message: &MessageItem, _state: &crate::state::PlayState) -> AnyView {
         let timestamp = super::timestamp(message.timestamp);
-        let text = message.text.to_string();
+        let channel = _state.chat.channel::<Self>();
+        let text = message.text.clone();
 
-        // todo: this is a hack. it should be replaced with something that
-        // properly removes the message from the channel it is in and the
-        // primary message list.
-        let (dismissed, set_dismissed) = signal(false);
+        let remove = {
+            let text = message.text.clone();
+            move |_| channel.remove_by_text(&text)
+        };
+
         view! {
             <super::Message
                 filtered=message.filtered
                 header=move || {
                     view! {
                         <span>Sending...</span>
-                        <button class=super::style::dismiss on:click=move |_| set_dismissed(true)>
+                        <button class=super::style::dismiss on:click=remove>
                             {"\u{2716}"}
                         </button>
                         <span>{timestamp}</span>
                     }
                 }
                 {..}
-                prop:hidden=dismissed
                 style:order="-1"
             >
                 <span class=super::style::sending>{text}</span>
