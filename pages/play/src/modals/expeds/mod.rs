@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use leptos::prelude::*;
+use leptos::{prelude::*, reactive::send_wrapper_ext::SendOption};
 use leptos_use::core::ConnectionReadyState;
 
 use crate::{sidebar::session::Command, state, states::locations::LocationResolved};
@@ -189,6 +189,8 @@ fn VM(vm: types::ExpedVM) -> impl IntoView {
             .ok()
     });
 
+    let previous_object = StoredValue::new(SendOption::new_local(None));
+
     Effect::new(move || {
         if let Some(response) = image.read().as_ref().flatten()
             && let Some(node) = node_ref.get()
@@ -197,6 +199,7 @@ fn VM(vm: types::ExpedVM) -> impl IntoView {
             let url = gloo_file::ObjectUrl::from(blob);
             let node: leptos::web_sys::HtmlImageElement = node;
             node.set_src(&url);
+            previous_object.set_value(SendOption::new_local(Some(url)));
         }
     });
 
