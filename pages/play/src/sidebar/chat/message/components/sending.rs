@@ -26,7 +26,7 @@ impl MessageComponent for SendingMessage {
                     }
                 }
                 {..}
-                class:hidden=dismissed
+                prop:hidden=dismissed
                 style:order="-1"
             >
                 <span class=super::style::sending>{text}</span>
