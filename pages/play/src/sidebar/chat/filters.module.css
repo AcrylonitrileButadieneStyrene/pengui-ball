@@ -5,7 +5,7 @@
 
 .filters label {
     border: solid 4px;
-    border-image: var(--ui-theme-border) 4 repeat;
+    border-image: var(--ui-theme-border);
     user-select: none;
     color: red;
 }

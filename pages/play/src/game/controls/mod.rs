@@ -3,6 +3,7 @@ use leptos::prelude::*;
 use crate::{
     game::controls::buttons::{
         full_screen::FullScreen, maps::Maps, modal::OpenModal, mute::Mute, private::Private,
+        toggle_chat::ToggleChat,
     },
     modals::Modals,
 };
@@ -24,7 +25,9 @@ pub fn Controls() -> impl IntoView {
                     <icon::FloppyDisk />
                 </OpenModal>
                 <icon::PaintPalette />
-                <icon::SpeechBubble />
+                <ToggleChat>
+                    <icon::SpeechBubble />
+                </ToggleChat>
                 <icon::SixLayerTerminal />
                 <icon::Camera />
                 <icon::Photograph />
@@ -41,7 +44,6 @@ pub fn Controls() -> impl IntoView {
                 <OpenModal modal=Modals::Expeds>
                     <icon::Compass />
                 </OpenModal>
-                <icon::FamilyTree />
                 <Maps />
             </div>
         </div>

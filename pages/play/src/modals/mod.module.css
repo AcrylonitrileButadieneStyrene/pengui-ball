@@ -1,7 +1,7 @@
 .modal {
     background: var(--ui-theme-background);
     border: solid 12px;
-    border-image: var(--ui-theme-border) 4 repeat;
+    border-image: var(--ui-theme-border);
     padding: 12px;
     inset: 0;
     color: white;

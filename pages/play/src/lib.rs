@@ -13,12 +13,11 @@ use leptos_router::hooks::use_params_map;
 
 mod game;
 mod header;
+mod layout;
 mod modals;
 mod sidebar;
 mod state;
 mod states;
-
-stylance::import_style!(pub style, "lib.module.css");
 
 pub type CurrentGame = Arc<common::config::Game>;
 pub type State = Arc<state::PlayState>;
@@ -53,11 +52,7 @@ pub fn Play() -> impl IntoView {
         />
 
         <state::Provider game_id=game.id.clone()>
-            <main id="layout" class=style::layout>
-                <header::Header />
-                <game::Game />
-                <sidebar::Sidebar />
-            </main>
+            <layout::Layout />
             <modals::Modals />
         </state::Provider>
 

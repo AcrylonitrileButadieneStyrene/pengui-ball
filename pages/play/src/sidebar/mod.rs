@@ -10,7 +10,7 @@ stylance::import_style!(pub style, "mod.module.css");
 #[component]
 pub fn Sidebar() -> impl IntoView {
     view! {
-        <div class=style::chat>
+        <div class=style::sidebar>
             <div class=style::connection>
                 <session::Session />
                 <player_count::PlayerCount />

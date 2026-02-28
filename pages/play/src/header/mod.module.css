@@ -23,7 +23,7 @@
 
 .button {
     border: solid 8px;
-    border-image: var(--ui-theme-border) 4 repeat;
+    border-image: var(--ui-theme-border);
     padding: 4px;
     background-color: rgb(45, 17, 23);
     color: white;

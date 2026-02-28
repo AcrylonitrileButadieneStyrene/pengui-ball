@@ -13,8 +13,9 @@ pub struct GlobalConfig {}
 #[derive(Clone, Default, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct GameConfig {
-    pub muted: bool,
     pub private_mode: u8,
+    pub muted: bool,
+    pub chat_hidden: bool,
 }
 
 impl State {

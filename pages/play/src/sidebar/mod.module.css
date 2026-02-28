@@ -1,10 +1,14 @@
-.chat {
+.sidebar {
     grid-area: chat;
     border-top: 0;
     border-left: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+:global(.chat-hidden) .sidebar {
+    display: none;
 }
 
 .connection {

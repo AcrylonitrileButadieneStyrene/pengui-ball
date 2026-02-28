@@ -1,0 +1,33 @@
+.layout {
+    --reserved-width: 384px;
+    --reserved-height: 192px;
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "game   chat  ";
+    grid-template-columns: 1fr 320px;
+    padding: 8px;
+}
+
+.layout>*>* {
+    border: solid 12px;
+    border-image: var(--ui-theme-border);
+    padding: 12px;
+}
+
+.layout:not(:fullscreen):global(.chat-hidden) {
+    grid-template-columns: 1fr 0;
+}
+
+.layout:fullscreen {
+    --reserved-height: 0px;
+    grid-template-areas:
+        "game header"
+        "game chat  ";
+    grid-template-rows: auto 1fr;
+    padding: 0;
+}
+
+.layout:fullscreen>* {
+    border: 0;
+}

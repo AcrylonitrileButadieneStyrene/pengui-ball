@@ -115,15 +115,6 @@ pub fn Compass() -> impl IntoView {
 }
 
 #[component]
-pub fn FamilyTree() -> impl IntoView {
-    view! {
-        <svg viewBox="0 0 18 18">
-            <path d="m6.75 0v4.5h4.5v-4.5h-4.5m2.25 4.5v4.5h-1.5v3h3v-3h-1.5m0-3h-7.5v3h-1.5v3h3v-3h-1.5m7.5-3h7.5v3h-1.5v3h3v-3h-1.5m-7.5 3v3.75h-1.125v2.25h2.25v-2.25h-1.125m0-2.25h-7.5v2.25h-1.125v2.25h2.25v-2.25h-1.125m7.5-2.25h7.5v2.25h-1.125v2.25h2.25v-2.25h-1.125" />
-        </svg>
-    }
-}
-
-#[component]
 pub fn Map() -> impl IntoView {
     view! {
         <svg viewBox="0 0 12 12">

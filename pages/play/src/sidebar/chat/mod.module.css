@@ -9,7 +9,7 @@
     position: absolute;
     inset: 0;
     border: solid 8px;
-    border-image: var(--ui-theme-border) 4 repeat;
+    border-image: var(--ui-theme-border);
 
     display: flex;
     flex-direction: column-reverse;

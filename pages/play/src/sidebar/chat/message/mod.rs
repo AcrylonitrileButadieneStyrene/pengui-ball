@@ -13,10 +13,7 @@ fn Message(
     children: Children,
 ) -> impl IntoView {
     view! {
-        <div
-            class=style::message
-            prop:hidden=filtered
-        >
+        <div class=style::message prop:hidden=filtered>
             <div class=style::header>{header.run()}</div>
             <div>{children()}</div>
         </div>

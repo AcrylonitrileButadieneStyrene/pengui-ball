@@ -1,6 +1,6 @@
 :root {
     --pop-out-scale: 1.25;
-    --ui-theme-border: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png");
+    --ui-theme-border: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
     --ui-theme-background: url("https://ynoproject.net/2kki/images/ui/2kki/system1/containerbg.png");
 }
 
@@ -62,33 +62,4 @@ code {
 svg {
     overflow: visible;
     paint-order: initial;
-}
-
-.layout {
-    display: grid;
-    grid-template-areas:
-        "header header"
-        "game   chat  ";
-    grid-template-columns: 1fr 320px;
-    padding: 8px;
-}
-
-.layout>* {
-    border: solid 12px;
-    border-image: var(--ui-theme-border) 4 repeat;
-    padding: 12px;
-}
-
-@media (display-mode: fullscreen) {
-    .layout {
-        grid-template-areas:
-            "game header"
-            "game chat  ";
-        grid-template-rows: auto 1fr;
-        padding: 0;
-    }
-
-    .layout>* {
-        border: 0;
-    }
 }

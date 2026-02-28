@@ -2,7 +2,7 @@
     display: none;
     flex-direction: column;
     border: solid 8px;
-    border-image: var(--ui-theme-border) 4 repeat;
+    border-image: var(--ui-theme-border);
     padding: 1px 2px;
 }
 
@@ -18,7 +18,7 @@
     color: white;
     background-color: rgb(45, 17, 23);
     border: solid 4px;
-    border-image: var(--ui-theme-border) 4 repeat;
+    border-image: var(--ui-theme-border);
     padding: 1px 2px;
     margin-top: 4px;
 }

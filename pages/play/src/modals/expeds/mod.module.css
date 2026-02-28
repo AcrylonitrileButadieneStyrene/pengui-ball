@@ -15,7 +15,7 @@
     grid-template-columns: 1fr min-content 72px 38px;
     width: 470px;
     border: solid 4px;
-    border-image: var(--ui-theme-border) 4 repeat;
+    border-image: var(--ui-theme-border);
     padding: 1px;
 }
 
@@ -40,7 +40,7 @@
 .vm img {
     grid-area: image;
     border: solid 6px;
-    border-image: var(--ui-theme-border) 4 repeat;
+    border-image: var(--ui-theme-border);
 }
 
 .stars {
@@ -69,7 +69,7 @@
     grid-area: checkbox;
     padding: 4px 6px;
     border: 6px solid;
-    border-image: var(--ui-theme-border) 4 repeat;
+    border-image: var(--ui-theme-border);
     height: 18px;
     align-self: center;
 }

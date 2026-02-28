@@ -9,7 +9,7 @@
 
 .message:not([hidden])~.message {
     border-bottom: solid 4px;
-    border-image: var(--ui-theme-border) 4 repeat;
+    border-image: var(--ui-theme-border);
 }
 
 .message:global(.highlight) {
