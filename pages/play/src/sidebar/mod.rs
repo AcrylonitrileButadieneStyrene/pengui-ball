@@ -4,6 +4,7 @@ pub mod chat;
 mod location;
 mod player_count;
 pub mod session;
+mod tabs;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -21,7 +22,9 @@ pub fn Sidebar() -> impl IntoView {
                 <location::CurrentLocation />
             </div>
 
-            <chat::Chat />
+            <tabs::Tabs>
+                <chat::Chat />
+            </tabs::Tabs>
         </div>
     }
     .into_any()

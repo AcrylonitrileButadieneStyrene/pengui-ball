@@ -9,6 +9,7 @@ pub fn Author(uuid: Arc<str>) -> impl IntoView {
     let state = crate::state();
     let author = state
         .players
+        .by_uuid
         .with_untracked(|players| players.get(&uuid).copied());
 
     author

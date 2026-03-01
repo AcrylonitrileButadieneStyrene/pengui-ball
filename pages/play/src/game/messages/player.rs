@@ -43,7 +43,7 @@ pub fn sync(state: &crate::state::PlayState, data: PlayerSyncData) {
 pub fn connect(state: &crate::state::PlayState, data: PlayerConnectData) {
     let PlayerConnectData { id, name, system } = data;
 
-    state.players.with_untracked(|players| {
+    state.players.by_uuid.with_untracked(|players| {
         let uuids = state.players.uuids.read_untracked();
         let Some(uuid) = uuids.get(&id) else {
             return;

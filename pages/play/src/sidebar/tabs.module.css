@@ -1,0 +1,11 @@
+.tabs {
+    display: flex;
+}
+
+.tabs input {
+    display: none;
+}
+
+.tabs label:has(input:checked) {
+    background-color: white;
+}

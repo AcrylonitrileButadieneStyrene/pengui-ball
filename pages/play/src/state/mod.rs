@@ -6,9 +6,6 @@ pub mod api;
 pub mod chat;
 mod config;
 pub mod engine;
-mod player;
-
-pub use player::Player;
 
 use crate::sidebar::session::SessionState;
 
@@ -23,12 +20,12 @@ pub struct PlayState {
     pub api: api::State,
     pub engine: engine::State,
     pub session: SessionState,
-    pub players: player::State,
     pub config: config::State,
     pub modal: RwSignal<Option<crate::modals::Modals>>,
     pub expeds: RwSignal<Option<crate::modals::expeds::types::Expeds>>,
 
     pub locations: crate::states::Locations,
+    pub players: crate::states::Players,
 }
 
 impl PlayState {
@@ -45,7 +42,6 @@ impl PlayState {
                     .map(|user| user.uuid.clone())
             })),
             session: SessionState::default(),
-            players: player::State::default(),
             engine: engine::State::default(),
             api,
             config: config::State::new(&game_id),
@@ -53,6 +49,7 @@ impl PlayState {
             expeds: RwSignal::new(None),
 
             locations: Arc::new(crate::states::locations::Locations::new(game_id)),
+            players: Arc::new(crate::states::players::Players::new()),
         }
     }
 }

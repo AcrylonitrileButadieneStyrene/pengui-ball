@@ -46,6 +46,16 @@ body {
 }
 
 button,
+label[role="button"] {
+    color: white;
+    background-color: rgb(45, 17, 23);
+    border: solid 8px;
+    border-image: var(--ui-theme-border);
+    padding: 4px;
+    user-select: none;
+}
+
+button,
 [role="button"] {
     transition: transform 0.125s cubic-bezier(0.7, 0, 0.7, 1.5);
 }
@@ -62,4 +72,17 @@ code {
 svg {
     overflow: visible;
     paint-order: initial;
+}
+
+a[target="yumeWiki"] {
+    color: white;
+    text-decoration-color: #0000EE;
+}
+
+a[target="yumeWiki"]:visited {
+    text-decoration-color: #551A8B;
+}
+
+a[target="yumeWiki"]:active {
+    text-decoration-color: #FF0000;
 }
