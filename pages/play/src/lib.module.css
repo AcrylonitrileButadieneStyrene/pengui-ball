@@ -86,3 +86,7 @@ a[target="yumeWiki"]:visited {
 a[target="yumeWiki"]:active {
     text-decoration-color: #FF0000;
 }
+
+:global(.no-op) {
+    display: contents;
+}
