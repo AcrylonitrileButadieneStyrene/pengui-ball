@@ -22,9 +22,17 @@ pub fn Sidebar() -> impl IntoView {
                 <location::CurrentLocation />
             </div>
 
-            <tabs::Tabs>
-                <chat::Chat />
-            </tabs::Tabs>
+            <div class=style::tabs>
+                <tabs::Tab label="Chat".to_string() default=true>
+                    <chat::Chat />
+                </tabs::Tab>
+                <tabs::Tab label="Players".to_string()>
+                    <div>Under construction</div>
+                </tabs::Tab>
+                <tabs::Tab label="Parties".to_string()>
+                    <div>Under construction</div>
+                </tabs::Tab>
+            </div>
         </div>
     }
     .into_any()

@@ -25,3 +25,11 @@
 .location :nth-child(2) {
     text-align: end;
 }
+
+.tabs {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: 41px 1fr;
+    grid-template-columns: repeat(4, auto) 1fr;
+    height: 100%;
+}

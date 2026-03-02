@@ -9,15 +9,13 @@ stylance::import_style!(pub style, "mod.module.css");
 #[component]
 pub fn Chat() -> impl IntoView {
     view! {
-        <div>
-            <div class=style::messages>
-                <div class=style::scroll_view>
-                    <ChatMessages />
-                </div>
+        <div class=style::messages>
+            <div class=style::scroll_view>
+                <ChatMessages />
             </div>
-            <input::ChatInput />
-            <filters::Filters />
         </div>
+        <input::ChatInput />
+        <filters::Filters />
     }
     .into_any()
 }

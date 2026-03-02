@@ -1,42 +1,28 @@
-.tabs {
-    display: flex;
-    margin-bottom: -8px;
-}
-
-.tabs label:hover {
+.label:hover {
     --pop-out-scale: 1.1;
 }
 
-.tabs label:has(input:checked) {
+.label:has(input:checked) {
     z-index: 1;
     margin-bottom: -8px;
     border-bottom: 0;
 }
 
-.tabs span {
+.label span {
     display: inline-block;
 }
 
-.tabs input {
+.label input {
     display: none;
 }
 
-.panes {
-    display: contents;
-}
-
-.panes>*>* {
+.tab-content {
+    grid-row: 2;
+    grid-column: 1 / -1;
     display: none;
+    flex-direction: column;
 }
 
-.panes[data-selected="Chat"]>*>:nth-child(1) {
-    display: contents;
-}
-
-.panes[data-selected="Players"]>*>:nth-child(2) {
-    display: contents;
-}
-
-.panes[data-selected="Parties"]>*>:nth-child(3) {
-    display: contents;
+.label:has(input:checked)+.tab-content {
+    display: flex;
 }
