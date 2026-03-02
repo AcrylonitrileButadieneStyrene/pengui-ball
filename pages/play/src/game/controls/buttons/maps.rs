@@ -98,7 +98,7 @@ pub fn Maps() -> impl IntoView {
                     })) = map;
 
                     view! {
-                        <a role="button" href=wiki_link title=description target="yumeWikiMap">
+                        <a class="pop-out" href=wiki_link title=description target="yumeWikiMap">
                             <icon::Map />
                         </a>
                     }

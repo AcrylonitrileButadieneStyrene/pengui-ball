@@ -46,7 +46,7 @@ body {
 }
 
 button,
-label[role="button"] {
+:global(.button) {
     color: white;
     background-color: rgb(45, 17, 23);
     border: solid 8px;
@@ -56,12 +56,12 @@ label[role="button"] {
 }
 
 button,
-[role="button"] {
+:global(.pop-out) {
     transition: transform 0.125s cubic-bezier(0.7, 0, 0.7, 1.5);
 }
 
 button:not(:disabled):hover,
-[role="button"]:hover {
+:global(.pop-out):hover {
     transform: scale(var(--pop-out-scale));
 }
 

@@ -1,11 +1,22 @@
 .tabs {
     display: flex;
+    margin-bottom: -8px;
+}
+
+.tabs label:hover {
+    --pop-out-scale: 1.1;
+}
+
+.tabs label:has(input:checked) {
+    z-index: 1;
+    margin-bottom: -8px;
+    border-bottom: 0;
+}
+
+.tabs span {
+    display: inline-block;
 }
 
 .tabs input {
     display: none;
-}
-
-.tabs label:has(input:checked) {
-    background-color: white;
 }

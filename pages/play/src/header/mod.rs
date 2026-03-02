@@ -17,7 +17,7 @@ pub fn Header() -> impl IntoView {
             />
             <a
                 class=style::project_logo
-                role="button"
+                class:pop-out=true
                 href="https://github.com/AcrylonitrileButadieneStyrene/pengui-ball"
                 target="_blank"
             >

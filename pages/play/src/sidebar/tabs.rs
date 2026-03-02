@@ -25,8 +25,22 @@ fn TabButton(
     set_selected: WriteSignal<SelectedTab>,
     target: SelectedTab,
 ) -> impl IntoView {
-    target.get_str("Name").map(|name| {
-        view! { <label role="button">{name} <input type="radio" name="selected-sidebar-tab" /></label> }
+    target.get_str("Name").map(move |name| {
+        view! {
+            <label class="button">
+                <span class="pop-out">{name}</span>
+                <input
+                    type="radio"
+                    name="selected-sidebar-tab"
+                    checked=selected.get_untracked() == target
+                    on:change=move |event| {
+                        if event_target_checked(&event) {
+                            set_selected(target);
+                        }
+                    }
+                />
+            </label>
+        }
     })
 }
 
