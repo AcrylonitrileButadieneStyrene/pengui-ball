@@ -112,7 +112,7 @@ body:has(.spotlight) .door {
 
     background: radial-gradient(transparent var(--spotlight-radius),
             black var(--spotlight-radius));
-    animation: 2s spotlight-zoom ease-in forwards;
+    animation: 1s spotlight-zoom ease-in forwards;
 }
 
 @property --spotlight-radius {

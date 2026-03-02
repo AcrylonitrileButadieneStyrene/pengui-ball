@@ -102,7 +102,16 @@ fn DoorSpotlight(index: usize) -> impl IntoView {
 
 #[island]
 fn DoorImage(id: Arc<str>, index: usize) -> impl IntoView {
+    let (open, set_open) = signal(false);
     let selected = expect_context::<RwSignal<Option<usize>>>();
+
+    Effect::new(move || {
+        if selected() == Some(index) {
+            set_timeout(move || set_open(true), std::time::Duration::from_secs(1));
+        } else {
+            set_open(false)
+        }
+    });
 
     view! {
         <img
@@ -110,7 +119,7 @@ fn DoorImage(id: Arc<str>, index: usize) -> impl IntoView {
             src=move || {
                 format!(
                     "https://ynoproject.net/images/door_{}{id}.gif",
-                    if selected() == Some(index) { "open_" } else { "" },
+                    if open() { "open_" } else { "" },
                 )
             }
             alt=""
