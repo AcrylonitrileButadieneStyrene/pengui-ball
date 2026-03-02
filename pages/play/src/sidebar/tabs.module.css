@@ -20,3 +20,23 @@
 .tabs input {
     display: none;
 }
+
+.panes {
+    display: contents;
+}
+
+.panes>*>* {
+    display: none;
+}
+
+.panes[data-selected="Chat"]>*>:nth-child(1) {
+    display: contents;
+}
+
+.panes[data-selected="Players"]>*>:nth-child(2) {
+    display: contents;
+}
+
+.panes[data-selected="Parties"]>*>:nth-child(3) {
+    display: contents;
+}

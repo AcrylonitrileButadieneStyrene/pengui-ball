@@ -10,40 +10,31 @@ pub fn Tabs(children: Children) -> impl IntoView {
 
     let tabs = SelectedTab::VARIANTS
         .iter()
-        .map(|variant| view! { <TabButton set_selected target=*variant /> })
+        .map(|variant| view! { <TabButton selected set_selected target=*variant /> })
         .collect::<Vec<_>>();
 
     view! {
         <div class=style::tabs>{tabs}</div>
-        <div class="no-op" data-selected=move || selected().get_str("Name")>
+        <div class=style::panes data-selected=move || selected().get_str("Name")>
             {children()}
         </div>
     }
 }
 
 #[component]
-fn TabButton(set_selected: WriteSignal<SelectedTab>, target: SelectedTab) -> impl IntoView {
-    let node_ref = NodeRef::new();
-
-    Effect::new(move || {
-        let node_ref: Option<leptos::web_sys::HtmlInputElement> = node_ref.get();
-        let Some(node) = node_ref else {
-            return;
-        };
-
-        if node.checked() {
-            set_selected(target);
-        }
-    });
-
+fn TabButton(
+    selected: ReadSignal<SelectedTab>,
+    set_selected: WriteSignal<SelectedTab>,
+    target: SelectedTab,
+) -> impl IntoView {
     target.get_str("Name").map(move |name| {
         view! {
             <label class="button">
                 <span class="pop-out">{name}</span>
                 <input
-                    node_ref=node_ref
                     type="radio"
                     name="selected-sidebar-tab"
+                    prop:checked=move || selected() == target
                     on:change=move |event| {
                         if event_target_checked(&event) {
                             set_selected(target);
