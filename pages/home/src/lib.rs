@@ -5,8 +5,6 @@ use leptos::prelude::*;
 mod door;
 mod doors;
 
-stylance::import_style!(pub style, "lib.module.css");
-
 #[component]
 pub fn Home() -> impl IntoView {
     view! {
@@ -19,7 +17,7 @@ pub fn Home() -> impl IntoView {
 
         <img
             src="https://ynoproject.net/images/logo_yno.png"
-            class=style::logo
+            id="logo"
             alt="Website logo"
             fetchpriority="high"
         />

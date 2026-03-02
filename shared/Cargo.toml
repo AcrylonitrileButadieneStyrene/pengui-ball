@@ -25,6 +25,3 @@ play.path = "../pages/play"
 [features]
 hydrate = ["dep:console_error_panic_hook", "leptos/hydrate"]
 ssr = ["leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr", "leptos-use/ssr"]
-
-[build-dependencies]
-stylance-cli.workspace = true

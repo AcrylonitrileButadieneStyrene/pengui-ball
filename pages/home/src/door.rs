@@ -5,8 +5,6 @@ use leptos::{
     web_sys::{self, HtmlAudioElement},
 };
 
-stylance::import_style!(pub style, "door.module.css");
-
 #[component]
 pub fn Door(index: usize, game: common::config::Game) -> impl IntoView {
     let aria_label = format!("Play {} online", &game.name);
@@ -16,15 +14,15 @@ pub fn Door(index: usize, game: common::config::Game) -> impl IntoView {
         <DoorSound id=game.id.clone() index>
             <DoorClickable id=game.id.clone() index=index>
                 <div
-                    class=style::door
+                    class="door"
                     style:--i=index.to_string()
                     aria-label=aria_label
                 >
                     <DoorSpotlight index />
                     <DoorImage id=game.id.clone() index />
-                    <img class=style::logo src=logo_src alt="" height=60 />
+                    <img class="logo" src=logo_src alt="" height=60 />
                     <img
-                        class=style::shadow
+                        class="shadow"
                         src="https://ynoproject.net/images/door_shadow.png"
                         alt=""
                         width=180
@@ -97,7 +95,7 @@ fn DoorSpotlight(index: usize) -> impl IntoView {
 
     view! {
         <Show when=move || selected() == Some(index)>
-            <div class=style::spotlight />
+            <div class="spotlight" />
         </Show>
     }
 }
@@ -108,7 +106,7 @@ fn DoorImage(id: Arc<str>, index: usize) -> impl IntoView {
 
     view! {
         <img
-            class=style::icon
+            class="icon"
             src=move || {
                 format!(
                     "https://ynoproject.net/images/door_{}{id}.gif",

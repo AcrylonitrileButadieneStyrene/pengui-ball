@@ -1,3 +1,55 @@
+:root {
+    /* This is a hack to fix Chrome Lighthouse. If it is set to exactly zero
+     * then the analyzer bugs out and refuses to see an LCP element and dies.
+     */
+    --fade-in-opacity: 0.001;
+}
+
+body {
+    background: url("https://ynoproject.net/images/bg.png");
+    background-size: cover;
+    background-attachment: fixed;
+    animation: fade-in 0.5s ease forwards;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: var(--fade-in-opacity);
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+#logo {
+    display: block;
+    margin: auto;
+    height: 130px;
+    padding: 64px 0;
+    image-rendering: pixelated;
+
+    animation: logo-animation 0.75s ease-in-out forwards;
+}
+
+@keyframes logo-animation {
+    from {
+        opacity: var(--fade-in-opacity);
+        transform: translateY(120px)
+    }
+
+    to {
+        opacity: 1;
+        transform: 0
+    }
+}
+
+.doors {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
 .door {
     width: 224px;
     position: relative;

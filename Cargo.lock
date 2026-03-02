@@ -1146,8 +1146,6 @@ dependencies = [
  "leptos",
  "leptos_meta",
  "serde",
- "stylance",
- "stylance-cli",
 ]
 
 [[package]]
@@ -2989,7 +2987,6 @@ dependencies = [
  "leptos_meta",
  "leptos_router",
  "play",
- "stylance-cli",
  "wasm-bindgen",
 ]
 

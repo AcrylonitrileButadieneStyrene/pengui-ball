@@ -11,7 +11,3 @@ common.path = "../../common"
 leptos.workspace = true
 leptos_meta.workspace = true
 serde.workspace = true
-stylance.workspace = true
-
-[build-dependencies]
-stylance-cli.workspace = true
