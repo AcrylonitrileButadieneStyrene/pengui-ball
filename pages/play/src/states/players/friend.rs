@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+#[derive(serde::Deserialize)]
 pub struct Friend {
     pub accepted: bool,
     pub account: bool,

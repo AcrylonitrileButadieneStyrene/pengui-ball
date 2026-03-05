@@ -1,0 +1,30 @@
+.tabs {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: 41px 1fr;
+    grid-template-columns: repeat(100, auto) 1fr;
+    height: 100%;
+}
+
+.tabs>label:hover {
+    --pop-out-scale: 1.1;
+}
+
+.tabs>label span {
+    display: inline-block;
+}
+
+.tabs>label input {
+    display: none;
+}
+
+.tab-content {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    display: none;
+    flex-direction: column;
+}
+
+.tabs>label:has(input:checked)+.tab-content {
+    display: flex;
+}

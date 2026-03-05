@@ -1,3 +1,4 @@
+#![feature(panic_update_hook)]
 #![allow(non_snake_case)]
 
 use leptos::prelude::*;
@@ -10,6 +11,10 @@ use leptos_router::{
 #[leptos::wasm_bindgen::prelude::wasm_bindgen]
 pub fn hydrate() {
     console_error_panic_hook::set_once();
+    std::panic::update_hook(|prev, info| {
+        prev(info);
+        window().alert_with_message(&info.to_string()).unwrap();
+    });
     leptos::mount::hydrate_islands();
 }
 

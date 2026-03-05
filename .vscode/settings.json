@@ -1,4 +1,8 @@
 {
+    "explorer.fileNesting.patterns": {
+        "*.rs": "${capture}.module.css",
+        "Cargo.toml": "Cargo.lock"
+    },
     "rust-analyzer.cargo.features": [
         "ssr",
     ],

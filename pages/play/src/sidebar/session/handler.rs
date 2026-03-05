@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use itertools::Itertools;
 use leptos::prelude::*;
 
 use crate::{
@@ -7,7 +8,7 @@ use crate::{
         global::GlobalMessage, map::MapMessage, party::PartyMessage,
     },
     state::chat::message::MessageItem,
-    states::locations::Location,
+    states::{locations::Location, players::friend::Friend},
 };
 
 pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
@@ -109,6 +110,15 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
                 .channel
                 .send(crate::sidebar::session::Command::GetExpeds)
                 .unwrap();
+        }
+        ["pf", json] => {
+            let new = serde_json::from_str::<Vec<Friend>>(json)
+                .unwrap()
+                .into_iter()
+                .sorted_by_key(|friend| friend.name.clone())
+                .sorted_by_key(|friend| friend.online)
+                .collect();
+            state.players.friends.update(|players| *players = new);
         }
         [cmd, args @ ..] => {
             leptos::logging::warn!("Received unknown command \"{cmd}\" with args {args:?}");

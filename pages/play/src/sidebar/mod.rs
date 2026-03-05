@@ -1,10 +1,12 @@
 use leptos::prelude::*;
 
+use crate::components::{Tab, Tabs};
+
 pub mod chat;
 mod location;
 mod player_count;
+mod players;
 pub mod session;
-mod tabs;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -22,17 +24,17 @@ pub fn Sidebar() -> impl IntoView {
                 <location::CurrentLocation />
             </div>
 
-            <div class=style::tabs>
-                <tabs::Tab label="Chat".to_string() default=true>
+            <Tabs group="selected-sidebar-tab" class=style::tabs>
+                <Tab label="Chat" default=true>
                     <chat::Chat />
-                </tabs::Tab>
-                <tabs::Tab label="Players".to_string()>
+                </Tab>
+                <Tab label="Players">
+                    <players::Players />
+                </Tab>
+                <Tab label="Parties">
                     <div>Under construction</div>
-                </tabs::Tab>
-                <tabs::Tab label="Parties".to_string()>
-                    <div>Under construction</div>
-                </tabs::Tab>
-            </div>
+                </Tab>
+            </Tabs>
         </div>
     }
     .into_any()

@@ -5,22 +5,18 @@ use leptos::prelude::*;
 pub mod friend;
 pub mod player;
 
+#[derive(Default)]
 pub struct Players {
     pub by_uuid: RwSignal<HashMap<Arc<str>, RwSignal<player::Player>>>,
     pub uuids: RwSignal<HashMap<i32, Arc<str>>>,
     pub count: RwSignal<Option<u32>>,
 
-    pub friends: RwSignal<HashMap<Arc<str>, RwSignal<friend::Friend>>>,
+    pub friends: RwSignal<Vec<friend::Friend>>,
 }
 
 impl Players {
     pub fn new() -> Self {
-        Self {
-            by_uuid: RwSignal::new(HashMap::new()),
-            uuids: RwSignal::new(HashMap::default()),
-            count: RwSignal::new(None),
-            friends: RwSignal::new(HashMap::new()),
-        }
+        Self::default()
     }
 
     pub fn get_or_init(&self, uuid: &Arc<str>) -> RwSignal<player::Player> {
