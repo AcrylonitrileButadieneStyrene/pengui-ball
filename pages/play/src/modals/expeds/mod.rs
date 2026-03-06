@@ -15,7 +15,7 @@ pub fn Modal() -> impl IntoView {
             <div class=style::expeds_header>Expeditions</div>
             <Inner />
         </super::Modal>
-        <svg viewBox="0 0 90 18" width=90>
+        <svg viewBox="0 0 90 18" width=90 style:display="none">
             <defs>
                 <path id="exped-star" d="m9 0.5 2 6.5h7l-5.5 4 2 6.5-5.5-4-5.5 4 2-6.5-5.5-4h7z" />
                 <g id="exped-stars">

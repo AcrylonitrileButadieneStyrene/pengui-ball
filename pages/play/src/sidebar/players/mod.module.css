@@ -1,0 +1,13 @@
+.players {
+    border: solid 8px;
+    border-image: var(--ui-theme-border);
+}
+
+.players label {
+    margin: 0 8px;
+    border-bottom: solid 1px gray;
+}
+
+.players>label:has(input:checked) {
+    border-color: white;
+}

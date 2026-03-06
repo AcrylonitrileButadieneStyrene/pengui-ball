@@ -24,7 +24,7 @@ pub fn Sidebar() -> impl IntoView {
                 <location::CurrentLocation />
             </div>
 
-            <Tabs group="selected-sidebar-tab" class=style::tabs>
+            <Tabs group="selected-sidebar-tab" large=true>
                 <Tab label="Chat" default=true>
                     <chat::Chat />
                 </Tab>

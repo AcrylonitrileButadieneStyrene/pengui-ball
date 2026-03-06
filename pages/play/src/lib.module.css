@@ -86,3 +86,8 @@ a[target="yumeWiki"]:visited {
 a[target="yumeWiki"]:active {
     text-decoration-color: #FF0000;
 }
+
+[role="button"] {
+    user-select: none;
+    cursor: pointer;
+}

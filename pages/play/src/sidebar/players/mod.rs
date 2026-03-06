@@ -2,13 +2,15 @@ use leptos::prelude::*;
 
 use crate::components::{Tab, Tabs};
 
+stylance::import_style!(pub style, "mod.module.css");
+
 #[component]
 pub fn Players() -> impl IntoView {
     // create a new reactive scope because provide_context works differently
     // than i thought and overwrites the context of the parent (leptos moment)
     move || {
         view! {
-            <Tabs group="selected-sidebar-players-tab">
+            <Tabs group="selected-sidebar-players-tab" class=style::players>
                 <Tab label="Map" default=true>
                     <div>Under construction</div>
                 </Tab>

@@ -1,21 +1,28 @@
 .tabs {
     display: grid;
     grid-auto-flow: column;
-    grid-template-rows: 41px 1fr;
+    grid-template-rows: auto 1fr;
     grid-template-columns: repeat(100, auto) 1fr;
     height: 100%;
 }
 
-.tabs>label:hover {
-    --pop-out-scale: 1.1;
-}
-
 .tabs>label span {
     display: inline-block;
+    --pop-out-scale: 1.1;
 }
 
 .tabs>label input {
     display: none;
+}
+
+.tabs>label:has(input:checked)+.tab-content {
+    display: flex;
+}
+
+.tabs>label:global(.button):has(input:checked) {
+    z-index: 1;
+    margin-bottom: -8px;
+    border-bottom: 0;
 }
 
 .tab-content {
@@ -23,8 +30,4 @@
     grid-column: 1 / -1;
     display: none;
     flex-direction: column;
-}
-
-.tabs>label:has(input:checked)+.tab-content {
-    display: flex;
 }
