@@ -29,11 +29,11 @@
     transform: scale(2);
     transform-origin: top left;
     object-fit: none;
-    object-position: calc(-24px - mod(var(--sprite-index), 4) * 72px) calc(-64px - var(--sprite-index) / 4 * 128px);
+    object-position: calc(-4px - mod(var(--sprite-index), 4) * 72px) calc(-64px - var(--sprite-index) / 4 * 128px);
 }
 
 .detail {
-    grid-area: details;
+    grid-area: detail;
     font-size: 13px;
 }
 
