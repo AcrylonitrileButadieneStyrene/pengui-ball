@@ -1,0 +1,11 @@
+.header {
+    text-align: center;
+}
+
+.header:global(.disabled) {
+    display: none;
+}
+
+.header:nth-child(2) {
+    order: 1;
+}

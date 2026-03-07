@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-#[derive(serde::Deserialize)]
+#[derive(Clone, PartialEq, Eq, Hash, serde::Deserialize)]
 pub struct Friend {
     pub accepted: bool,
     pub account: bool,

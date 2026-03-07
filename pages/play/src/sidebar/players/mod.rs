@@ -40,6 +40,7 @@ fn PlayerCell(
     detail: AnyView,
     medals: [u8; 5],
     badge: Option<Arc<str>>,
+    // #[prop(optional)] class: String,
 ) -> impl IntoView {
     let badge = badge.map(|badge| {
         view! {
