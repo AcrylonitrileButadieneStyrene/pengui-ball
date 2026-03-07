@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use leptos::{prelude::*, wasm_bindgen::JsCast as _};
+use leptos::prelude::*;
 
 use crate::components::{Tab, Tabs};
 

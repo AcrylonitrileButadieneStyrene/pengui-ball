@@ -1,9 +1,6 @@
 use std::{
     collections::HashMap,
-    sync::{
-        Arc,
-        nonpoison::{Mutex, RwLock},
-    },
+    sync::{Arc, nonpoison::Mutex},
 };
 
 use leptos::prelude::*;
@@ -14,6 +11,7 @@ mod classic;
 mod explorer;
 
 pub struct LocationResolver {
+    owner: Owner,
     classic: classic::Container,
     explorer: explorer::Container,
 }
@@ -23,8 +21,10 @@ impl LocationResolver {
         let mut map = HashMap::new();
         let resource = classic::fetch(&game);
         map.insert(game, resource);
+
         Self {
-            classic: RwLock::new(map),
+            owner: Owner::current().unwrap(),
+            classic: Mutex::new(map),
             explorer: Arc::new(Mutex::new(HashMap::new())),
         }
     }
@@ -33,14 +33,13 @@ impl LocationResolver {
         &self,
         game: &str,
     ) -> LocalResource<Result<classic::LocationData, gloo_net::Error>> {
-        self.classic.read().get(game).map_or_else(
-            || {
-                let resource = classic::fetch(game);
-                self.classic.write().insert(Arc::from(game), resource);
-                resource
-            },
-            |resource| *resource,
-        )
+        let resource = self.classic.lock().get(game).cloned();
+
+        resource.unwrap_or_else(|| {
+            let resource = classic::fetch_with_owner(game, &self.owner);
+            self.classic.lock().insert(Arc::from(game), resource);
+            resource
+        })
     }
 
     pub fn resolve(&self, location: &Location) -> LocationResolved {

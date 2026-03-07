@@ -1,12 +1,11 @@
 use std::{
     collections::HashMap,
-    sync::{Arc, nonpoison::RwLock},
+    sync::{Arc, nonpoison::Mutex},
 };
 
 use leptos::prelude::*;
 
-pub type Container =
-    RwLock<HashMap<Arc<str>, LocalResource<Result<LocationData, gloo_net::Error>>>>;
+pub type Container = Mutex<HashMap<Arc<str>, LocalResource<Result<LocationData, gloo_net::Error>>>>;
 
 #[derive(Debug, serde::Deserialize)]
 pub struct LocationData {
@@ -49,6 +48,13 @@ impl Coordinates {
             && if self.y1 == -1 { true } else { self.y1 <= y }
             && if self.y2 == -1 { true } else { y <= self.y2 }
     }
+}
+
+pub fn fetch_with_owner(
+    game: &str,
+    owner: &Owner,
+) -> LocalResource<Result<LocationData, gloo_net::Error>> {
+    owner.with(|| fetch(game))
 }
 
 pub fn fetch(game: &str) -> LocalResource<Result<LocationData, gloo_net::Error>> {
