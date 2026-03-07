@@ -6,10 +6,12 @@ pub enum Message {
     ConnectionStatusUpdated(ConnectionStatus),
     PlayerSync(PlayerSyncData),
     PlayerConnect(PlayerConnectData),
+    PlayerDisconnect(i32),
     PlayerTeleported(u16, i16, i16),
     RegainFocus(bool),
     SaveData(usize, SaveFile),
     SaveTimestamps(Box<[Option<String>; 15]>),
+    RoomSwitch,
 }
 
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
@@ -25,10 +27,10 @@ pub enum ConnectionStatus {
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct PlayerSyncData {
     pub uuid: String,
-    pub rank: u32,
+    pub rank: u8,
     pub account: bool,
     pub badge: String,
-    pub medals: [u32; 5],
+    pub medals: [u8; 5],
     pub id: i32,
 }
 

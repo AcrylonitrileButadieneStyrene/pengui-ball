@@ -99,10 +99,10 @@ pub fn on_player_teleported(map: u16, x: i16, y: i16) {
 #[wasm_bindgen]
 pub fn sync_player_data(
     uuid: String,
-    rank: u32,
+    rank: u8,
     account: bool,
     badge: String,
-    medals: Vec<u32>,
+    medals: Vec<u8>,
     id: i32,
 ) {
     crate::send(common::PlayMessage::PlayerSync(
@@ -119,7 +119,7 @@ pub fn sync_player_data(
 
 #[wasm_bindgen]
 pub fn on_room_switch() {
-    leptos::logging::log!("room switched");
+    crate::send(common::PlayMessage::RoomSwitch);
 }
 
 #[wasm_bindgen]
@@ -136,8 +136,8 @@ pub fn on_player_connected_or_updated(system: String, name: String, id: i32) {
 }
 
 #[wasm_bindgen]
-pub fn on_player_disconnected(id: u32) {
-    leptos::logging::log!("player with {id} disconnected");
+pub fn on_player_disconnected(id: i32) {
+    crate::send(common::PlayMessage::PlayerDisconnect(id))
 }
 
 #[wasm_bindgen]

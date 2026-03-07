@@ -56,10 +56,10 @@ fn Friend(friend: Friend) -> impl IntoView {
         <super::PlayerCell
             game=friend.game.clone()
             sprite=(friend.sprite_name.clone(), friend.sprite_index)
-            name=friend.name.clone()
+            name=friend.player.name.unwrap().clone()
             detail
-            medals=friend.medals.clone()
-            badge=Some(friend.badge.clone())
+            medals=friend.player.medals.clone()
+            badge=friend.player.badge.clone()
             {..}
             style:order=(!friend.online).then_some("1")
         />

@@ -55,6 +55,11 @@ pub fn connect(state: &crate::state::PlayState, data: PlayerConnectData) {
             return;
         };
 
+        state
+            .players
+            .uuids
+            .update(|uuids| drop(uuids.insert(id, uuid)));
+
         player.update(|player| {
             if !name.is_empty() {
                 player.name = Some(name.into());
@@ -65,6 +70,12 @@ pub fn connect(state: &crate::state::PlayState, data: PlayerConnectData) {
             }
         });
     });
+}
+
+pub fn disconnect(state: &crate::state::PlayState, id: i32) {
+    state.players.uuids.update(|uuids| {
+        uuids.remove(&id);
+    })
 }
 
 pub fn teleported(state: &crate::state::PlayState, map: u16, x: i16, y: i16) {

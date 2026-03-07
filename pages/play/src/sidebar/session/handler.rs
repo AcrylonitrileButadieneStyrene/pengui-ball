@@ -115,7 +115,7 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
             let new = serde_json::from_str::<Vec<Friend>>(json)
                 .unwrap()
                 .into_iter()
-                .sorted_by_key(|friend| friend.name.clone())
+                .sorted_by_key(|friend| friend.player.name.clone())
                 .sorted_by_key(|friend| friend.online)
                 .collect();
             state.players.friends.update(|players| *players = new);
