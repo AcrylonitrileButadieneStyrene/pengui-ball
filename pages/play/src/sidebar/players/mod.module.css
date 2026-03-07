@@ -11,3 +11,34 @@
 .players>label:has(input:checked) {
     border-color: white;
 }
+
+.row {
+    display: grid;
+    grid-template-areas:
+        "sprite name   medals badge"
+        "sprite detail medals badge";
+    grid-template-columns: 32px 1fr auto 37px;
+    grid-template-rows: 1fr auto;
+    min-height: 32px;
+}
+
+.sprite {
+    grid-area: sprite;
+    width: 16px;
+    height: 16px;
+    transform: scale(2);
+    transform-origin: top left;
+    object-fit: none;
+    object-position: calc(-24px - mod(var(--sprite-index), 4) * 72px) calc(-64px - var(--sprite-index) / 4 * 128px);
+}
+
+.detail {
+    grid-area: details;
+    font-size: 13px;
+}
+
+.badge {
+    grid-area: badge;
+    height: 37px;
+    margin: -5px 0;
+}
