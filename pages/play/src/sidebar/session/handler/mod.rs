@@ -7,71 +7,33 @@ use crate::{
     sidebar::chat::message::components::{
         global::GlobalMessage, map::MapMessage, party::PartyMessage,
     },
-    state::chat::message::MessageItem,
-    states::{
-        locations::Location,
-        players::{friend::Friend, player::PlayerStoreFields as _},
-    },
+    states::players::{friend::Friend, player::PlayerStoreFields},
 };
+
+mod chat;
 
 pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
     match parts {
         ["pc", count] => state.players.count.set(count.parse::<u32>().ok()),
-        ["say", uuid, text] => state.chat.add(
-            MessageItem::new(
-                None::<&str>,
-                Arc::from(*text),
-                state.chat.channel::<MapMessage>().filter.read_only(),
-            ),
-            MapMessage {
-                author: Arc::from(*uuid),
-            },
-        ),
-        ["psay", uuid, text, id] => state.chat.add(
-            MessageItem::new(
-                Some(*id),
-                Arc::from(*text),
-                state.chat.channel::<PartyMessage>().filter.read_only(),
-            ),
-            PartyMessage {
-                author: Arc::from(*uuid),
-            },
+        ["say", uuid, text] => chat::say(state, chat::item::<MapMessage>(state, text, None), uuid),
+        ["psay", uuid, text, id] => chat::psay(
+            state,
+            chat::item::<PartyMessage>(state, text, Some(id)),
+            uuid,
         ),
         ["gsay", uuid, map, prev, _, x, y, text, id] => {
-            state.chat.add(
-                MessageItem::new(
-                    Some(*id),
-                    Arc::from(*text),
-                    state.chat.channel::<GlobalMessage>().filter.read_only(),
-                ),
-                GlobalMessage {
-                    author: Arc::from(*uuid),
-                    location: {
-                        if let Ok(map) = map.parse()
-                            && let Ok(x) = x.parse()
-                            && let Ok(y) = y.parse()
-                        {
-                            Some(Location {
-                                game: state.locations.game.clone(),
-                                map,
-                                previous: prev.parse().ok(),
-                                x,
-                                y,
-                            })
-                        } else {
-                            leptos::logging::warn!(
-                                "Chat message parse error: {map},{prev},{x},{y}"
-                            );
-                            None
-                        }
-                    },
-                },
+            chat::gsay(
+                state,
+                chat::item::<GlobalMessage>(state, text, Some(id)),
+                uuid,
+                map,
+                prev,
+                x,
+                y,
             );
         }
         ["p", uuid, name, system, rank, account, badge, medals @ ..] => {
-            let uuid = Arc::from(*uuid);
-
-            let player = state.players.get_or_init(&uuid, false);
+            let player = state.players.get_or_init(&Arc::from(*uuid), false);
             player.name().set(Some(Arc::from(*name)));
             player.system().set(Some(Arc::from(*system)));
             player.rank().set(rank.parse().unwrap());
@@ -96,15 +58,15 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
             state.expeds.set(serde_json::from_str(json).ok());
         }
         ["eec", experience, is_ok] => {
-            if *is_ok != "0" {
+            if *is_ok == "0" {
+                leptos::logging::warn!("received error when claiming exped");
+            } else {
                 leptos::logging::log!("completed exped for {experience} xp");
                 state
                     .session
                     .channel
                     .send(crate::sidebar::session::Command::GetExpeds)
                     .unwrap();
-            } else {
-                leptos::logging::warn!("received error when claiming exped");
             }
         }
         ["vm", experience] => {

@@ -5,9 +5,9 @@ use crate::state::chat::message::{MessageComponent, MessageItem};
 pub struct SendingMessage;
 
 impl MessageComponent for SendingMessage {
-    fn render(&self, message: &MessageItem, _state: &crate::state::PlayState) -> AnyView {
+    fn render(&self, message: &MessageItem, state: &crate::state::PlayState) -> AnyView {
         let timestamp = super::timestamp(message.timestamp);
-        let channel = _state.chat.channel::<Self>();
+        let channel = state.chat.channel::<Self>();
         let text = message.text.clone();
 
         let remove = {

@@ -30,13 +30,13 @@ pub fn sync(state: &crate::state::PlayState, data: PlayerSyncData) {
 
     if id == -1
         && let Some(Ok(user)) = &*state.api.user.read_untracked()
-        && user.name.len() != 0
+        && !user.name.is_empty()
     {
-        player.name().set(Some(user.name.clone().into()));
+        player.name().set(Some(user.name.clone()));
     }
 
     state.players.in_map.update(|players| {
-        players.insert(id as _, player);
+        players.insert(id.try_into().unwrap(), player);
     });
 }
 
@@ -59,8 +59,8 @@ pub fn connect(state: &crate::state::PlayState, data: PlayerConnectData) {
 
 pub fn disconnect(state: &crate::state::PlayState, id: i32) {
     state.players.in_map.update(|uuids| {
-        uuids.remove(&(id as _));
-    })
+        uuids.remove(&id.try_into().unwrap());
+    });
 }
 
 pub fn teleported(state: &crate::state::PlayState, map: u16, x: i16, y: i16) {

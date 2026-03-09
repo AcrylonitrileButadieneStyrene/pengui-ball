@@ -27,7 +27,7 @@ impl<T: ChatMessageComponent + Send + Sync> MessageComponent for T {
             .chat
             .my_id
             .get_untracked()
-            .or(state.players.local.uuid().get_untracked())
+            .or_else(|| state.players.local.uuid().get_untracked())
             .is_some_and(|id| id == author);
         if is_self {
             state.chat.channel::<SendingMessage>().remove(message);
@@ -72,8 +72,7 @@ fn has_ping(state: &crate::state::PlayState, message: &str) -> bool {
         .read()
         .as_ref()
         .map(Result::as_ref)
-        .map(Result::ok)
-        .flatten()
+        .and_then(Result::ok)
         .map(|user| user.name.clone())
         .filter(|name| !name.is_empty())
         .or_else(|| state.players.local.name().get())

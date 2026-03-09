@@ -48,7 +48,10 @@ impl Players {
         if id == -1 {
             Some(self.local)
         } else {
-            self.in_map.read_untracked().get(&(id as u16)).cloned()
+            self.in_map
+                .read_untracked()
+                .get(&u16::try_from(id).unwrap())
+                .copied()
         }
     }
 }

@@ -19,7 +19,7 @@ pub fn Friends() -> impl IntoView {
             .fold((0, 0), |(online, offline), friend| {
                 // this isn't intentionally optimized to be branchless, it's
                 // just more readable like this instead of using a branch.
-                let state = friend.online as usize;
+                let state = usize::from(friend.online);
                 (online + state, offline + 1 - state)
             });
 
@@ -62,7 +62,7 @@ fn Friend(friend: Friend) -> impl IntoView {
             sprite=Some((friend.sprite_name.clone(), friend.sprite_index))
             name=friend.name.clone()
             detail
-            medals=friend.medals.clone()
+            medals=friend.medals
             badge=Some(friend.badge.clone())
             {..}
             style:order=(!friend.online).then_some("1")

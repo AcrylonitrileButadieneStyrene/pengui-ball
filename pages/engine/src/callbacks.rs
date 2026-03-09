@@ -137,7 +137,7 @@ pub fn on_player_connected_or_updated(system: String, name: String, id: i32) {
 
 #[wasm_bindgen]
 pub fn on_player_disconnected(id: i32) {
-    crate::send(common::PlayMessage::PlayerDisconnect(id))
+    crate::send(common::PlayMessage::PlayerDisconnect(id));
 }
 
 #[wasm_bindgen]

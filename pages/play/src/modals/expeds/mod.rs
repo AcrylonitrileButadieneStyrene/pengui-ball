@@ -64,8 +64,8 @@ fn Inner() -> impl IntoView {
 
         let mut locations = locations.into_iter().map(|location| {
             location
-                .split_once(":")
-                .map_or(location.clone(), |pair| pair.0.into())
+                .split_once(':')
+                .map_or_else(|| location.clone(), |pair| pair.0.into())
         });
 
         let Some(exped) = locations.find_map(|location| {

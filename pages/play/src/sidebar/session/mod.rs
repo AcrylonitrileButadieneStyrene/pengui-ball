@@ -140,8 +140,8 @@ async fn send_messages(
             Command::ClaimExpedLocation(location, is_free) => {
                 vec![
                     "eec".to_string(),
-                    location.replace("&", "%26"),
-                    (is_free as u8).to_string(),
+                    location.replace('&', "%26"),
+                    u8::from(is_free).to_string(),
                 ]
             }
         };

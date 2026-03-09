@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Clone, PartialEq, Eq, Hash, serde::Deserialize)]
 pub struct Friend {
     pub name: Arc<str>,

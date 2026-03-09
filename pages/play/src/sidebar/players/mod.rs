@@ -83,8 +83,8 @@ fn PlayerCell(
 fn to_last_online(last_active: chrono::DateTime<chrono::Utc>) -> String {
     match (chrono::Utc::now() - last_active).num_minutes() {
         x if x < 0 => "A long time ago".to_string(),
-        x if x == 1 => "A moment ago".to_string(),
-        x if x < 60 => format!("{} minutes ago", x),
+        1 => "A moment ago".to_string(),
+        x if x < 60 => format!("{x} minutes ago"),
         x if x < 1440 => format!("{} hours ago", x / 60),
         x => format!("{} days ago", x / 1440),
     }

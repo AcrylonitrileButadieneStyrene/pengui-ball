@@ -109,7 +109,7 @@ fn DoorImage(id: Arc<str>, index: usize) -> impl IntoView {
         if selected() == Some(index) {
             set_timeout(move || set_open(true), std::time::Duration::from_secs(1));
         } else {
-            set_open(false)
+            set_open(false);
         }
     });
 

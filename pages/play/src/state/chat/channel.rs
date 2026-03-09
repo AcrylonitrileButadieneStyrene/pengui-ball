@@ -68,7 +68,7 @@ impl ChatChannel {
                 .lock()
                 .iter()
                 .enumerate()
-                .map(|(index, (_, text))| (index, strsim::levenshtein(&message, text)))
+                .map(|(index, (_, text))| (index, strsim::levenshtein(message, text)))
                 .min_by_key(|(_, distance)| *distance)
                 .map(|(index, _)| index);
             index

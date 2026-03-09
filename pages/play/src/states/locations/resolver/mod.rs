@@ -33,7 +33,7 @@ impl LocationResolver {
         &self,
         game: &str,
     ) -> LocalResource<Result<classic::LocationData, gloo_net::Error>> {
-        let resource = self.classic.lock().get(game).cloned();
+        let resource = self.classic.lock().get(game).copied();
 
         resource.unwrap_or_else(|| {
             let resource = classic::fetch_with_owner(game, &self.owner);
