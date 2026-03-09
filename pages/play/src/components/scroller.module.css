@@ -1,0 +1,10 @@
+.scroller {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    word-wrap: break-word;
+    overflow-y: scroll;
+}

@@ -1,19 +1,6 @@
 .messages {
     position: relative;
     flex: 1;
-}
-
-/* A hack to prevent the chatbox from making the parent expand
- */
-.scroll-view {
-    position: absolute;
-    inset: 0;
     border: solid 8px;
     border-image: var(--ui-theme-border);
-
-    display: flex;
-    flex-direction: column-reverse;
-
-    word-wrap: break-word;
-    overflow-y: scroll;
 }

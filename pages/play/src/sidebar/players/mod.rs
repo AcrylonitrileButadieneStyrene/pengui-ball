@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-use crate::components::{Tab, Tabs};
+use crate::components::{Scroller, Tab, Tabs};
 
 mod friends;
 mod map;
@@ -20,10 +20,14 @@ fn players_inner() -> impl IntoView {
     view! {
         <Tabs group="selected-sidebar-players-tab" class=style::players>
             <Tab label="Map" default=true>
-                <map::Map />
+                <Scroller>
+                    <map::Map />
+                </Scroller>
             </Tab>
             <Tab label="Friends">
-                <friends::Friends />
+                <Scroller>
+                    <friends::Friends />
+                </Scroller>
             </Tab>
             <Tab label="Party">
                 <div>Under construction</div>

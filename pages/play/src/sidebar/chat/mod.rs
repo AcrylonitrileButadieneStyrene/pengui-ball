@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+use crate::components::Scroller;
+
 mod filters;
 mod input;
 pub mod message;
@@ -10,9 +12,9 @@ stylance::import_style!(pub style, "mod.module.css");
 pub fn Chat() -> impl IntoView {
     view! {
         <div class=style::messages>
-            <div class=style::scroll_view>
+            <Scroller {..} style:flex-direction="column-reverse">
                 <ChatMessages />
-            </div>
+            </Scroller>
         </div>
         <input::ChatInput />
         <filters::Filters />
