@@ -8,6 +8,7 @@ pub enum Message {
     PlayerConnect(PlayerConnectData),
     PlayerDisconnect(i32),
     PlayerTeleported(u16, i16, i16),
+    PlayerSpriteUpdated(i32, String, u8),
     RegainFocus(bool),
     SaveData(usize, SaveFile),
     SaveTimestamps(Box<[Option<String>; 15]>),

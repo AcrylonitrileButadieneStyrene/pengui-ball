@@ -3,7 +3,7 @@ use std::sync::Arc;
 use common::messages::play::{PlayerConnectData, PlayerSyncData};
 use leptos::prelude::*;
 
-use crate::states::locations::Location;
+use crate::states::{locations::Location, players::player::PlayerStoreFields};
 
 pub fn sync(state: &crate::state::PlayState, data: PlayerSyncData) {
     let PlayerSyncData {
@@ -15,66 +15,50 @@ pub fn sync(state: &crate::state::PlayState, data: PlayerSyncData) {
         id,
     } = data;
 
-    let uuid = Arc::<str>::from(uuid);
-    state
-        .players
-        .uuids
-        .update(|uuids| drop(uuids.insert(id, uuid.clone())));
-
     let badge = match &*badge {
         "null" => None,
         _ => Some(Arc::from(badge)),
     };
 
-    state.players.get_or_init(&uuid).update(|player| {
-        player.rank = rank;
-        player.account = account;
-        player.badge = badge;
-        player.medals = medals;
+    let player = state.players.get_or_init(&uuid.into());
+    player.rank().set(rank);
+    player.account().set(account);
+    player.badge().set(badge);
+    player.medals().set(medals);
 
-        if id == -1
-            && let Some(Ok(user)) = &*state.api.user.read_untracked()
+    if id == -1 {
+        if let Some(Ok(user)) = &*state.api.user.read_untracked()
+            && user.name.len() != 0
         {
-            player.name = Some(user.name.clone().into());
+            player.name().set(Some(user.name.clone().into()));
         }
-    });
+    } else {
+        state.players.in_map.update(|players| {
+            players.insert(id as _, player);
+        });
+    }
 }
 
 pub fn connect(state: &crate::state::PlayState, data: PlayerConnectData) {
     let PlayerConnectData { id, name, system } = data;
 
-    state.players.by_uuid.with_untracked(|players| {
-        let uuids = state.players.uuids.read_untracked();
-        let Some(uuid) = uuids.get(&id) else {
-            return;
-        };
-        let uuid = uuid.clone();
-        drop(uuids);
+    let Some(player) = state.players.get_by_id(id) else {
+        leptos::logging::warn!("connected player not already existing");
+        return;
+    };
 
-        let Some(player) = players.get(&uuid) else {
-            return;
-        };
+    if !name.is_empty() {
+        player.name().set(Some(name.into()));
+    }
 
-        state
-            .players
-            .uuids
-            .update(|uuids| drop(uuids.insert(id, uuid)));
-
-        player.update(|player| {
-            if !name.is_empty() {
-                player.name = Some(name.into());
-            }
-
-            if !system.is_empty() {
-                player.system = Some(system.into());
-            }
-        });
-    });
+    if !system.is_empty() {
+        player.system().set(Some(system.into()));
+    }
 }
 
 pub fn disconnect(state: &crate::state::PlayState, id: i32) {
-    state.players.uuids.update(|uuids| {
-        uuids.remove(&id);
+    state.players.in_map.update(|uuids| {
+        uuids.remove(&(id as _));
     })
 }
 
@@ -89,4 +73,17 @@ pub fn teleported(state: &crate::state::PlayState, map: u16, x: i16, y: i16) {
             y,
         });
     });
+}
+
+pub fn sprite_update(state: &crate::state::PlayState, id: i32, charset: String, index: u8) {
+    let sprite = match &*charset {
+        "" => None,
+        _ => Some((charset.into(), index)),
+    };
+
+    if let Some(player) = state.players.get_by_id(id) {
+        player.sprite().set(sprite);
+    } else {
+        leptos::logging::warn!("no player for {id}");
+    }
 }

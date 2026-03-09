@@ -32,6 +32,9 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
         PlayMessage::PlayerConnect(data) => player::connect(state, data),
         PlayMessage::PlayerDisconnect(id) => player::disconnect(state, id),
         PlayMessage::PlayerTeleported(map, x, y) => player::teleported(state, map, x, y),
+        PlayMessage::PlayerSpriteUpdated(id, charset, index) => {
+            player::sprite_update(state, id, charset, index)
+        }
         PlayMessage::RegainFocus(_shift_held) => {
             if let Some(element) = state.chat.input.get_untracked() {
                 element.focus().unwrap();
@@ -43,6 +46,6 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
         PlayMessage::SaveTimestamps(timestamps) => {
             state.engine.save_timestamps.set(timestamps);
         }
-        PlayMessage::RoomSwitch => state.players.uuids.update(|uuids| uuids.clear()),
+        PlayMessage::RoomSwitch => state.players.in_map.update(|uuids| uuids.clear()),
     }
 }

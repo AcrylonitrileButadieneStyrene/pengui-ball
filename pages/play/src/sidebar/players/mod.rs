@@ -5,6 +5,7 @@ use leptos::prelude::*;
 use crate::components::{Tab, Tabs};
 
 mod friends;
+mod map;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -12,36 +13,51 @@ stylance::import_style!(pub style, "mod.module.css");
 pub fn Players() -> impl IntoView {
     // create a new reactive scope because provide_context works differently
     // than i thought and overwrites the context of the parent (leptos moment)
-    move || {
-        view! {
-            <Tabs group="selected-sidebar-players-tab" class=style::players>
-                <Tab label="Map" default=true>
-                    <div>Under construction</div>
-                </Tab>
-                <Tab label="Friends">
-                    <friends::Friends />
-                </Tab>
-                <Tab label="Party">
-                    <div>Under construction</div>
-                </Tab>
-                <Tab label="Enemies">
-                    <div>Under construction</div>
-                </Tab>
-            </Tabs>
-        }
+    players_inner
+}
+
+fn players_inner() -> impl IntoView {
+    view! {
+        <Tabs group="selected-sidebar-players-tab" class=style::players>
+            <Tab label="Map" default=true>
+                <map::Map />
+            </Tab>
+            <Tab label="Friends">
+                <friends::Friends />
+            </Tab>
+            <Tab label="Party">
+                <div>Under construction</div>
+            </Tab>
+            <Tab label="Enemies">
+                <div>Under construction</div>
+            </Tab>
+        </Tabs>
     }
 }
 
 #[component]
 fn PlayerCell(
     game: Arc<str>,
-    sprite: (Arc<str>, u8),
+    sprite: Option<(Arc<str>, u8)>,
     name: Arc<str>,
     detail: AnyView,
     medals: [u8; 5],
     badge: Option<Arc<str>>,
-    // #[prop(optional)] class: String,
 ) -> impl IntoView {
+    let sprite = sprite.map_or_else(
+        || view! { <div class=style::sprite /> }.into_any(),
+        |sprite| {
+            view! {
+                <img
+                    class=style::sprite
+                    style:--sprite-index=sprite.1.to_string()
+                    src=format!("https://ynoproject.net/data/{game}/CharSet/{}.png", sprite.0.replace('#', "%23"))
+                />
+            }
+            .into_any()
+        },
+    );
+
     let badge = badge.map(|badge| {
         view! {
             <img
@@ -54,15 +70,8 @@ fn PlayerCell(
 
     view! {
         <div class=style::row>
-            <img
-                class=style::sprite
-                style:--sprite-index=sprite.1.to_string()
-                src=format!("https://ynoproject.net/data/{game}/CharSet/{}.png", sprite.0)
-            />
-            <span>{name}</span>
-            <span class=style::detail>{detail}</span>
-            <span>{medals}</span>
-            {badge}
+            {sprite} <span>{name}</span> <span class=style::detail>{detail}</span>
+            <span>{medals}</span> {badge}
         </div>
     }
 }

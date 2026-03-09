@@ -2166,6 +2166,7 @@ dependencies = [
  "leptos-use",
  "leptos_meta",
  "leptos_router",
+ "reactive_stores",
  "serde",
  "serde-wasm-bindgen",
  "serde_json",

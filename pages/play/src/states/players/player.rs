@@ -1,12 +1,15 @@
 use std::sync::Arc;
 
-#[derive(Clone, Default, PartialEq, Eq, Hash, serde::Deserialize)]
+use reactive_stores::Store;
+
+#[derive(Clone, Default, PartialEq, Eq, Hash, Store)]
 pub struct Player {
-    pub name: Option<Arc<str>>,
-    #[serde(rename = "systemName")]
-    pub system: Option<Arc<str>>,
-    pub rank: u8,
-    pub account: bool,
-    pub badge: Option<Arc<str>>,
-    pub medals: [u8; 5],
+    name: Option<Arc<str>>,
+    badge: Option<Arc<str>>,
+    system: Option<Arc<str>>,
+    sprite: Option<(Arc<str>, u8)>,
+    medals: [u8; 5],
+    rank: u8,
+    account: bool,
+    friend: Option<super::friend::Friend>,
 }

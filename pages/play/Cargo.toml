@@ -21,6 +21,7 @@ leptos.workspace = true
 leptos_meta.workspace = true
 leptos_router.workspace = true
 leptos-use.workspace = true
+reactive_stores = "0.4.2"
 serde.workspace = true
 serde_json = "1.0.149"
 serde-wasm-bindgen.workspace = true

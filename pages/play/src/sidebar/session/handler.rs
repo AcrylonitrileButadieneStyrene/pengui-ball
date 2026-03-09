@@ -8,7 +8,10 @@ use crate::{
         global::GlobalMessage, map::MapMessage, party::PartyMessage,
     },
     state::chat::message::MessageItem,
-    states::{locations::Location, players::friend::Friend},
+    states::{
+        locations::Location,
+        players::{friend::Friend, player::PlayerStoreFields as _},
+    },
 };
 
 pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
@@ -68,16 +71,17 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
         ["p", uuid, name, system, rank, account, badge, medals @ ..] => {
             let uuid = Arc::from(*uuid);
 
-            state.players.get_or_init(&uuid).update(|player| {
-                player.name = Some(Arc::from(*name));
-                player.system = Some(Arc::from(*system));
-                player.rank = rank.parse().unwrap();
-                player.account = (*account).eq("1");
-                player.badge = match *badge {
-                    "null" => None,
-                    _ => Some(Arc::from(*badge)),
-                };
-                player.medals = medals
+            let player = state.players.get_or_init(&uuid);
+            player.name().set(Some(Arc::from(*name)));
+            player.system().set(Some(Arc::from(*system)));
+            player.rank().set(rank.parse().unwrap());
+            player.account().set((*account).eq("1"));
+            player.badge().set(match *badge {
+                "null" => None,
+                _ => Some(Arc::from(*badge)),
+            });
+            player.medals().set(
+                medals
                     .iter()
                     .map(|medal| medal.parse().unwrap_or_default())
                     .collect::<Vec<_>>()
@@ -85,8 +89,8 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
                     .inspect_err(|err| {
                         leptos::logging::error!("Error while parsing player medals: {err:?}");
                     })
-                    .unwrap_or([0, 0, 0, 0, 0]);
-            });
+                    .unwrap_or([0, 0, 0, 0, 0]),
+            );
         }
         ["e", json] => {
             state.expeds.set(serde_json::from_str(json).ok());
@@ -115,7 +119,7 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
             let new = serde_json::from_str::<Vec<Friend>>(json)
                 .unwrap()
                 .into_iter()
-                .sorted_by_key(|friend| friend.player.name.clone())
+                .sorted_by_key(|friend| friend.name.clone())
                 .sorted_by_key(|friend| friend.online)
                 .collect();
             state.players.friends.update(|players| *players = new);

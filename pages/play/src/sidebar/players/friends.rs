@@ -24,8 +24,12 @@ pub fn Friends() -> impl IntoView {
             });
 
         view! {
-            <div class=style::header class:disabled=online == 0>{format!("Online - {online}")}</div>
-            <div class=style::header class:disabled=offline == 0>{format!("Offline - {offline}")}</div>
+            <div class=style::header class:disabled=online == 0>
+                {format!("Online - {online}")}
+            </div>
+            <div class=style::header class:disabled=offline == 0>
+                {format!("Offline - {offline}")}
+            </div>
         }
     };
 
@@ -55,11 +59,11 @@ fn Friend(friend: Friend) -> impl IntoView {
     view! {
         <super::PlayerCell
             game=friend.game.clone()
-            sprite=(friend.sprite_name.clone(), friend.sprite_index)
-            name=friend.player.name.unwrap().clone()
+            sprite=Some((friend.sprite_name.clone(), friend.sprite_index))
+            name=friend.name.clone()
             detail
-            medals=friend.player.medals.clone()
-            badge=friend.player.badge.clone()
+            medals=friend.medals.clone()
+            badge=Some(friend.badge.clone())
             {..}
             style:order=(!friend.online).then_some("1")
         />
