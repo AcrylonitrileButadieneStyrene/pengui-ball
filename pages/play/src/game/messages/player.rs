@@ -15,35 +15,36 @@ pub fn sync(state: &crate::state::PlayState, data: PlayerSyncData) {
         id,
     } = data;
 
+    let uuid = Arc::<str>::from(uuid);
     let badge = match &*badge {
         "null" => None,
         _ => Some(Arc::from(badge)),
     };
 
-    let player = state.players.get_or_init(&uuid.into());
+    let player = state.players.get_or_init(&uuid, id == -1);
+    player.uuid().set(Some(uuid));
     player.rank().set(rank);
     player.account().set(account);
     player.badge().set(badge);
     player.medals().set(medals);
 
-    if id == -1 {
-        if let Some(Ok(user)) = &*state.api.user.read_untracked()
-            && user.name.len() != 0
-        {
-            player.name().set(Some(user.name.clone().into()));
-        }
-    } else {
-        state.players.in_map.update(|players| {
-            players.insert(id as _, player);
-        });
+    if id == -1
+        && let Some(Ok(user)) = &*state.api.user.read_untracked()
+        && user.name.len() != 0
+    {
+        player.name().set(Some(user.name.clone().into()));
     }
+
+    state.players.in_map.update(|players| {
+        players.insert(id as _, player);
+    });
 }
 
 pub fn connect(state: &crate::state::PlayState, data: PlayerConnectData) {
     let PlayerConnectData { id, name, system } = data;
 
     let Some(player) = state.players.get_by_id(id) else {
-        leptos::logging::warn!("connected player not already existing");
+        leptos::logging::warn!("connected player does not already exist");
         return;
     };
 

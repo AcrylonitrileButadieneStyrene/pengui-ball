@@ -5,6 +5,7 @@ use leptos::prelude::*;
 use crate::{
     sidebar::chat::message::{Message, components::sending::SendingMessage},
     state::chat::message::{MessageComponent, MessageItem},
+    states::players::player::PlayerStoreFields,
 };
 
 pub trait ChatMessageComponent {
@@ -25,9 +26,9 @@ impl<T: ChatMessageComponent + Send + Sync> MessageComponent for T {
         let is_self = state
             .chat
             .my_id
-            .read_untracked()
-            .as_ref()
-            .is_some_and(|id| *id == author);
+            .get_untracked()
+            .or(state.players.local.uuid().get_untracked())
+            .is_some_and(|id| id == author);
         if is_self {
             state.chat.channel::<SendingMessage>().remove(message);
         }

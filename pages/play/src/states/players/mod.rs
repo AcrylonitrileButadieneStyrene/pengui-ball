@@ -20,15 +20,28 @@ impl Players {
         Self::default()
     }
 
-    pub fn get_or_init(&self, uuid: &Arc<str>) -> Store<player::Player> {
-        self.all
-            .with_untracked(|players| players.get(uuid).copied())
-            .unwrap_or_else(|| {
-                let signal = Store::new(player::Player::default());
-                self.all
-                    .update(|players| assert!(players.insert(uuid.clone(), signal).is_none()));
-                signal
-            })
+    pub fn get_or_init(&self, uuid: &Arc<str>, is_local: bool) -> Store<player::Player> {
+        let existing = self.all.read_untracked().get(uuid).copied();
+        let updated = if let Some(existing) = existing {
+            if is_local && existing != self.local {
+                self.local.set(existing.get_untracked());
+                self.local
+            } else {
+                return existing;
+            }
+        } else {
+            if is_local {
+                self.local
+            } else {
+                Store::new(player::Player::default())
+            }
+        };
+
+        self.all.update(|players| {
+            players.insert(uuid.clone(), updated);
+        });
+
+        updated
     }
 
     pub fn get_by_id(&self, id: i32) -> Option<Store<player::Player>> {

@@ -71,7 +71,7 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
         ["p", uuid, name, system, rank, account, badge, medals @ ..] => {
             let uuid = Arc::from(*uuid);
 
-            let player = state.players.get_or_init(&uuid);
+            let player = state.players.get_or_init(&uuid, false);
             player.name().set(Some(Arc::from(*name)));
             player.system().set(Some(Arc::from(*system)));
             player.rank().set(rank.parse().unwrap());

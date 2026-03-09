@@ -2,8 +2,9 @@ use std::sync::Arc;
 
 use reactive_stores::Store;
 
-#[derive(Clone, Default, PartialEq, Eq, Hash, Store)]
+#[derive(Clone, Debug, Default, PartialEq, Eq, Hash, Store)]
 pub struct Player {
+    uuid: Option<Arc<str>>,
     name: Option<Arc<str>>,
     badge: Option<Arc<str>>,
     system: Option<Arc<str>>,
@@ -11,5 +12,4 @@ pub struct Player {
     medals: [u8; 5],
     rank: u8,
     account: bool,
-    friend: Option<super::friend::Friend>,
 }
