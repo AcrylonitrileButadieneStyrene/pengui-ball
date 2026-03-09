@@ -21,7 +21,7 @@ pub fn Player(state: crate::State, player: Store<Player>) -> impl IntoView {
             <super::PlayerCell
                 game=state.locations.game.clone()
                 sprite=player.sprite().get()
-                name=player.name().get().unwrap_or_else(|| "Unnamed Player".into())
+                name=player.name().get().unwrap_or_else(|| "<Unnamed Player>".into())
                 detail=().into_any()
                 medals=player.medals().get()
                 badge=player.badge().get()
