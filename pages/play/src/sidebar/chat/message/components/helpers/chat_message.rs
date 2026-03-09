@@ -76,7 +76,7 @@ fn has_ping(state: &crate::state::PlayState, message: &str) -> bool {
         .flatten()
         .map(|user| user.name.clone())
         .filter(|name| !name.is_empty())
-        .or_else(|| state.chat.guest_name.get())
+        .or_else(|| state.players.local.name().get())
     else {
         return false;
     };

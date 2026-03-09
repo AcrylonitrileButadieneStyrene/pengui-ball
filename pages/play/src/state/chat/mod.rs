@@ -21,7 +21,6 @@ pub struct State {
     pub input: NodeRef<leptos::html::Div>,
     pub destination: RwSignal<MessageDestination>,
 
-    pub guest_name: RwSignal<Option<Arc<str>>>,
     /// User ID of the currently signed in user.
     pub my_id: Signal<Option<Arc<str>>>,
     pub mention_audio: SendOption<leptos::web_sys::HtmlAudioElement>,
@@ -36,7 +35,6 @@ impl State {
             channels: RwSignal::default(),
             input: NodeRef::new(),
             destination: RwSignal::default(),
-            guest_name: RwSignal::default(),
             my_id,
             mention_audio: SendOption::new_local(is_browser().then(|| {
                 let audio =

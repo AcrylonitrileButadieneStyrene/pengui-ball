@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 use leptos_use::core::ConnectionReadyState;
 
-use crate::sidebar::session::Command;
+use crate::{sidebar::session::Command, states::players::player::PlayerStoreFields};
 
 stylance::import_style!(pub style, "guest_name.module.css");
 
@@ -20,7 +20,7 @@ pub fn GuestName() -> impl IntoView {
 #[island]
 fn Input() -> impl IntoView {
     let state = crate::state();
-    let guest_name = state.chat.guest_name;
+    let guest_name = state.players.local.name();
 
     let on_keydown = move |event: leptos::ev::KeyboardEvent| {
         if event.key() != "Enter" {
