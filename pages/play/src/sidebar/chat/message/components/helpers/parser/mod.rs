@@ -1,77 +1,10 @@
-use std::sync::Arc;
-
 use logos::Logos;
 
-#[derive(Debug, logos::Logos)]
-enum Token {
-    #[regex(r"\\.", |lex| str_trim(lex, 1, 0))]
-    Escaped(String),
+mod options;
+mod token;
 
-    #[token("**")]
-    Bold,
-
-    #[token("*")]
-    Italic,
-
-    #[token("__")]
-    Underline,
-
-    #[token("~~")]
-    Strike,
-
-    #[token("||")]
-    Spoiler,
-
-    #[regex(r":([a-z0-9_\-])+(?::|$)", |lex| str_trim(lex, 1, 1))]
-    Emoji(String),
-
-    #[regex(r"\[(t?[a-z0-9]{16}(:(\d+))?)\]", |lex| str_trim(lex, 1, 1))]
-    Screenshot(String),
-
-    #[token("_", str)]
-    #[token("|", str)]
-    #[token("~", str)]
-    #[token(":", str)]
-    #[regex(r"[^\\\*_~|\:]+", str)]
-    Text(String),
-}
-
-#[derive(Default)]
-pub struct Options {
-    pub screenshots: Option<Arc<str>>,
-}
-
-fn str(lex: &mut logos::Lexer<Token>) -> String {
-    lex.slice().to_string()
-}
-
-fn str_trim(lex: &mut logos::Lexer<'_, Token>, start: usize, end: usize) -> String {
-    let slice = lex.slice();
-    slice[start..slice.len() - end].to_string()
-}
-
-macro_rules! replace {
-    ($tokens: ident, $pattern: pat, $start: expr, $end: expr) => {
-        for i in 0..$tokens.len() {
-            if matches!($tokens[i], $pattern) {
-                let mut matched = None;
-                for j in (i + 1)..$tokens.len() {
-                    if matches!($tokens[j], $pattern) {
-                        matched = Some(j);
-                        break;
-                    }
-                }
-
-                if let Some(j) = matched {
-                    $tokens[i] = Token::Text($start.to_string());
-                    $tokens[j] = Token::Text($end.to_string())
-                } else {
-                    break;
-                }
-            }
-        }
-    };
-}
+pub use options::Options;
+use token::Token;
 
 pub fn parse(text: &str, options: Options) -> String {
     let mut tokens = dbg!(Token::lexer(text))
@@ -88,16 +21,32 @@ pub fn parse(text: &str, options: Options) -> String {
         })
         .try_collect::<Vec<_>>()
         .unwrap();
-    replace!(tokens, Token::Bold, "<b>", "</b>");
-    replace!(tokens, Token::Italic, "<i>", "</i>");
-    replace!(tokens, Token::Underline, "<u>", "</u>");
-    replace!(tokens, Token::Strike, "<s>", "</s>");
-    replace!(
-        tokens,
-        Token::Spoiler,
-        "<span class=\"spoiler\">",
-        "</span>"
-    );
+
+    let mut bold = None;
+    let mut italic = None;
+    let mut underline = None;
+    let mut strike = None;
+    let mut spoiler = None;
+
+    for i in 0..tokens.len() {
+        let (store, start, end) = match tokens[i] {
+            Token::Bold => (&mut bold, "<b>", "</b>"),
+            Token::Italic => (&mut italic, "<i>", "</i>"),
+            Token::Underline => (&mut underline, "<u>", "</u>"),
+            Token::Strike => (&mut strike, "<s>", "</s>"),
+            Token::Spoiler => (&mut spoiler, "<span class=\"spoiler\">", "</span>"),
+            _ => continue,
+        };
+
+        if let Some(previous) = *store {
+            tokens[previous] = Token::Text(start.to_string());
+            tokens[i] = Token::Text(end.to_string());
+            *store = None;
+        } else {
+            *store = Some(i);
+        }
+    }
+
     tokens
         .into_iter()
         .map(|token| match token {
