@@ -4,7 +4,6 @@
 #![feature(sync_nonpoison)]
 #![feature(iter_intersperse)]
 #![feature(random)]
-#![feature(iterator_try_collect)]
 #![feature(if_let_guard)]
 #![allow(non_snake_case)]
 

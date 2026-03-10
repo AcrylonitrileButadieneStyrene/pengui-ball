@@ -1,0 +1,10 @@
+:global(.emoji) {
+    max-width: 16px;
+    max-height: 16px;
+    image-rendering: auto;
+}
+
+:global(.emoji.big) {
+    max-width: 32px;
+    max-height: 32px;
+}

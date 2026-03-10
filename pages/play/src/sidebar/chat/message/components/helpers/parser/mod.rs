@@ -10,39 +10,46 @@ use token::Token;
 
 pub fn parse(text: &str, options: Options) -> String {
     let mut tokens = Token::lexer(text)
+        .filter_map(|x| x.ok())
         .map(|token| match token {
-            Ok(Token::Text(text) | Token::Escaped(text)) => Ok(Token::Text(
+            Token::Text(text) | Token::Escaped(text) => Token::Text(
                 text.replace('&', "&amp;")
                     .replace('<', "&lt;")
                     .replace('>', "&gt;"),
-            )),
+            ),
+            Token::Emoji(emoji) if let Some(url) = options.emojis.get(&Arc::from(&*emoji)) => {
+                Token::Emoji(url.to_string())
+            }
+            Token::Emoji(emoji) => Token::Text(format!(":{emoji}:")),
             x => x,
         })
-        .try_collect::<Vec<_>>()
-        .unwrap();
+        .collect::<Vec<_>>();
 
-    let mut bold = None;
-    let mut italic = None;
-    let mut underline = None;
-    let mut strike = None;
-    let mut spoiler = None;
+    let only_emojis = tokens.iter().all(|token| matches!(token, Token::Emoji(_)));
+    if !only_emojis {
+        let mut bold = None;
+        let mut italic = None;
+        let mut underline = None;
+        let mut strike = None;
+        let mut spoiler = None;
 
-    for i in 0..tokens.len() {
-        let (store, start, end) = match tokens[i] {
-            Token::Bold => (&mut bold, "<b>", "</b>"),
-            Token::Italic => (&mut italic, "<i>", "</i>"),
-            Token::Underline => (&mut underline, "<u>", "</u>"),
-            Token::Strike => (&mut strike, "<s>", "</s>"),
-            Token::Spoiler => (&mut spoiler, "<span class=\"spoiler\">", "</span>"),
-            _ => continue,
-        };
+        for i in 0..tokens.len() {
+            let (store, start, end) = match tokens[i] {
+                Token::Bold => (&mut bold, "<b>", "</b>"),
+                Token::Italic => (&mut italic, "<i>", "</i>"),
+                Token::Underline => (&mut underline, "<u>", "</u>"),
+                Token::Strike => (&mut strike, "<s>", "</s>"),
+                Token::Spoiler => (&mut spoiler, "<span class=\"spoiler\">", "</span>"),
+                _ => continue,
+            };
 
-        if let Some(previous) = *store {
-            tokens[previous] = Token::Text(start.to_string());
-            tokens[i] = Token::Text(end.to_string());
-            *store = None;
-        } else {
-            *store = Some(i);
+            if let Some(previous) = *store {
+                tokens[previous] = Token::Text(start.to_string());
+                tokens[i] = Token::Text(end.to_string());
+                *store = None;
+            } else {
+                *store = Some(i);
+            }
         }
     }
 
@@ -55,8 +62,13 @@ pub fn parse(text: &str, options: Options) -> String {
             Token::Underline => "__".to_string(),
             Token::Spoiler => "||".to_string(),
             Token::Strike => "~~".to_string(),
-            Token::Emoji(id) if let Some(url) = options.emojis.get(&Arc::from(&*id)) => format!("<img src=\"{url}\">"),
-            Token::Emoji(id) => format!(":{id}:"),
+            Token::Emoji(url) => {
+                if only_emojis {
+                    format!(r#"<img src="{url}" class="emoji big">"#)
+                } else {
+                    format!(r#"<img src="{url}" class="emoji">"#)
+                }
+            },
             Token::Screenshot(id) if let Some(ref author) = options.screenshots => {
                 // todo: options and temporary
                 format!("<img src=\"https://connect.ynoproject.net/2kki/screenshots/{author}/{id}.png\">")

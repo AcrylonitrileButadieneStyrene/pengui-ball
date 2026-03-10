@@ -54,8 +54,11 @@ fn PlayerCell(
             view! {
                 <img
                     class=style::sprite
-                    style:--sprite-index=sprite.1.to_string()
-                    src=format!("https://ynoproject.net/data/{game}/CharSet/{}.png", sprite.0.replace('#', "%23"))
+                    style=("--sprite-index", sprite.1.to_string())
+                    src=format!(
+                        "https://ynoproject.net/data/{game}/CharSet/{}.png",
+                        sprite.0.replace('#', "%23"),
+                    )
                 />
             }
             .into_any()

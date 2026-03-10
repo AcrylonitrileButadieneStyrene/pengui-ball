@@ -64,8 +64,7 @@ impl<T: ChatMessageComponent + Send + Sync> MessageComponent for T {
                 {..}
                 class:highlight=pinged
             >
-                {icon}
-                <super::super::author::Author uuid=author />
+                <super::super::author::Author uuid=author icon />
                 <span inner_html=inner_html />
             </Message>
         }
