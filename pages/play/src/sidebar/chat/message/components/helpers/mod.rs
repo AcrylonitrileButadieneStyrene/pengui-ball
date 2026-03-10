@@ -1,4 +1,5 @@
 mod chat_message;
+mod parser;
 
 pub use chat_message::ChatMessageComponent;
 

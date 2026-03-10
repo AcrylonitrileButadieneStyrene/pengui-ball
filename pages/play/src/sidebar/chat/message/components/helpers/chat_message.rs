@@ -57,8 +57,8 @@ impl<T: ChatMessageComponent + Send + Sync> MessageComponent for T {
                 class:highlight=pinged
             >
                 {icon}
-                <super::super::author::Author uuid=author />
-                <span>{text}</span>
+                <super::super::author::Author uuid=author.clone() />
+                <span inner_html=super::parser::parse(&text, super::parser::Options { screenshots: Some(author) }) />
             </Message>
         }
         .into_any()

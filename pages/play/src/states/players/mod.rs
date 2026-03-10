@@ -11,7 +11,7 @@ pub struct Players {
     pub all: RwSignal<HashMap<Arc<str>, Store<player::Player>>>,
     pub count: RwSignal<Option<u32>>,
     pub local: Store<player::Player>,
-    pub in_map: RwSignal<HashMap<u16, Store<player::Player>>>,
+    pub in_map: RwSignal<HashMap<i32, Store<player::Player>>>,
     pub friends: RwSignal<Vec<friend::Friend>>,
 }
 
@@ -48,10 +48,7 @@ impl Players {
         if id == -1 {
             Some(self.local)
         } else {
-            self.in_map
-                .read_untracked()
-                .get(&u16::try_from(id).unwrap())
-                .copied()
+            self.in_map.read_untracked().get(&id).copied()
         }
     }
 }
