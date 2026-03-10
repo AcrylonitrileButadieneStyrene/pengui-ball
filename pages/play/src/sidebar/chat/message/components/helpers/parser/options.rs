@@ -1,6 +1,6 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
-#[derive(Default)]
-pub struct Options {
-    pub screenshots: Option<Arc<str>>,
+pub struct Options<'a> {
+    pub screenshots: Option<&'a str>,
+    pub emojis: &'a HashMap<Arc<str>, Arc<str>>,
 }

@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use logos::Logos;
 
 mod options;
@@ -7,17 +9,14 @@ pub use options::Options;
 use token::Token;
 
 pub fn parse(text: &str, options: Options) -> String {
-    let mut tokens = dbg!(Token::lexer(text))
+    let mut tokens = Token::lexer(text)
         .map(|token| match token {
             Ok(Token::Text(text) | Token::Escaped(text)) => Ok(Token::Text(
                 text.replace('&', "&amp;")
                     .replace('<', "&lt;")
                     .replace('>', "&gt;"),
             )),
-            x => {
-                leptos::logging::log!("{x:?}");
-                x
-            }
+            x => x,
         })
         .try_collect::<Vec<_>>()
         .unwrap();
@@ -56,8 +55,8 @@ pub fn parse(text: &str, options: Options) -> String {
             Token::Underline => "__".to_string(),
             Token::Spoiler => "||".to_string(),
             Token::Strike => "~~".to_string(),
-            // todo: lookup table
-            Token::Emoji(id) => format!("<img src=\"/yno/2kki/images/ynomoji/{id}.png\">"),
+            Token::Emoji(id) if let Some(url) = options.emojis.get(&Arc::from(&*id)) => format!("<img src=\"{url}\">"),
+            Token::Emoji(id) => format!(":{id}:"),
             Token::Screenshot(id) if let Some(ref author) = options.screenshots => {
                 // todo: options and temporary
                 format!("<img src=\"https://connect.ynoproject.net/2kki/screenshots/{author}/{id}.png\">")
@@ -71,7 +70,13 @@ pub fn parse(text: &str, options: Options) -> String {
 #[cfg(test)]
 mod tests {
     fn parse(text: &str) -> String {
-        super::parse(text, super::Options::default())
+        super::parse(
+            text,
+            super::Options {
+                emojis: &std::collections::HashMap::default(),
+                screenshots: None,
+            },
+        )
     }
 
     #[test]

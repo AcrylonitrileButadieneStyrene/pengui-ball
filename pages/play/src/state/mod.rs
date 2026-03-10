@@ -24,6 +24,7 @@ pub struct PlayState {
     pub modal: RwSignal<Option<crate::modals::Modals>>,
     pub expeds: RwSignal<Option<crate::modals::expeds::types::Expeds>>,
 
+    pub interfaces: crate::states::Interfaces,
     pub locations: crate::states::Locations,
     pub players: crate::states::Players,
 }
@@ -48,6 +49,7 @@ impl PlayState {
             modal: RwSignal::new(None),
             expeds: RwSignal::new(None),
 
+            interfaces: crate::states::Interfaces::new(),
             locations: Arc::new(crate::states::locations::Locations::new(game_id)),
             players: Arc::new(crate::states::players::Players::new()),
         }

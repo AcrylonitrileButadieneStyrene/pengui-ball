@@ -42,7 +42,15 @@ impl<T: ChatMessageComponent + Send + Sync> MessageComponent for T {
         let timestamp = super::timestamp(message.timestamp);
 
         let icon = self.icon();
-        let text = message.text.clone();
+        let emojis = state.interfaces.emojis.all.read_untracked();
+        let inner_html = super::parser::parse(
+            &message.text,
+            super::parser::Options {
+                screenshots: Some(&author),
+                emojis: &emojis,
+            },
+        );
+        drop(emojis);
 
         view! {
             <Message
@@ -57,8 +65,8 @@ impl<T: ChatMessageComponent + Send + Sync> MessageComponent for T {
                 class:highlight=pinged
             >
                 {icon}
-                <super::super::author::Author uuid=author.clone() />
-                <span inner_html=super::parser::parse(&text, super::parser::Options { screenshots: Some(author) }) />
+                <super::super::author::Author uuid=author />
+                <span inner_html=inner_html />
             </Message>
         }
         .into_any()

@@ -18,12 +18,13 @@ pub enum Token {
     #[token("||")]
     Spoiler,
 
-    #[regex(r":([a-z0-9_\-])+(?::|$)", |lex| str_trim(lex, 1, 1))]
+    #[regex(r":([a-zA-Z0-9_\-])+(?::|$)", |lex| str_trim(lex, 1, 1))]
     Emoji(String),
 
     #[regex(r"\[(t?[a-z0-9]{16}(:(\d+))?)\]", |lex| str_trim(lex, 1, 1))]
     Screenshot(String),
 
+    #[token("\\", str)]
     #[token("_", str)]
     #[token("|", str)]
     #[token("~", str)]
