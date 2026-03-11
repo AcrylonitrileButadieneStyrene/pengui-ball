@@ -51,3 +51,21 @@
         color: red;
     }
 }
+
+:global(.emoji) {
+    max-width: 16px;
+    max-height: 16px;
+    image-rendering: auto;
+}
+
+:global(.emoji.big) {
+    max-width: 32px;
+    max-height: 32px;
+}
+
+:global(.screenshot) {
+    max-width: -webkit-fill-available;
+    max-width: -moz-available;
+    max-width: fill-available;
+    height: 120px;
+}

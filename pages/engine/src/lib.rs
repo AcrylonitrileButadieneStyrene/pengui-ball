@@ -20,7 +20,6 @@ pub fn Engine() -> impl IntoView {
 
     view! {
         <leptos_meta::Body {..} style:overflow="hidden" />
-        <leptos_meta::Link rel="stylesheet" href="/css/engine.css" />
         <leptos_meta::Meta name="robots" content="noindex" />
         <leptos_meta::Style>
             r"#canvas {

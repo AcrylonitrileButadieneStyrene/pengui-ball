@@ -58,7 +58,7 @@ impl<T: ChatMessageComponent + Send + Sync> MessageComponent for T {
                 header=move || {
                     view! {
                         {header}
-                        <span>{timestamp}</span>
+                        <span style:white-space="nowrap">{timestamp}</span>
                     }
                 }
                 {..}
