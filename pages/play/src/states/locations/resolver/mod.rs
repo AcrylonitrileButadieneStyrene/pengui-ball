@@ -88,7 +88,12 @@ impl LocationResolver {
             .cloned();
         value.map_or_else(
             || {
-                explorer::fetch(self.explorer.clone(), location.map, location.previous);
+                explorer::fetch_with_owner(
+                    self.explorer.clone(),
+                    location.map,
+                    location.previous,
+                    &self.owner,
+                );
                 LocationResolved::Pending
             },
             |entry| {

@@ -22,6 +22,10 @@ pub struct Location {
     // pub title_jp: Option<Arc<str>>,
 }
 
+pub fn fetch_with_owner(explorer: Container, map: u16, previous: Option<u16>, owner: &Owner) {
+    owner.with(|| fetch(explorer, map, previous));
+}
+
 pub fn fetch(explorer: Container, map: u16, previous: Option<u16>) {
     let pending = RwSignal::new(None);
     pending.track();
