@@ -35,11 +35,11 @@ pub enum Token {
     Text(String),
 }
 
-fn str(lex: &mut logos::Lexer<Token>) -> String {
+fn str(lex: &logos::Lexer<Token>) -> String {
     lex.slice().to_string()
 }
 
-fn str_trim(lex: &mut logos::Lexer<'_, Token>, start: usize, end: usize) -> String {
+fn str_trim(lex: &logos::Lexer<'_, Token>, start: usize, end: usize) -> String {
     let slice = lex.slice();
     slice[start..slice.len() - end].to_string()
 }

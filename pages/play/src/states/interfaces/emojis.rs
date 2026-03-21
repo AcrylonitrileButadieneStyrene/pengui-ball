@@ -6,18 +6,20 @@ use std::{
 use leptos::prelude::*;
 use wasm_bindgen::JsValue;
 
+type EmojiEntries = HashMap<Arc<str>, Arc<str>>;
+
 #[wasm_bindgen::prelude::wasm_bindgen]
 #[derive(Clone)]
 pub struct Emojis {
     #[wasm_bindgen(skip)]
-    pub sources: Arc<Mutex<HashMap<Arc<str>, HashMap<Arc<str>, Arc<str>>>>>,
+    pub sources: Arc<Mutex<HashMap<Arc<str>, EmojiEntries>>>,
     #[wasm_bindgen(skip)]
-    pub all: RwSignal<HashMap<Arc<str>, Arc<str>>>,
+    pub all: RwSignal<EmojiEntries>,
 }
 
 impl Emojis {
     pub fn new() -> Self {
-        let value = Emojis {
+        let value = Self {
             sources: Arc::new(Mutex::new(HashMap::new())),
             all: RwSignal::new(HashMap::default()),
         };
@@ -50,6 +52,7 @@ impl Emojis {
         let mut sources = self.sources.lock();
         sources.insert(source, emojis);
         self.update(&sources);
+        drop(sources);
     }
 
     fn update(&self, sources: &HashMap<Arc<str>, HashMap<Arc<str>, Arc<str>>>) {
@@ -79,6 +82,7 @@ impl Emojis {
         let mut sources = self.sources.lock();
         let result = sources.remove(&Arc::from(source)).is_some();
         self.update(&sources);
+        drop(sources);
         result
     }
 }

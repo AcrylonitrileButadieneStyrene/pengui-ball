@@ -22,7 +22,7 @@ impl Interfaces {
                 &JsValue::from(instance.clone()),
             )
             .unwrap();
-        };
+        }
 
         instance
     }

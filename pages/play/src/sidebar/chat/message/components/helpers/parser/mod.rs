@@ -14,7 +14,7 @@ use token::Token;
 pub fn parse(text: &str, options: Options) -> String {
     let mut seen_large_emoji = false;
     let mut tokens = Token::lexer(text)
-        .filter_map(|x| x.ok())
+        .filter_map(Result::ok)
         .map(transform_early(&options, &mut seen_large_emoji))
         .collect::<Vec<_>>();
 
@@ -36,7 +36,7 @@ fn transform_early(options: &Options, seen_large_emoji: &mut bool) -> impl FnMut
                 .replace('<', "&lt;")
                 .replace('>', "&gt;"),
         ),
-        Token::Screenshot(id) if let Some(ref author) = options.screenshots => {
+        Token::Screenshot(id) if let Some(author) = options.screenshots => {
             // todo: parse temporary and options
             Token::Screenshot(format!(
                 "https://connect.ynoproject.net/2kki/screenshots/{author}/{id}.png"
@@ -45,11 +45,11 @@ fn transform_early(options: &Options, seen_large_emoji: &mut bool) -> impl FnMut
         Token::Screenshot(text) => Token::Text(format!("[{text}]")),
         Token::Emoji((emoji, large)) if let Some(url) = options.emojis.get(&Arc::from(&*emoji)) => {
             if large {
-                if !*seen_large_emoji {
+                if *seen_large_emoji {
+                    Token::Text(format!("[{url}]"))
+                } else {
                     *seen_large_emoji = true;
                     Token::Screenshot(url.to_string())
-                } else {
-                    Token::Text(format!("[{url}]"))
                 }
             } else {
                 Token::Emoji((url.to_string(), false))
@@ -61,7 +61,7 @@ fn transform_early(options: &Options, seen_large_emoji: &mut bool) -> impl FnMut
     }
 }
 
-fn transform_spans(tokens: &mut Vec<Token>) {
+fn transform_spans(tokens: &mut [Token]) {
     let mut bold = None;
     let mut italic = None;
     let mut underline = None;

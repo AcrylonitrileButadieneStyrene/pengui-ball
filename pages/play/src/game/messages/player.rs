@@ -36,7 +36,7 @@ pub fn sync(state: &crate::state::PlayState, data: PlayerSyncData) {
     }
 
     state.players.in_map.update(|players| {
-        players.insert(id.try_into().unwrap(), player);
+        players.insert(id, player);
     });
 }
 
@@ -59,7 +59,7 @@ pub fn connect(state: &crate::state::PlayState, data: PlayerConnectData) {
 
 pub fn disconnect(state: &crate::state::PlayState, id: i32) {
     state.players.in_map.update(|uuids| {
-        uuids.remove(&id.try_into().unwrap());
+        uuids.remove(&id);
     });
 }
 

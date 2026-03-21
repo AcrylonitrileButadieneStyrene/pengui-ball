@@ -77,10 +77,26 @@ fn PlayerCell(
 
     view! {
         <div class=style::row>
-            {sprite} <span>{name}</span> <span class=style::detail>{detail}</span>
-            <span>{medals}</span> {badge}
+            {sprite} <span>{name}</span> <span class=style::detail>{detail}</span> <span class=style::medals>
+                <Medals medals />
+            </span> {badge}
         </div>
     }
+}
+
+#[component]
+fn Medals(medals: [u8; 5]) -> impl IntoView {
+    let [bronze, silver, gold, platinum, diamond] = medals;
+    ((0..diamond).map(|_| "diamond"))
+        .chain((0..platinum).map(|_| "platinum"))
+        .chain((0..gold).map(|_| "gold"))
+        .chain((0..silver).map(|_| "silver"))
+        .chain((0..bronze).map(|_| "bronze"))
+        .take(5)
+        .map(|kind| {
+            view! { <img src=format!("/yno/2kki/images/medal_{kind}.png") /> }
+        })
+        .collect::<Vec<_>>()
 }
 
 fn to_last_online(last_active: chrono::DateTime<chrono::Utc>) -> String {
