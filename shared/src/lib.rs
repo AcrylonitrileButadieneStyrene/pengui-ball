@@ -1,5 +1,6 @@
 #![feature(panic_update_hook)]
 #![allow(non_snake_case)]
+#![allow(unused_features)]
 
 use leptos::prelude::*;
 use leptos_router::{

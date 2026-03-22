@@ -1,10 +1,7 @@
-#![feature(result_option_map_or_default)]
-#![feature(nonpoison_rwlock)]
 #![feature(nonpoison_mutex)]
 #![feature(sync_nonpoison)]
 #![feature(iter_intersperse)]
 #![feature(random)]
-#![feature(if_let_guard)]
 #![allow(non_snake_case)]
 
 use std::sync::Arc;

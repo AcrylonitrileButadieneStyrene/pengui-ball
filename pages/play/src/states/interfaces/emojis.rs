@@ -58,8 +58,8 @@ impl Emojis {
     fn update(&self, sources: &HashMap<Arc<str>, HashMap<Arc<str>, Arc<str>>>) {
         self.all.set(
             sources
-                .iter()
-                .flat_map(|(_, entries)| entries.clone().into_iter())
+                .values()
+                .flat_map(|entries| entries.clone().into_iter())
                 .collect(),
         );
     }
