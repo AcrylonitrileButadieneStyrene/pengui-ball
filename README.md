@@ -46,4 +46,4 @@ ${\color{transparent}█████\color{#eeee70}██\color{white}█\color{
 
 # License
 This project is licensed under [MIT](LICENSE-MIT) OR [Apache-2.0](LICENSE-APACHE), 
-at your choice, with exceptions listed in [LICENSE-EXCEPTIONS](LICENSE-EXCEPTIONS).
+at your choice, with exceptions listed in [LICENSE](LICENSE).

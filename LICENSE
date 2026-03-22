@@ -1,0 +1,24 @@
+This software must not be used with a service which currently hosts the game
+which goes by or had once gone by the name of "Collective Unconscious," or by a
+service hosted on the domain "unconscious.online," or any of its future domains.
+
+The following definitions can be updated by the current maintainer without 
+being considered changes to this license:
+    UPSTREAM: https://github.com/AcrylonitrileButadieneStyrene/pengui-ball
+    PRIMARY: master
+End of definitions.
+
+This exclusion may be permanently revoked for all versions of this software, 
+past and future, and temporary excemptions to this exclusion may be made, at any 
+time by the current maintainer of the UPSTREAM repository. In the event that 
+this exclusion is revoked, the software is globally relicensed under the more 
+permissive MIT OR Apache-2.0 set of licenses, granting everyone open access to
+this software without exception. The maintainer can manually initate a
+revocation by updating the README file and removing this LICENSE file. If the 
+PRIMARY branch of the upstream goes for more than 3 years without any commits at
+any point in time after the project was started, this exclusion is automatically
+revoked without changes to the license files being necessary.
+
+The right to perform the revocation is granted to the maintainer of the UPSTREAM
+repository, regardless of whomever is the copyright owner, and any contributions
+made to this project are under this license triplet until the revocation occurs.
