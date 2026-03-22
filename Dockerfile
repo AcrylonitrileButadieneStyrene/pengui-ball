@@ -18,6 +18,7 @@ COPY nginx /etc/nginx
 RUN sed -i '/daemon off;/d' /etc/nginx/nginx.conf
 RUN sed -i 's|root \.\./public;|root /app/public;|g' /etc/nginx/nginx.conf
 COPY config /app/config
+VOLUME [ "app/config" ]
 COPY --from=builder /usr/src/myapp/target/x86_64-unknown-linux-musl/release/server /app/server
 COPY --from=builder /usr/src/myapp/public /app/public
 

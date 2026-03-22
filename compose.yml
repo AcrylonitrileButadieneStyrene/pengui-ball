@@ -1,7 +1,9 @@
 services:
-  pengui-ball:
+  server:
     build: .
     restart: unless-stopped
+    volumes:
+      - config:/app/config
 
   cloudflared:
     image: docker.io/cloudflare/cloudflared:latest
@@ -9,4 +11,7 @@ services:
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARED}
     command: tunnel --no-autoupdate run
-    network_mode: "service:pengui-ball"
+    network_mode: "service:server"
+
+volumes:
+  config:
