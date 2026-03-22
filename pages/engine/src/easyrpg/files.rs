@@ -90,13 +90,14 @@ pub fn delete_file(game: Arc<str>, id: usize) {
 
 #[allow(clippy::future_not_send)]
 pub async fn get_timestamps(game: Arc<str>) -> [Option<String>; 15] {
-    let (transaction, store) = get_store(&game).await;
+    let mut timestamps = [const { None }; 15];
+    let Ok((transaction, store)) = get_store(&game).await else {
+        return timestamps;
+    };
 
     let keys = store.get_all_keys(None, None).unwrap().await.unwrap();
     let values = store.get_all(None, None).unwrap().await.unwrap();
     let entries = keys.iter().zip(values);
-
-    let mut timestamps = std::array::from_fn(|_| None);
 
     for (key, value) in entries {
         let key = key.as_string().unwrap();
@@ -117,18 +118,16 @@ async fn get_store_with_entry(
     game: &str,
     id: usize,
 ) -> (idb::Transaction, idb::ObjectStore, String, bool) {
-    let (transaction, store) = get_store(game).await;
+    let (transaction, store) = get_store(game).await.unwrap();
     let key = format!("/easyrpg/{game}/Save/Save{id:>02}.lsd");
     let exists = exists(&store, idb::Query::Key(JsValue::from_str(&key))).await;
     (transaction, store, key, exists)
 }
 
 #[allow(clippy::future_not_send)]
-async fn get_store(game: &str) -> (idb::Transaction, idb::ObjectStore) {
-    let factory = idb::Factory::new().unwrap();
-    let mut request = factory
-        .open(&format!("/easyrpg/{game}/Save"), None)
-        .unwrap();
+async fn get_store(game: &str) -> Result<(idb::Transaction, idb::ObjectStore), idb::Error> {
+    let factory = idb::Factory::new()?;
+    let mut request = factory.open(&format!("/easyrpg/{game}/Save"), None)?;
     request.on_upgrade_needed(|event| {
         event
             .database()
@@ -136,12 +135,10 @@ async fn get_store(game: &str) -> (idb::Transaction, idb::ObjectStore) {
             .create_object_store("FILE_DATA", idb::ObjectStoreParams::new())
             .unwrap();
     });
-    let database = request.await.unwrap();
-    let transaction = database
-        .transaction(&["FILE_DATA"], idb::TransactionMode::ReadWrite)
-        .unwrap();
-    let store = transaction.object_store("FILE_DATA").unwrap();
-    (transaction, store)
+    let database = request.await?;
+    let transaction = database.transaction(&["FILE_DATA"], idb::TransactionMode::ReadWrite)?;
+    let store = transaction.object_store("FILE_DATA")?;
+    Ok((transaction, store))
 }
 
 #[allow(clippy::future_not_send)]

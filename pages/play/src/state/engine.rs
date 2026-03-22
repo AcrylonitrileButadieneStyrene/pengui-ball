@@ -19,7 +19,7 @@ impl Default for State {
             load_count: RwSignal::new(0),
             status,
             set_status,
-            save_timestamps: RwSignal::new(Box::new(std::array::from_fn(|_| None))),
+            save_timestamps: RwSignal::new(Box::new([const { None }; 15])),
         }
     }
 }
