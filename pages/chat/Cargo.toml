@@ -1,0 +1,10 @@
+[package]
+name = "chat"
+version = "0.1.0"
+edition = "2024"
+
+[lints]
+workspace = true
+
+[dependencies]
+logos = "0.16.1"

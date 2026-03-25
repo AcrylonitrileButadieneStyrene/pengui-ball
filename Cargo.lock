@@ -345,6 +345,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 
 [[package]]
+name = "chat"
+version = "0.1.0"
+dependencies = [
+ "logos",
+]
+
+[[package]]
 name = "chrono"
 version = "0.4.44"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2193,6 +2200,7 @@ checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
 name = "play"
 version = "0.1.0"
 dependencies = [
+ "chat",
  "chrono",
  "common",
  "flume",
@@ -2204,7 +2212,6 @@ dependencies = [
  "leptos-use",
  "leptos_meta",
  "leptos_router",
- "logos",
  "reactive_stores",
  "serde",
  "serde-wasm-bindgen",

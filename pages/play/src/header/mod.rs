@@ -23,7 +23,7 @@ pub fn Header() -> impl IntoView {
             >
                 <img src=format!(
                     "https://cdn.jsdelivr.net/gh/AcrylonitrileButadieneStyrene/yno-commumoji/assets/penguiBall{}.png",
-                    match std::random::random::<u8>(..) % 3 + 1 {
+                    match std::random::random::<u8>(..) % 4 + 1 {
                         1 => String::new(),
                         x => x.to_string(),
                     },

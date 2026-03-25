@@ -43,9 +43,9 @@ impl<T: ChatMessageComponent + Send + Sync> MessageComponent for T {
 
         let icon = self.icon();
         let emojis = state.interfaces.emojis.all.read_untracked();
-        let inner_html = super::parser::parse(
+        let inner_html = chat::parser::parse(
             &message.text,
-            super::parser::Options {
+            chat::parser::Options {
                 screenshots: Some(&author),
                 emojis: &emojis,
             },
