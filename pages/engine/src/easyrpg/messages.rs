@@ -22,11 +22,9 @@ fn handle(state: &crate::EngineState, message: EngineMessage) {
             state.muted.set(muted);
         }
         EngineMessage::Focus(active) => {
-            if document().has_focus().unwrap_or_default() {
-                return;
+            if !document().has_focus().unwrap_or_default() {
+                crate::effects::events::focus::control_timer(state.defocus_timeout, !active);
             }
-
-            crate::effects::events::control_timer(state.defocus_timeout, !active);
         }
         EngineMessage::SetSave(id, data) => super::files::set_file(state.game.clone(), id, data),
         EngineMessage::GetSave(id) => super::files::get_file(state.game.clone(), id),
