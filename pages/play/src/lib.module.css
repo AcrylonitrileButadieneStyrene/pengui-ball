@@ -1,6 +1,7 @@
 :root {
     --pop-out-scale: 1.25;
-    --ui-theme-border: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png") 4 repeat;
+    --ui-theme-border-url: url("https://ynoproject.net/2kki/images/ui/2kki/system1/border.png");
+    --ui-theme-border: var(--ui-theme-border-url) 4 repeat;
     --ui-theme-background: url("https://ynoproject.net/2kki/images/ui/2kki/system1/containerbg.png");
 }
 

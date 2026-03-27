@@ -1,24 +1,13 @@
-use std::sync::Arc;
-
 use leptos::prelude::*;
 
 pub mod files;
 pub mod messages;
 
-#[component]
-pub fn EasyRPG(game: Arc<str>, children: Children) -> impl IntoView {
-    view! {
-        <LoadPlayer game>
-            <StartPlayer>{children()}</StartPlayer>
-        </LoadPlayer>
-    }
-}
-
 #[derive(Clone)]
 struct Loaded(pub ReadSignal<bool>);
 
 #[island]
-fn LoadPlayer(game: Arc<str>, children: Children) -> impl IntoView {
+pub fn LoadPlayer(children: Children) -> impl IntoView {
     let state = expect_context::<crate::EngineState>();
     messages::setup_handler(state);
 
@@ -28,13 +17,13 @@ fn LoadPlayer(game: Arc<str>, children: Children) -> impl IntoView {
     Effect::new(super::callbacks::setup);
 
     view! {
-        <script src=format!("/yno/{game}/ynoengine-simd.js") onload=move || set_loaded(true) />
+        <script src=format!("_yno/ynoengine-simd.js") onload=move || set_loaded(true) />
         {children()}
     }
 }
 
 #[island]
-fn StartPlayer(children: Children) -> impl IntoView {
+pub fn StartPlayer(children: Children) -> impl IntoView {
     let loaded = expect_context::<Loaded>();
     let state = expect_context::<crate::EngineState>();
     let node_ref = state.easyrpg_player.canvas;

@@ -95,7 +95,7 @@ fn Medals(medals: [u8; 5]) -> impl IntoView {
         .chain((0..bronze).map(|_| "bronze"))
         .take(5)
         .map(|kind| {
-            view! { <img src=format!("/yno/2kki/images/medal_{kind}.png") /> }
+            view! { <img src=format!("_yno/images/medal_{kind}.png") /> }
         })
         .collect::<Vec<_>>()
 }

@@ -52,17 +52,27 @@ fn screenshot() -> impl Fn(&Screenshot) -> AnyView {
             previous: None,
         };
 
+        let image = format!(
+            "https://connect.ynoproject.net/2kki/screenshots/{}/{}.png",
+            screenshot.uuid, screenshot.id,
+        );
+        let border = format!(
+            "url('_yno/images/ui/{}/{}/border.png')",
+            screenshot.game, screenshot.system,
+        );
+        let background = format!(
+            "url('_yno/images/ui/{}/{}/containerbg.png')",
+            screenshot.game, screenshot.system,
+        );
+
         view! {
-            <div class=style::screenshot class=("pop-out", true)>
-                <img
-                    src=format!(
-                        "https://connect.ynoproject.net/2kki/screenshots/{}/{}.png",
-                        screenshot.uuid,
-                        screenshot.id,
-                    )
-                    loading="lazy"
-                />
-                <div></div>
+            <div
+                class=style::screenshot
+                class=("pop-out", true)
+                style=("--ui-theme-border-url", border)
+            >
+                <img src=image loading="lazy" />
+                <div style=("background-image", background)></div>
                 <crate::sidebar::location::Location location />
             </div>
         }

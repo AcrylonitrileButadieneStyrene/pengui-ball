@@ -4,8 +4,8 @@
 @font-face {
     font-family: "PGothic";
     src: local("MS PGothic"),
-        url("/yno/fonts/ms-pgothic.woff2") format("woff2"),
-        url("/yno/fonts/ms-pgothic.woff") format("woff");
+        url("/_yno/fonts/ms-pgothic.woff2") format("woff2"),
+        url("/_yno/fonts/ms-pgothic.woff") format("woff");
 }
 
 :root {

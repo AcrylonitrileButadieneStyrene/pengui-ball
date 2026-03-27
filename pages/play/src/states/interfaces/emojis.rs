@@ -28,16 +28,14 @@ impl Emojis {
             leptos::task::spawn_local({
                 let value = value.clone();
                 async move {
-                    if let Ok(response) = gloo_net::http::Request::get("/yno/2kki/ynomoji.json")
+                    if let Ok(response) = gloo_net::http::Request::get("_yno/ynomoji.json")
                         .send()
                         .await
                         && let Ok(emojis) = response.json::<HashMap<Arc<str>, Arc<str>>>().await
                     {
                         let emojis = emojis
                             .into_iter()
-                            .map(|(key, file)| {
-                                (key, format!("/yno/2kki/images/ynomoji/{file}").into())
-                            })
+                            .map(|(key, file)| (key, format!("_yno/images/ynomoji/{file}").into()))
                             .collect();
                         value.add_source_inner("ynomoji".into(), emojis);
                     }

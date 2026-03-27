@@ -30,8 +30,10 @@ pub fn Engine() -> impl IntoView {
             }"#
         </leptos_meta::Style>
 
-        <state::Provider game=game.clone()>
-            <easyrpg::EasyRPG game>{None::<()>}</easyrpg::EasyRPG>
+        <state::Provider game>
+            <easyrpg::LoadPlayer>
+                <easyrpg::StartPlayer>{None::<()>}</easyrpg::StartPlayer>
+            </easyrpg::LoadPlayer>
             <effects::Effects />
         </state::Provider>
     }
