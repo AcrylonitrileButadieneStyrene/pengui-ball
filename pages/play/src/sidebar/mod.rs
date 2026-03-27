@@ -3,7 +3,7 @@ use leptos::prelude::*;
 use crate::components::{Tab, Tabs};
 
 pub mod chat;
-mod location;
+pub mod location;
 mod player_count;
 mod players;
 pub mod session;

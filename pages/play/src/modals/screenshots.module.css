@@ -1,0 +1,32 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 44px;
+}
+
+.screenshot {
+    --pop-out-scale: 1.1;
+}
+
+.screenshot>img {
+    width: 160px;
+    height: 120px;
+    border: solid 8px;
+    border-image: var(--ui-theme-border);
+}
+
+.screenshot>div {
+    margin-top: -4px;
+    height: 26px;
+    border: solid 8px;
+    border-top: 0;
+    border-image: var(--ui-theme-border);
+}
+
+.screenshot>a {
+    display: inline-block;
+    width: 176px;
+    word-break: keep-all;
+    text-align: center;
+}

@@ -7,6 +7,8 @@
     color: white;
     overflow: visible;
     outline: 0;
+    max-width: calc(100% - 112px);
+    max-height: calc(100% - 112px);
 }
 
 @media not (prefers-reduced-motion: reduce) {

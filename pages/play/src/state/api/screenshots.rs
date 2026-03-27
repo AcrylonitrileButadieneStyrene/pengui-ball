@@ -10,9 +10,9 @@ pub struct Screenshot {
     #[serde(rename = "mapId")]
     pub map: Arc<str>,
     #[serde(rename = "mapX")]
-    pub map_x: u16,
+    pub map_x: i16,
     #[serde(rename = "mapY")]
-    pub map_y: u16,
+    pub map_y: i16,
     #[serde(rename = "systemName")]
     pub system: Arc<str>,
     pub timestamp: Arc<str>,

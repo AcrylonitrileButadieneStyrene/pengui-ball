@@ -79,7 +79,7 @@ pub fn on_message(state: &crate::state::PlayState, parts: &[&str]) {
         }
         ["pf", json] => {
             let new = serde_json::from_str::<Vec<Friend>>(json)
-                .unwrap()
+                .unwrap_or_default()
                 .into_iter()
                 .sorted_by_key(|friend| friend.name.clone())
                 .sorted_by_key(|friend| friend.online)
