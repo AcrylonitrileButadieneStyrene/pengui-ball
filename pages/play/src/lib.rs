@@ -2,6 +2,7 @@
 #![feature(sync_nonpoison)]
 #![feature(iter_intersperse)]
 #![feature(random)]
+#![feature(impl_trait_in_fn_trait_return)]
 #![allow(non_snake_case)]
 
 use std::sync::Arc;

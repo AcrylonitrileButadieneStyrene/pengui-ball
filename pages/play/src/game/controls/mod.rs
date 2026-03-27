@@ -30,7 +30,9 @@ pub fn Controls() -> impl IntoView {
                 </ToggleChat>
                 <icon::SixLayerTerminal />
                 <icon::Camera />
-                <icon::Photograph />
+                <OpenModal modal=Modals::Screenshots>
+                    <icon::Photograph />
+                </OpenModal>
                 <icon::Gear />
                 <Mute>
                     <icon::Sound />

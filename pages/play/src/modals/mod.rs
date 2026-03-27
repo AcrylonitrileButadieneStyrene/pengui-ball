@@ -5,6 +5,7 @@ pub mod expeds;
 pub mod login;
 pub mod logout;
 pub mod saves;
+pub mod screenshots;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -15,6 +16,7 @@ pub enum Modals {
     LogOut,
     Saves,
     Expeds,
+    Screenshots,
 }
 
 #[component]
@@ -25,6 +27,7 @@ pub fn Modals() -> impl IntoView {
         <logout::Modal />
         <saves::Modal />
         <expeds::Modal />
+        <screenshots::Modal />
     }
 }
 
@@ -60,8 +63,8 @@ pub fn Modal(when: Modals, children: Children) -> impl IntoView {
             node_ref=node_ref
             class=style::modal
             on:close=on_close
-            // idk if i like this or not
             autofocus=true
+            closedby="any"
         >
             <form method="dialog">
                 <button>{"\u{2716}"}</button>
@@ -69,5 +72,4 @@ pub fn Modal(when: Modals, children: Children) -> impl IntoView {
             {children()}
         </dialog>
     }
-    .attr("closedby", "any") // leptos is making it as difficult as possible
 }

@@ -77,7 +77,8 @@ fn PlayerCell(
 
     view! {
         <div class=style::row>
-            {sprite} <span>{name}</span> <span class=style::detail>{detail}</span> <span class=style::medals>
+            {sprite} <span>{name}</span> <span class=style::detail>{detail}</span>
+            <span class=style::medals>
                 <Medals medals />
             </span> {badge}
         </div>
