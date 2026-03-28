@@ -1,7 +1,9 @@
 use leptos::prelude::*;
 
+mod callbacks;
 pub mod files;
 pub mod messages;
+pub mod state;
 
 #[derive(Clone)]
 struct Loaded(pub ReadSignal<bool>);
@@ -14,7 +16,7 @@ pub fn LoadPlayer(children: Children) -> impl IntoView {
     let (loaded, set_loaded) = signal(false);
     provide_context(Loaded(loaded));
 
-    Effect::new(super::callbacks::setup);
+    Effect::new(callbacks::setup);
 
     view! {
         <script src=format!("_yno/ynoengine-simd.js") onload=move || set_loaded(true) />
@@ -35,7 +37,7 @@ pub fn StartPlayer(children: Children) -> impl IntoView {
 
         let state = state.clone();
         leptos::task::spawn_local(async move {
-            let config = crate::state::easyrpg::Configuration {
+            let config = crate::easyrpg::state::Configuration {
                 websocket_url: format!("wss://connect.ynoproject.net/{}/", state.game),
                 game: state.game.clone(),
             };

@@ -2,9 +2,7 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-pub mod easyrpg;
-
-use easyrpg::Player;
+use crate::easyrpg::state::Player;
 
 #[island]
 pub fn Provider(game: Arc<str>, children: Children) -> impl IntoView {

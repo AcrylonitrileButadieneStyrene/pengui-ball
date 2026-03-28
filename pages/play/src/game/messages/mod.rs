@@ -4,6 +4,8 @@ use common::PlayMessage;
 use leptos::{ev, prelude::*};
 use leptos_use::core::ConnectionReadyState;
 
+use crate::states::players::player::PlayerStoreFields;
+
 mod player;
 mod save;
 
@@ -47,5 +49,6 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
             state.engine.save_timestamps.set(timestamps);
         }
         PlayMessage::RoomSwitch => state.players.in_map.update(HashMap::clear),
+        PlayMessage::SetSystem(system) => state.players.local.system().set(Some(system.into())),
     }
 }

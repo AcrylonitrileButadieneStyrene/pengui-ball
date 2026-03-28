@@ -13,6 +13,7 @@ pub enum Message {
     SaveData(usize, SaveFile),
     SaveTimestamps(Box<[Option<String>; 15]>),
     RoomSwitch,
+    SetSystem(String),
 }
 
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]

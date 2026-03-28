@@ -1,10 +1,9 @@
 use leptos::{prelude::*, reactive::send_wrapper_ext::SendOption, wasm_bindgen::JsValue};
 
-use crate::state::easyrpg::bindings::{PlayerJSObject, create_easyrpg_player};
-
 mod bindings;
 mod configuration;
 
+use bindings::{PlayerJSObject, create_easyrpg_player};
 pub use configuration::Configuration;
 
 pub struct Player {

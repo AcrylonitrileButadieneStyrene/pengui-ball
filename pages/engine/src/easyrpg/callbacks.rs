@@ -64,8 +64,8 @@ pub fn on_request_file(_file: String) {
 
 #[allow(clippy::needless_pass_by_value)]
 #[wasm_bindgen]
-pub fn on_update_system_graphic(graphic: String) {
-    leptos::logging::log!("changing system graphic: {graphic}");
+pub fn on_update_system_graphic(system: String) {
+    crate::send(common::PlayMessage::SetSystem(system));
 }
 
 #[wasm_bindgen]

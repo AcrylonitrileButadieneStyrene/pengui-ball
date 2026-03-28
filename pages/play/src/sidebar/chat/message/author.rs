@@ -35,28 +35,30 @@ pub fn Author(uuid: Arc<str>, icon: AnyView) -> impl IntoView {
     };
 
     let name = move || {
-        author.system().read().as_ref().map(|system| {
-            view! {
-                <span
-                    class=style::name
-                    style:background-image=format!(
-                        "var(--{}-{system}-gradient)",
-                        state.locations.game,
-                    )
-                    style=(
-                        "--shadow-color",
-                        format!("var(--{}-{system}-shadow)", state.locations.game),
-                    )
-                >
-                    {author.name().get()}
-                </span>
-            }
-        })
+        author.system().read().as_ref().map_or_else(
+            || author.name().get().into_any(),
+            |system| {
+                author_name_with_system(author.name().get(), system, &state.locations.game)
+                    .into_any()
+            },
+        )
     };
 
     view! {
         <div class=style::author>
             {icon} {move || wrapper().0} {name} {badge} {move || wrapper().1}
         </div>
+    }
+}
+
+fn author_name_with_system(name: Option<Arc<str>>, system: &str, game: &str) -> impl IntoView {
+    view! {
+        <span
+            class=style::name
+            style:background-image=format!("var(--{}-{system}-gradient)", game)
+            style=("--shadow-color", format!("var(--{}-{system}-shadow)", game))
+        >
+            {name}
+        </span>
     }
 }
