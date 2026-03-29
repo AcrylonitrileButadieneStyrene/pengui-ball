@@ -9,11 +9,13 @@ stylance::import_style!(pub style, "author.module.css");
 #[component]
 pub fn Author(uuid: Arc<str>, icon: AnyView) -> impl IntoView {
     let state = crate::state();
-    let author = state
+    let Some(author) = state
         .players
         .all
         .with_untracked(|players| players.get(&uuid).copied())
-        .unwrap();
+    else {
+        return "(Unknown)".into_any();
+    };
 
     let wrapper = move || {
         if *author.account().read() {
@@ -49,6 +51,7 @@ pub fn Author(uuid: Arc<str>, icon: AnyView) -> impl IntoView {
             {icon} {move || wrapper().0} {name} {badge} {move || wrapper().1}
         </div>
     }
+    .into_any()
 }
 
 fn author_name_with_system(name: Option<Arc<str>>, system: &str, game: &str) -> impl IntoView {

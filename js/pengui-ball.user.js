@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        PenguiBall Temporary Workarounds
-// @version     0.1.13
+// @version     0.1.14
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @homepageURL https://github.com/AcrylonitrileButadieneStyrene/pengui-ball/
@@ -28,16 +28,16 @@ if (location.host == "ynoproject.net") {
     Password
     <input name="password" type="password">
   </label>
-  <label>
-    Log In
-    <input type="submit"/>
-  </label>
+  <div style="display:flex;">
+    <input type="submit" value="Register"/>
+    <input type="submit" value="Login" style="flex:1;"/>
+  </div>
   <div class="cf-turnstile" data-sitekey="0x4AAAAAAB2ijZ45647GuniE"/>
 </form>
 <script>
-  loginForm.onsubmit = () => {
+  loginForm.onsubmit = event => {
     const body = new URLSearchParams(new FormData(loginForm)).toString();
-    window.parent.postMessage(["login", body], "*");
+    window.parent.postMessage([event.submitter.value.toLowerCase(), body], "*");
     return false;
   }
 </script>
@@ -128,7 +128,7 @@ if (location.host == "ynoproject.net") {
     if (e.data?.length == 2) {
       GM.xmlHttpRequest({
         method: "POST",
-        url: "https://connect.ynoproject.net/seiko/login",
+        url: "https://connect.ynoproject.net/seiko/" + e.data[0],
         data: e.data[1],
         headers: {
           "content-type": "application/x-www-form-urlencoded",
@@ -137,6 +137,8 @@ if (location.host == "ynoproject.net") {
         onload: response => {
           if (response.status != 200)
             return alert(response.responseText);
+          if (e.data[0] == "register")
+            return alert("Account created successfully.");
           const auth = response.responseHeaders.split("auth=")[1].split(";")[0];
           iframe.contentWindow.postMessage(["set-auth", auth], "*");
           onAuthCookieSet();
