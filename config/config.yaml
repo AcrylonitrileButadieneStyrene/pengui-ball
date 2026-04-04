@@ -11,8 +11,6 @@ games:
     name: "Uneven Dream"
   - id: "deepdreams"
     name: "Deep Dreams"
-  - id: "prayers"
-    name: "Answered Prayers"
   - id: "someday"
     name: "Someday"
   - id: "amillusion"
