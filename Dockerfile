@@ -1,5 +1,5 @@
 # from https://hub.docker.com/_/rust/
-FROM docker.io/library/rust:alpine as builder
+FROM docker.io/library/rust:alpine AS builder
 WORKDIR /usr/src/myapp
 
 RUN apk add --no-cache curl
@@ -7,9 +7,14 @@ RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/ca
 RUN rustup default nightly
 RUN rustup target add wasm32-unknown-unknown
 RUN cargo binstall cargo-leptos
-COPY . .
 ENV LEPTOS_BIN_TARGET_TRIPLE x86_64-unknown-linux-musl
-RUN cargo leptos build --release
+COPY . .
+RUN --mount=type=cache,target=/usr/src/myapp/target \
+    --mount=type=cache,target=/usr/local/cargo/git/db \
+    --mount=type=cache,target=/usr/local/cargo/registry/ \
+	cargo leptos build --release && \
+	cp /usr/src/myapp/target/x86_64-unknown-linux-musl/release/server /bin/server
+
 
 FROM docker.io/library/nginx:alpine
 WORKDIR /app
@@ -19,7 +24,7 @@ RUN sed -i '/daemon off;/d' /etc/nginx/nginx.conf
 RUN sed -i 's|root \.\./public;|root /app/public;|g' /etc/nginx/nginx.conf
 COPY config /app/config
 VOLUME [ "app/config" ]
-COPY --from=builder /usr/src/myapp/target/x86_64-unknown-linux-musl/release/server /app/server
+COPY --from=builder /bin/server /app/
 COPY --from=builder /usr/src/myapp/public /app/public
 
 EXPOSE 8080
