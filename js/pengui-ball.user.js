@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        PenguiBall Temporary Workarounds
-// @version     0.1.14
+// @version     0.1.15
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @homepageURL https://github.com/AcrylonitrileButadieneStyrene/pengui-ball/
@@ -32,7 +32,7 @@ if (location.host == "ynoproject.net") {
     <input type="submit" value="Register"/>
     <input type="submit" value="Login" style="flex:1;"/>
   </div>
-  <div class="cf-turnstile" data-sitekey="0x4AAAAAAB2ijZ45647GuniE"/>
+  <div class="cf-turnstile" data-sitekey="0x4AAAAAAC_-ONgXPc49t7sd"/>
 </form>
 <script>
   loginForm.onsubmit = event => {
