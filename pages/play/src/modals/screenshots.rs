@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-use crate::{state::api::screenshots::Screenshot, states::locations::Location};
+use crate::state::api::screenshots::Screenshot;
 
 stylance::import_style!(pub style, "screenshots.module.css");
 
@@ -44,7 +44,7 @@ fn Screenshots() -> impl IntoView {
 
 fn screenshot() -> impl Fn(&Screenshot) -> AnyView {
     |screenshot| {
-        let location = Location {
+        let location = locations::Location {
             game: screenshot.game.clone(),
             map: screenshot.map.parse().unwrap(),
             x: screenshot.map_x,

@@ -252,6 +252,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "badge_tools"
+version = "0.1.0"
+dependencies = [
+ "common",
+ "leptos",
+ "leptos-use",
+ "leptos_meta",
+ "locations",
+ "serde",
+]
+
+[[package]]
 name = "base16"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1897,6 +1909,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6373607a59f0be73a39b6fe456b8192fcc3585f602af20751600e974dd455e77"
 
 [[package]]
+name = "locations"
+version = "0.1.0"
+dependencies = [
+ "gloo-net",
+ "leptos",
+ "serde",
+]
+
+[[package]]
 name = "lock_api"
 version = "0.4.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2212,6 +2233,7 @@ dependencies = [
  "leptos-use",
  "leptos_meta",
  "leptos_router",
+ "locations",
  "reactive_stores",
  "serde",
  "serde-wasm-bindgen",
@@ -3016,6 +3038,7 @@ dependencies = [
 name = "shared"
 version = "0.1.0"
 dependencies = [
+ "badge_tools",
  "console_error_panic_hook",
  "engine",
  "home",

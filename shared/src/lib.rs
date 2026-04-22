@@ -44,6 +44,7 @@ pub fn App() -> impl IntoView {
         <Router>
             <Routes fallback=|| ()>
                 <Route path=path!("/") view=home::Home />
+                <Route path=path!("/badge_tools") view=badge_tools::BadgeTools />
                 <Route path=path!("/:game/") view=play::Play />
                 <Route path=path!("/:game/engine") view=engine::Engine />
             </Routes>

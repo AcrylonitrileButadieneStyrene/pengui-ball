@@ -58,7 +58,7 @@ pub fn fetch_with_owner(
 }
 
 pub fn fetch(game: &str) -> LocalResource<Result<LocationData, gloo_net::Error>> {
-    let endpoint = format!("_yno/locations/{game}/config.json");
+    let endpoint = format!("/{game}/_yno/locations/{game}/config.json");
     LocalResource::new(move || {
         let endpoint = endpoint.clone();
         async move {

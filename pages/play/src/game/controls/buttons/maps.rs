@@ -1,6 +1,7 @@
 use leptos::prelude::*;
+use locations::LocationResolved;
 
-use crate::{game::controls::icon, states::locations::LocationResolved};
+use crate::game::controls::icon;
 
 #[derive(Debug, Clone)]
 enum Map {
@@ -37,7 +38,9 @@ pub fn Maps() -> impl IntoView {
 
             let endpoint = match (is_2kki, location) {
                 (_, LocationResolved::Pending | LocationResolved::Unknown) => return vec![],
-                (_, LocationResolved::Multiple(locations)) if locations.is_empty() => return vec![],
+                (_, LocationResolved::Multiple(locations)) if locations.is_empty() => {
+                    return vec![];
+                }
                 (true, LocationResolved::Single { name, .. }) => [EXPLORER_BASE, &name].concat(),
                 (true, LocationResolved::Multiple(locations)) => [
                     EXPLORER_BASE,

@@ -2,12 +2,10 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-use crate::states::locations::Location;
-
 #[derive(Clone)]
 pub struct GlobalMessage {
     pub author: Arc<str>,
-    pub location: Option<Location>,
+    pub location: Option<locations::Location>,
 }
 
 impl super::ChatMessageComponent for GlobalMessage {

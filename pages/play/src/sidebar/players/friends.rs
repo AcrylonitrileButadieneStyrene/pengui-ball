@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::{
     sidebar::{location::Location, players::to_last_online},
-    states::{locations::Location, players::friend::Friend},
+    states::players::friend::Friend,
 };
 
 stylance::import_style!(pub style, "friends.module.css");
@@ -44,7 +44,7 @@ pub fn Friends() -> impl IntoView {
 #[component]
 fn Friend(friend: Friend) -> impl IntoView {
     let detail = if friend.online {
-        let location = friend.map_id.parse().ok().map(|map| Location {
+        let location = friend.map_id.parse().ok().map(|map| locations::Location {
             game: friend.game.clone(),
             map,
             previous: friend.prev_map_id.as_ref().and_then(|str| str.parse().ok()),

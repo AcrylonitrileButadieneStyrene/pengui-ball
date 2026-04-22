@@ -18,6 +18,7 @@ leptos-use.workspace = true
 wasm-bindgen.workspace = true
 
 # local crates
+badge_tools.path = "../pages/badge_tools"
 engine.path = "../pages/engine"
 home.path = "../pages/home"
 play.path = "../pages/play"

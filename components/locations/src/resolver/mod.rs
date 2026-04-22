@@ -10,23 +10,26 @@ use super::Location;
 mod classic;
 mod explorer;
 
-pub struct LocationResolver {
+pub struct Resolver {
     owner: Owner,
     classic: classic::Container,
     explorer: explorer::Container,
 }
 
-impl LocationResolver {
-    pub fn new_prefetch(game: Arc<str>) -> Self {
-        let mut map = HashMap::new();
-        let resource = classic::fetch(&game);
-        map.insert(game, resource);
-
+impl Resolver {
+    pub fn new() -> Self {
         Self {
             owner: Owner::current().unwrap(),
-            classic: Mutex::new(map),
+            classic: Mutex::new(HashMap::new()),
             explorer: Arc::new(Mutex::new(HashMap::new())),
         }
+    }
+
+    pub fn new_prefetch(game: Arc<str>) -> Self {
+        let new = Self::new();
+        let resource = classic::fetch(&game);
+        new.classic.lock().insert(game, resource);
+        new
     }
 
     pub fn get_or_init(

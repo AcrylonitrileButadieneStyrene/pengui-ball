@@ -1,8 +1,9 @@
 use itertools::Itertools;
 use leptos::{prelude::*, reactive::send_wrapper_ext::SendOption};
 use leptos_use::core::ConnectionReadyState;
+use locations::LocationResolved;
 
-use crate::{sidebar::session::Command, state, states::locations::LocationResolved};
+use crate::{sidebar::session::Command, state};
 
 pub mod types;
 

@@ -1,0 +1,13 @@
+.center {
+    margin: auto;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    width: min-content;
+}
+
+main {
+    background: #111;
+    color: white;
+    padding: 20px;
+}

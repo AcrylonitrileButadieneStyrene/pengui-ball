@@ -2,22 +2,16 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-mod location;
-mod resolver;
-
-pub use location::Location;
-pub use resolver::LocationResolved;
-
 pub struct Locations {
     pub game: Arc<str>,
-    pub resolver: Arc<resolver::LocationResolver>,
-    pub current: RwSignal<Option<Location>>,
-    pub current_resolved: Signal<Option<resolver::LocationResolved>>,
+    pub resolver: Arc<locations::Resolver>,
+    pub current: RwSignal<Option<locations::Location>>,
+    pub current_resolved: Signal<Option<locations::LocationResolved>>,
 }
 
 impl Locations {
     pub fn new(game: Arc<str>) -> Self {
-        let resolver = Arc::new(resolver::LocationResolver::new_prefetch(game.clone()));
+        let resolver = Arc::new(locations::Resolver::new_prefetch(game.clone()));
         let current = RwSignal::new(None);
 
         Self {

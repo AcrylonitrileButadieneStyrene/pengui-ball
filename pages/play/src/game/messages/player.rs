@@ -3,7 +3,7 @@ use std::sync::Arc;
 use common::messages::play::{PlayerConnectData, PlayerSyncData};
 use leptos::prelude::*;
 
-use crate::states::{locations::Location, players::player::PlayerStoreFields};
+use crate::states::players::player::PlayerStoreFields;
 
 pub fn sync(state: &crate::state::PlayState, data: PlayerSyncData) {
     let PlayerSyncData {
@@ -66,7 +66,7 @@ pub fn disconnect(state: &crate::state::PlayState, id: i32) {
 pub fn teleported(state: &crate::state::PlayState, map: u16, x: i16, y: i16) {
     state.locations.current.update(|value| {
         let previous = value.as_ref().map(|previous| previous.map);
-        *value = Some(Location {
+        *value = Some(locations::Location {
             game: state.locations.game.clone(),
             map,
             previous,

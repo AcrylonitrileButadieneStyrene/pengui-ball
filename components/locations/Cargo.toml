@@ -1,0 +1,12 @@
+[package]
+name = "locations"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+leptos.workspace = true
+serde.workspace = true
+gloo-net.workspace = true
+
+[lints]
+workspace = true

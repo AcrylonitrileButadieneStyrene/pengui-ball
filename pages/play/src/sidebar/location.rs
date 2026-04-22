@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-use crate::states::locations::{Location, LocationResolved};
+use locations::{Location, LocationResolved};
 
 #[island]
 pub fn CurrentLocation() -> impl IntoView {

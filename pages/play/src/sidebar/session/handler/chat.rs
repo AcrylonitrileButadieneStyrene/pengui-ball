@@ -5,7 +5,6 @@ use crate::{
         global::GlobalMessage, map::MapMessage, party::PartyMessage,
     },
     state::chat::message::{MessageComponent, MessageItem},
-    states::locations::Location,
 };
 
 pub fn item<T: MessageComponent + 'static>(
@@ -56,7 +55,7 @@ pub fn gsay(
                     && let Ok(x) = x.parse()
                     && let Ok(y) = y.parse()
                 {
-                    Some(Location {
+                    Some(locations::Location {
                         game: state.locations.game.clone(),
                         map,
                         previous: prev.parse().ok(),
