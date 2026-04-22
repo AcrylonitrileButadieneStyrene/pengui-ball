@@ -48,7 +48,7 @@ fn Connection(game: Arc<str>, children: Children) -> impl IntoView {
         close,
         ..
     } = use_websocket_with_options::<String, String, FromToStringCodec, _, _>(
-        &format!("wss://connect.ynoproject.net/{game}/session"),
+        &format!("wss://api.ynoproject.net/{game}/session"),
         UseWebSocketOptions::default()
             .immediate(false)
             .reconnect_limit(leptos_use::ReconnectLimit::Limited(0))

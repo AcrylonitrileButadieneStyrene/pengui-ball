@@ -38,7 +38,7 @@ pub fn StartPlayer(children: Children) -> impl IntoView {
         let state = state.clone();
         leptos::task::spawn_local(async move {
             let config = crate::easyrpg::state::Configuration {
-                websocket_url: format!("wss://connect.ynoproject.net/{}/", state.game),
+                websocket_url: format!("wss://api.ynoproject.net/{}/", state.game),
                 game: state.game.clone(),
             };
             state.easyrpg_player.start(config).await;

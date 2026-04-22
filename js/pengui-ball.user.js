@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        PenguiBall Temporary Workarounds
-// @version     0.1.15
+// @version     0.1.16
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @homepageURL https://github.com/AcrylonitrileButadieneStyrene/pengui-ball/
@@ -8,9 +8,9 @@
 // @match       *://127.0.0.1:8080/*
 // @match       https://pengui-ball.jackssrt.com/*
 // @match       https://ynoproject.net/%F0%9F%A5%BA
-// @match       https://connect.ynoproject.net/%F0%9F%A5%BA
+// @match       https://api.ynoproject.net/%F0%9F%A5%BA
 // @run-at      document-start
-// @connect     connect.ynoproject.net
+// @connect     api.ynoproject.net
 // @downloadURL https://raw.githubusercontent.com/AcrylonitrileButadieneStyrene/pengui-ball/master/js/pengui-ball.user.js
 // @supportURL  https://github.com/AcrylonitrileButadieneStyrene/pengui-ball/issues
 // ==/UserScript==
@@ -66,7 +66,7 @@ if (location.host == "ynoproject.net") {
 </style>
   `);
   document.close();
-} else if (location.host == "connect.ynoproject.net") {
+} else if (location.host == "api.ynoproject.net") {
   window.addEventListener("message", e => {
     if (e.data.length == 2) {
       if (e.data[0] == "set-auth")
@@ -99,7 +99,7 @@ if (location.host == "ynoproject.net") {
 
   // please give me a CORS excemption so i don't have to do this
   const iframe = document.createElement("iframe");
-  iframe.src = "https://connect.ynoproject.net/%F0%9F%A5%BA";
+  iframe.src = "https://api.ynoproject.net/%F0%9F%A5%BA";
   iframe.style.display = "none";
   iframe.onload = () => {
     let items = queue;
@@ -128,7 +128,7 @@ if (location.host == "ynoproject.net") {
     if (e.data?.length == 2) {
       GM.xmlHttpRequest({
         method: "POST",
-        url: "https://connect.ynoproject.net/seiko/" + e.data[0],
+        url: "https://auth.ynoproject.net/" + e.data[0],
         data: e.data[1],
         headers: {
           "content-type": "application/x-www-form-urlencoded",

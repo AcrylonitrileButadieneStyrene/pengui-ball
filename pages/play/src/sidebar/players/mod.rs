@@ -56,7 +56,7 @@ fn PlayerCell(
                     class=style::sprite
                     style=("--sprite-index", sprite.1.to_string())
                     src=format!(
-                        "https://ynoproject.net/data/{game}/CharSet/{}.png",
+                        "https://cdn.ynoproject.net/{game}/CharSet/{}.png",
                         sprite.0.replace('#', "%23"),
                     )
                 />

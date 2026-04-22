@@ -53,7 +53,7 @@ fn screenshot() -> impl Fn(&Screenshot) -> AnyView {
         };
 
         let image = format!(
-            "https://connect.ynoproject.net/2kki/screenshots/{}/{}.png",
+            "https://ugc.ynoproject.net/screenshots/{}/{}.png",
             screenshot.uuid, screenshot.id,
         );
         let border = format!(

@@ -39,7 +39,7 @@ fn transform_early(options: &Options, seen_large_emoji: &mut bool) -> impl FnMut
         Token::Screenshot(id) if let Some(author) = options.screenshots => {
             // todo: parse temporary and options
             Token::Screenshot(format!(
-                "https://connect.ynoproject.net/2kki/screenshots/{author}/{id}.png"
+                "https://ugc.ynoproject.net/screenshots/{author}/{id}.png"
             ))
         }
         Token::Screenshot(text) => Token::Text(format!("[{text}]")),
