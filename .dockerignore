@@ -3,6 +3,7 @@
 !.cargo
 !assets
 !common
+!components
 !config
 !nginx
 !pages

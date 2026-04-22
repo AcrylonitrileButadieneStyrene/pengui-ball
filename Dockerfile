@@ -15,7 +15,6 @@ RUN --mount=type=cache,target=/usr/src/myapp/target \
 	cargo leptos build --release && \
 	cp /usr/src/myapp/target/x86_64-unknown-linux-musl/release/server /bin/server
 
-
 FROM docker.io/library/nginx:alpine
 WORKDIR /app
 
