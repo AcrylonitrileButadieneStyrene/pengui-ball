@@ -17,19 +17,18 @@ lto = true
 panic = "abort"
 
 [workspace.dependencies]
-gloo-net = { version = "0.6.0", default-features = false, features = [
+gloo-net = { version = "0.7.0", default-features = false, features = [
     "http",
     "json",
 ] }
-leptos = { version = "0.8.17", features = ["nightly", "islands"] }
+leptos = { version = "0.8.19", features = ["nightly", "islands"] }
 leptos_router = { version = "0.8.12", features = ["nightly"] }
 leptos_meta = "0.8.6"
 leptos-use = "0.18.3"
 serde = { version = "1", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
-stylance = "0.7.4"
-stylance-cli = "0.7.4"
-wasm-bindgen = "=0.2.112"
+stylance = "0.8.0"
+wasm-bindgen = "=0.2.114"
 web-sys = { version = "*", features = [
     "Selection",
     "Range",

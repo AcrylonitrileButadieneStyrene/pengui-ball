@@ -1,7 +1,7 @@
 set windows-shell := ["powershell.exe", "-c"]
 
 css:
-    stylance -w pages/play --output-file target/site/css/play.css
+    stylance -w pages/play --output-file assets/css/play.css
 
 [linux]
 fmt:
