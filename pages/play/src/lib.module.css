@@ -46,7 +46,6 @@ body {
     }
 }
 
-button,
 :global(.button) {
     color: white;
     background-color: rgb(45, 17, 23);
@@ -56,13 +55,11 @@ button,
     user-select: none;
 }
 
-button,
 :global(.pop-out) {
     transition: transform 0.125s cubic-bezier(0.7, 0, 0.7, 1.5);
 }
 
-button:not(:disabled):hover,
-:global(.pop-out):hover {
+:global(.pop-out):not(:disabled):hover {
     transform: scale(var(--pop-out-scale));
 }
 

@@ -69,7 +69,11 @@ fn CurrentUser() -> impl IntoView {
 
         let on_click = on_click.clone();
         content.map(|content| {
-            view! { <button on:click=on_click>{content}</button> }
+            view! {
+                <button on:click=on_click class="button pop-out">
+                    {content}
+                </button>
+            }
         })
     }
 }

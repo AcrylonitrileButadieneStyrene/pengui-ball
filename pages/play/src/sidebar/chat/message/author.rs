@@ -58,8 +58,8 @@ fn author_name_with_system(name: Option<Arc<str>>, system: &str, game: &str) -> 
     view! {
         <span
             class=style::name
-            style:background-image=format!("var(--{}-{system}-gradient)", game)
-            style=("--shadow-color", format!("var(--{}-{system}-shadow)", game))
+            style:background-image=format!("var(--{game}-{system}-gradient)")
+            style=("--shadow-color", format!("var(--{game}-{system}-shadow)"))
         >
             {name}
         </span>

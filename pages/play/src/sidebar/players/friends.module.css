@@ -6,6 +6,10 @@
     display: none;
 }
 
-.header:nth-child(2) {
-    order: 1;
+.action {
+    background: 0;
+    border: 0;
+    color: white;
+    text-decoration: underline;
+    padding: 0;
 }

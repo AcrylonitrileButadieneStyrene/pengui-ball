@@ -18,5 +18,9 @@ pub fn FullScreen(children: Children) -> impl IntoView {
         }
     };
 
-    view! { <button on:click=on_click>{children()}</button> }
+    view! {
+        <button on:click=on_click class="pop-out">
+            {children()}
+        </button>
+    }
 }

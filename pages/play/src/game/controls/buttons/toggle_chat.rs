@@ -9,7 +9,7 @@ pub fn ToggleChat(children: Children) -> impl IntoView {
     let on_click = move |_| game_config.update(|config| config.chat_hidden ^= true);
 
     view! {
-        <button class="strickable" class:stricken=chat_hidden on:click=on_click>
+        <button class="strickable pop-out" class:stricken=chat_hidden on:click=on_click>
             {children()}
         </button>
     }

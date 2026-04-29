@@ -4,6 +4,7 @@ use leptos::prelude::*;
 
 use crate::components::{Scroller, Tab, Tabs};
 
+mod components;
 mod friends;
 mod map;
 
@@ -65,39 +66,15 @@ fn PlayerCell(
         },
     );
 
-    let badge = badge.map(|badge| {
-        view! {
-            <img
-                class=style::badge
-                loading="lazy"
-                src=format!("https://ynoproject.net/2kki/images/badge/{badge}.png")
-            />
-        }
-    });
-
     view! {
         <div class=style::row>
-            {sprite} <span>{name}</span> <span class=style::detail>{detail}</span>
-            <span class=style::medals>
-                <Medals medals />
-            </span> {badge}
+            <span>{sprite}</span>
+            <span>{name}</span>
+            <span class=style::detail>{detail}</span>
+            <components::Medals medals />
+            <components::Badge badge />
         </div>
     }
-}
-
-#[component]
-fn Medals(medals: [u8; 5]) -> impl IntoView {
-    let [bronze, silver, gold, platinum, diamond] = medals;
-    ((0..diamond).map(|_| "diamond"))
-        .chain((0..platinum).map(|_| "platinum"))
-        .chain((0..gold).map(|_| "gold"))
-        .chain((0..silver).map(|_| "silver"))
-        .chain((0..bronze).map(|_| "bronze"))
-        .take(5)
-        .map(|kind| {
-            view! { <img src=format!("_yno/images/medal_{kind}.png") /> }
-        })
-        .collect::<Vec<_>>()
 }
 
 fn to_last_online(last_active: chrono::DateTime<chrono::Utc>) -> String {

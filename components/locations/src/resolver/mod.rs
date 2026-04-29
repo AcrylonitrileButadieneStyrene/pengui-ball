@@ -16,17 +16,19 @@ pub struct Resolver {
     explorer: explorer::Container,
 }
 
-impl Resolver {
-    pub fn new() -> Self {
+impl Default for Resolver {
+    fn default() -> Self {
         Self {
             owner: Owner::current().unwrap(),
             classic: Mutex::new(HashMap::new()),
             explorer: Arc::new(Mutex::new(HashMap::new())),
         }
     }
+}
 
+impl Resolver {
     pub fn new_prefetch(game: Arc<str>) -> Self {
-        let new = Self::new();
+        let new = Self::default();
         let resource = classic::fetch(&game);
         new.classic.lock().insert(game, resource);
         new

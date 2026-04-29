@@ -34,6 +34,7 @@ pub fn Private(children: Children) -> impl IntoView {
             class=style::button
             class:private=move || config.get().private_mode == 1
             class:single=move || config.get().private_mode == 2
+            class:pop-out=true
             on:click=on_click
         >
             {children()}
