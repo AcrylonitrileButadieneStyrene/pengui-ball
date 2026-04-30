@@ -45,3 +45,10 @@ games:
     name: "[COLD]"
   - id: "loveyou"
     name: "loveyou"
+  - id: "okuri"
+    name: "Okuri"
+  - id: "scarynikki"
+    name: "Scary Nikki"
+  - id: "space"
+    name: "Space Funeral"
+  

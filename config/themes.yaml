@@ -109,6 +109,10 @@
   - takikomi_syst2
   - fluxide_sysblava
   - Holdery_Sys_Garden_Festival
+  - eur_menusys
+  - PGR_SYS_06
+  - eur_menusys2
+  - eur_menusys3
   - system_E_eye
   - System_kuraud
   - Kong_SystemFC
@@ -125,6 +129,9 @@ amillusion:
   - system EPACSE
   - MenuChance
   - tournesol
+  - MenuGlace
+  - hack-menu
+  - jaisormenu
 braingirl:
   - analog
   - Vanilla
@@ -239,6 +246,18 @@ if:
   - sys-p
   - sys-p2
   - sys-p3
+loveyou:
+  - defaultsystem
+  - systemcursed
+  - systemmeat
+  - systemsoap
+  - system95
+  - systemdorfic2
+  - systemnocturne
+  - systemyellow
+  - systemcopper
+  - systemglass
+  - systemshampoo
 mikan:
   - s_1
   - s_2
@@ -250,8 +269,8 @@ nostalgic:
   - cute
   - mono
   - colorful
-  - 001
-  - 006
+  - "001"
+  - "006"
 oneshot:
   - system
   - system2

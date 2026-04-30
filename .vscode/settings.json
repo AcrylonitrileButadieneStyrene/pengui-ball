@@ -4,7 +4,7 @@
         "Cargo.toml": "Cargo.lock"
     },
     "rust-analyzer.cargo.features": [
-        "ssr",
+        "ssr"
     ],
     "rust-analyzer.procMacro.ignored": {
         "leptos_macro": [
@@ -12,5 +12,6 @@
             "island",
             "server"
         ]
-    }
+    },
+    "deno.enable": true
 }
