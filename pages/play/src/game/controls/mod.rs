@@ -24,7 +24,9 @@ pub fn Controls() -> impl IntoView {
                 <OpenModal modal=Modals::Saves>
                     <icon::FloppyDisk />
                 </OpenModal>
-                <icon::PaintPalette />
+                <OpenModal modal=Modals::Themes>
+                    <icon::PaintPalette />
+                </OpenModal>
                 <ToggleChat>
                     <icon::SpeechBubble />
                 </ToggleChat>

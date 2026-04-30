@@ -6,28 +6,31 @@ pub mod login;
 pub mod logout;
 pub mod saves;
 pub mod screenshots;
+pub mod themes;
 
 stylance::import_style!(pub style, "mod.module.css");
 
 #[derive(Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum Modals {
     Cors,
+    Expeds,
     LogIn,
     LogOut,
     Saves,
-    Expeds,
     Screenshots,
+    Themes,
 }
 
 #[component]
 pub fn Modals() -> impl IntoView {
     view! {
         <cors::Modal />
+        <expeds::Modal />
         <login::Modal />
         <logout::Modal />
         <saves::Modal />
-        <expeds::Modal />
         <screenshots::Modal />
+        <themes::Modal />
     }
 }
 

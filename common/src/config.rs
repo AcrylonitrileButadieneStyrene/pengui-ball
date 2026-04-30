@@ -1,8 +1,10 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc};
 
 #[derive(Debug, serde::Deserialize)]
 pub struct ServerConfiguration {
     pub games: Vec<Game>,
+    #[serde(skip)]
+    pub themes: HashMap<Arc<str>, Vec<Arc<str>>>,
     #[serde(default)]
     pub motd: Option<Arc<str>>,
 }

@@ -1,6 +1,7 @@
 pub fn load() -> anyhow::Result<common::ServerConfiguration> {
-    let config: common::ServerConfiguration =
+    let mut config: common::ServerConfiguration =
         yaml_serde::from_reader(std::fs::File::open("config/config.yaml")?)?;
+    config.themes = yaml_serde::from_reader(std::fs::File::open("config/themes.yaml")?)?;
 
     tokio::spawn(crate::theme_compiler::run());
 
