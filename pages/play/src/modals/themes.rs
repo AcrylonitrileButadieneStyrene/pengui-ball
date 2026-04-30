@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use leptos::prelude::*;
 
 #[component]
@@ -8,8 +10,23 @@ pub fn Modal() -> impl IntoView {
 
     view! {
         <super::Modal when=super::Modals::Themes>
-            <div>{format!("{themes:#?}")}
-            </div>
+            {themes.map_or_else(Fallback, |themes| view!{ <Inner game=game.id.clone() themes /> }.into_any())}
         </super::Modal>
     }
+}
+
+fn Fallback() -> AnyView {
+    "This game does not yet support menu themes".into_any()
+}
+
+#[island]
+fn Inner(game: Arc<str>, themes: Vec<Arc<str>>) -> impl IntoView {
+    themes
+        .into_iter()
+        .map(|theme| {
+            view! {
+                <div>{theme}</div>
+            }
+        })
+        .collect::<Vec<_>>()
 }

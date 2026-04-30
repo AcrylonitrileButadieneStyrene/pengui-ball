@@ -19,6 +19,7 @@
 .controls button {
     background: 0;
     border: 0;
+    padding: 0;
 }
 
 .controls button:global(.strickable):not(:global(.stricken)) path:nth-child(2) {
