@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 48px;
+    /* this is a hack */
+    max-height: calc(100vh - 138px);
+    overflow-y: scroll;
+}
+
+.icon {
+    background-image: var(--bg);
+    border: solid 24px;
+    border-image: var(--bd) 10 repeat;
+    width: 68px;
+    height: 68px;
+}
+
+.icon img {
+    width: 100%;
+}

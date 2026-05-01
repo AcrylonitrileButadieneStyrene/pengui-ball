@@ -6,17 +6,19 @@ use leptos::{
 
 #[component]
 pub fn Modal() -> impl IntoView {
+    let iframe = view! {
+        <iframe
+            src="https://ynoproject.net/\u{1F97A}"
+            width=300
+            height=137
+            style:border="0"
+        />
+    }
+    .attr("loading", "lazy");
+
     view! {
         <super::Modal when=super::Modals::LogIn>
-            {view! {
-                <iframe
-                    src="https://ynoproject.net/\u{1F97A}"
-                    width=300
-                    height=137
-                    style:border="0"
-                />
-            }
-                .attr("loading", "lazy")} <LoginCallback />
+            {iframe} <LoginCallback />
         </super::Modal>
     }
 }
