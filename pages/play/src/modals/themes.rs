@@ -16,7 +16,7 @@ pub fn Modal() -> impl IntoView {
             .map(|theme| view! { <Icon game=game.id.clone() theme /> })
             .collect::<Vec<_>>();
 
-        view! { <Listener>{icons}</Listener> }.into_any()
+        view! { <Listener game=game.id.clone()>{icons}</Listener> }.into_any()
     };
 
     view! {
@@ -28,20 +28,32 @@ pub fn Modal() -> impl IntoView {
 }
 
 #[island]
-fn Listener(children: Children) -> impl IntoView {
-    let on_click = |event: leptos::ev::MouseEvent| {
+fn Listener(game: Arc<str>, children: Children) -> impl IntoView {
+    let (selected, set_selected) = signal(None);
+
+    let on_click = move |event: leptos::ev::MouseEvent| {
         if let Some(target) = event.target()
             && let Some(element) = target.dyn_ref::<web_sys::HtmlButtonElement>()
             && let Some(id) = element.dataset().get("id")
         {
-            leptos::logging::log!("changing to {id}");
+            set_selected(Some(id));
         }
+    };
+
+    let style = move || {
+        selected().map(|id| format!(
+            ":root {{
+                --ui-theme-border-url: url('https://ynoproject.net/{game}/images/ui/{game}/{id}/border.png'); 
+                --ui-theme-background: url('https://ynoproject.net/{game}/images/ui/{game}/{id}/containerbg.png'); 
+            }}",
+        )).map(|style| view! { <style>{style}</style> })
     };
 
     view! {
         <div class=style::container on:click=on_click>
             {children()}
         </div>
+        {style}
     }
 }
 
