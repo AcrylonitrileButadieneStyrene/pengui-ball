@@ -4,7 +4,8 @@
     justify-content: space-evenly;
     gap: 48px;
     /* this is a hack */
-    max-height: calc(100vh - 138px);
+    max-height: calc(100vh - 178px);
+    padding: 20px;
     overflow-y: scroll;
 }
 
@@ -12,10 +13,11 @@
     background-image: var(--bg);
     border: solid 24px;
     border-image: var(--bd) 10 repeat;
-    width: 68px;
-    height: 68px;
+    width: 112px;
+    height: 112px;
 }
 
 .icon img {
+    pointer-events: none;
     width: 100%;
 }
