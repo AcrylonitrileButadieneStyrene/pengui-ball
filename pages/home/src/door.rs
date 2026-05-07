@@ -11,33 +11,31 @@ pub fn Door(index: usize, game: common::config::Game) -> impl IntoView {
     let logo_src = format!("https://ynoproject.net/images/logo_{}.png", &game.id);
 
     view! {
-        <DoorSound id=game.id.clone() index>
-            <DoorClickable id=game.id.clone() index=index>
-                <div class="door" style=("--i", index.to_string()) aria-label=aria_label>
-                    <DoorSpotlight index />
-                    <DoorImage id=game.id.clone() index />
-                    <img class="logo" src=logo_src alt="" height=60 />
-                    <img
-                        class="shadow"
-                        src="https://ynoproject.net/images/door_shadow.png"
-                        alt=""
-                        width=180
-                        height=64
-                    />
-                </div>
-            </DoorClickable>
-        </DoorSound>
+        <DoorWrapper id=game.id.clone() index>
+            <div class="door" style=("--i", index.to_string()) aria-label=aria_label>
+                <DoorSpotlight index />
+                <DoorImage id=game.id.clone() index />
+                <img class="logo" src=logo_src alt="" height=60 />
+                <img
+                    class="shadow"
+                    src="https://ynoproject.net/images/door_shadow.png"
+                    alt=""
+                    width=180
+                    height=64
+                />
+            </div>
+        </DoorWrapper>
     }
 }
 
 #[island]
-fn DoorSound(id: Arc<str>, index: usize, children: Children) -> impl IntoView {
-    let node_ref = NodeRef::new();
+fn DoorWrapper(id: Arc<str>, index: usize, children: Children) -> impl IntoView {
+    let audio_ref = NodeRef::new();
     let selected = expect_context::<RwSignal<Option<usize>>>();
 
     Effect::new(move || {
         if selected() == Some(index)
-            && let Some(audio) = node_ref.get()
+            && let Some(audio) = audio_ref.get()
         {
             let audio = audio as HtmlAudioElement;
             set_timeout(
@@ -46,22 +44,6 @@ fn DoorSound(id: Arc<str>, index: usize, children: Children) -> impl IntoView {
             );
         }
     });
-
-    view! {
-        <audio
-            node_ref=node_ref
-            src=format!("https://ynoproject.net/audio/door_{id}.wav")
-            hidden=true
-            prop:volume=0.5
-            preload="none"
-        />
-        {children()}
-    }
-}
-
-#[island]
-fn DoorClickable(id: Arc<str>, index: usize, children: Children) -> impl IntoView {
-    let selected = expect_context::<RwSignal<Option<usize>>>();
 
     let href = format!("/{id}/");
     let on_click = {
@@ -79,6 +61,13 @@ fn DoorClickable(id: Arc<str>, index: usize, children: Children) -> impl IntoVie
     };
 
     view! {
+        <audio
+            node_ref=audio_ref
+            src=format!("https://ynoproject.net/audio/door_{id}.wav")
+            hidden=true
+            prop:volume=0.5
+            preload="none"
+        />
         <a href=href on:click=on_click>
             {children()}
         </a>
@@ -87,13 +76,9 @@ fn DoorClickable(id: Arc<str>, index: usize, children: Children) -> impl IntoVie
 
 #[island]
 fn DoorSpotlight(index: usize) -> impl IntoView {
-    let selected = expect_context::<RwSignal<Option<usize>>>();
-
-    view! {
-        <Show when=move || selected() == Some(index)>
-            <div class="spotlight" />
-        </Show>
-    }
+    expect_context::<RwSignal<Option<usize>>>()()
+        .filter(|selected| *selected == index)
+        .map(|_| view! { <div class="spotlight" /> });
 }
 
 #[island]
@@ -109,15 +94,17 @@ fn DoorImage(id: Arc<str>, index: usize) -> impl IntoView {
         }
     });
 
+    let src = move || {
+        format!(
+            "https://ynoproject.net/images/door_{}{id}.gif",
+            if open() { "open_" } else { "" },
+        )
+    };
+
     view! {
         <img
             class="icon"
-            src=move || {
-                format!(
-                    "https://ynoproject.net/images/door_{}{id}.gif",
-                    if open() { "open_" } else { "" },
-                )
-            }
+            src=src
             alt=""
             height=120
         />

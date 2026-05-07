@@ -8,7 +8,6 @@ pub fn Doors() -> impl IntoView {
     view! {
         <main class="doors">
             <DoorsContext>
-                <DoorsSound />
                 <For
                     each=move || games.clone().into_iter().enumerate()
                     key=|game| game.clone()
@@ -30,17 +29,10 @@ fn DoorsContext(children: Children) -> impl IntoView {
         selected.set(None);
     });
 
-    view! { {children()} }
-}
-
-#[island]
-fn DoorsSound() -> impl IntoView {
-    let selected = expect_context::<RwSignal<Option<usize>>>();
-    let node_ref = NodeRef::new();
-
+    let audio_ref = NodeRef::new();
     Effect::new(move || {
         if selected().is_some()
-            && let Some(audio) = node_ref.get()
+            && let Some(audio) = audio_ref.get()
         {
             let audio = audio as HtmlAudioElement;
             drop(audio.play());
@@ -49,10 +41,11 @@ fn DoorsSound() -> impl IntoView {
 
     view! {
         <audio
-            node_ref=node_ref
+            node_ref=audio_ref
             src="https://ynoproject.net/audio/door_effect.wav"
             hidden=true
             preload="none"
         />
+        { children() }
     }
 }
