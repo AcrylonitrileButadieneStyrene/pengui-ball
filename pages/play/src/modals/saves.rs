@@ -18,6 +18,7 @@ pub fn Modal() -> impl IntoView {
             <div class=style::container>
                 {(1..=15).map(|index| view! { <Slot index /> }).collect::<Vec<_>>()}
             </div>
+            <Sync />
         </super::Modal>
     }
 }
@@ -113,4 +114,36 @@ fn Controls(
             </button>
         </div>
     }
+}
+
+#[island]
+fn Sync() -> impl IntoView {
+    let state = crate::state();
+    let user = state.api.user;
+
+    let url = std::sync::Arc::<str>::from(format!(
+        "https://api.ynoproject.net/{}/api/savesync?command=timestamp",
+        state.locations.game
+    ));
+
+    let timestamp = LocalResource::new(move || {
+        let url = url.clone();
+        async move {
+            if user.read().is_none() {
+                return None;
+            }
+
+            gloo_net::http::Request::get(&url)
+                .send()
+                .await
+                .ok()?
+                .text()
+                .await
+                .ok()
+        }
+    });
+
+    Effect::new(move || {});
+
+    view! { <div>{move || timestamp.get()}</div> }
 }

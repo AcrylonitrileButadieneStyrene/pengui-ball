@@ -101,12 +101,5 @@ fn DoorImage(id: Arc<str>, index: usize) -> impl IntoView {
         )
     };
 
-    view! {
-        <img
-            class="icon"
-            src=src
-            alt=""
-            height=120
-        />
-    }
+    view! { <img class="icon" src=src alt="" height=120 /> }
 }

@@ -46,6 +46,6 @@ fn DoorsContext(children: Children) -> impl IntoView {
             hidden=true
             preload="none"
         />
-        { children() }
+        {children()}
     }
 }
