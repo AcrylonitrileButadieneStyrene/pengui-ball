@@ -48,7 +48,7 @@ pub fn StartPlayer(children: Children) -> impl IntoView {
             // so it's probably a side effect of its strange load system
             set_timeout(
                 || crate::send(common::PlayMessage::EngineLoaded),
-                std::time::Duration::from_millis(200),
+                std::time::Duration::from_millis(350),
             );
         });
     });

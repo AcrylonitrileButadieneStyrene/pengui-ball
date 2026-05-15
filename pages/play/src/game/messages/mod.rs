@@ -1,7 +1,11 @@
 use std::{collections::HashMap, sync::Arc};
 
 use common::PlayMessage;
-use leptos::{ev, prelude::*};
+use leptos::{
+    ev,
+    prelude::*,
+    web_sys::{js_sys::Reflect, wasm_bindgen::prelude::Closure},
+};
 use leptos_use::core::ConnectionReadyState;
 
 use crate::states::players::player::PlayerStoreFields;
@@ -22,6 +26,13 @@ pub fn setup_handler(state: Arc<crate::state::PlayState>) {
 fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
     match message {
         PlayMessage::EngineLoaded => {
+            Reflect::set(
+                &window(),
+                &"onbeforeunload".into(),
+                &Closure::<dyn Fn() -> u8>::new(|| 1).into_js_value(),
+            )
+            .unwrap();
+
             state.engine.load_count.update(|count| *count += 1);
             if state.session.status.get_untracked() == ConnectionReadyState::Open {
                 state.engine.send(common::EngineMessage::Connect);
