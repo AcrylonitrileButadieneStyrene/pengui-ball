@@ -9,5 +9,6 @@ mod theme_compiler;
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt().init();
+    log::info!("Initializing");
     serve::run().await;
 }
