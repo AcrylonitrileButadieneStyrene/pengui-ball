@@ -68,4 +68,5 @@
     max-width: -moz-available;
     max-width: fill-available;
     height: 120px;
+    max-height: unset;
 }

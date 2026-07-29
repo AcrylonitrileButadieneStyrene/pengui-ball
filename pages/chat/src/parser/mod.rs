@@ -49,7 +49,7 @@ fn transform_early(options: &Options, seen_large_emoji: &mut bool) -> impl FnMut
                     Token::Text(format!("[{url}]"))
                 } else {
                     *seen_large_emoji = true;
-                    Token::Screenshot(url.to_string())
+                    Token::Sticker(url.to_string())
                 }
             } else {
                 Token::Emoji((url.to_string(), false))
@@ -99,6 +99,7 @@ fn transform_late(only_emojis: bool) -> impl Fn(Token) -> String {
         Token::Emoji((url, _)) if only_emojis => format!(r#"<img src="{url}" class="emoji big">"#),
         Token::Emoji((url, _)) => format!(r#"<img src="{url}" class="emoji">"#),
         Token::Screenshot(url) => format!(r#"<img src="{url}" class="screenshot">"#),
+        Token::Sticker(url) => format!(r#"<img src="{url}" class="emoji screenshot">"#),
         Token::Text(text) => text,
     }
 }

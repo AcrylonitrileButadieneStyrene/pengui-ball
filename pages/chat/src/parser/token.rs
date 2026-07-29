@@ -24,6 +24,7 @@ pub enum Token {
 
     #[regex(r"\[t?[a-z0-9]{16}(:(\d+))?\]", |lex| str_trim(lex, 1, 1))]
     Screenshot(String),
+    Sticker(String),
 
     #[token("\\", str)]
     #[token("_", str)]
