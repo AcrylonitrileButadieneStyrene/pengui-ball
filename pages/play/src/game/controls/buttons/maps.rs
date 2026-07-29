@@ -70,7 +70,7 @@ pub fn Maps() -> impl IntoView {
                 request
                     .json::<Vec<_>>()
                     .await
-                    .unwrap()
+                    .unwrap_or_default()
                     .into_iter()
                     .map(Map::ExplorerMap)
                     .collect()
@@ -78,7 +78,7 @@ pub fn Maps() -> impl IntoView {
                 request
                     .json::<Vec<_>>()
                     .await
-                    .unwrap()
+                    .unwrap_or_default()
                     .into_iter()
                     .map(Map::WikiMap)
                     .collect()
