@@ -113,6 +113,13 @@ pub async fn get_timestamps(game: Arc<str>) -> [Option<String>; 15] {
     timestamps
 }
 
+pub fn send_timestamps(game: Arc<str>) {
+    leptos::task::spawn_local(async move {
+        let timestamps = get_timestamps(game).await;
+        crate::send(common::PlayMessage::SaveTimestamps(Box::new(timestamps)));
+    });
+}
+
 #[allow(clippy::future_not_send)]
 async fn get_store_with_entry(
     game: &str,

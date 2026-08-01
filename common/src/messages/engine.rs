@@ -8,4 +8,5 @@ pub enum Message {
     SetSave(usize, Arc<[u8]>),
     GetSave(usize),
     DeleteSave(usize),
+    GetSaveTimestamps,
 }

@@ -16,7 +16,7 @@ pub fn Modal() -> impl IntoView {
                 <div>Please exit the game before modifying your saves.</div>
             </div>
             <div class=style::container>
-                {(1..=15).map(|index| view! { <Slot index /> }).collect::<Vec<_>>()}
+                <Slots />
             </div>
             <Sync />
         </super::Modal>
@@ -24,9 +24,26 @@ pub fn Modal() -> impl IntoView {
 }
 
 #[island]
+fn Slots() -> impl IntoView {
+    let state = crate::state();
+    let mut opened = false;
+    Effect::new(move || {
+        let was_opened = opened;
+        opened = state.modal.get() == Some(super::Modals::Saves);
+        if opened && !was_opened {
+            state.engine.save_timestamps.refetch();
+        }
+    });
+
+    (1..=15)
+        .map(|index| view! { <Slot index /> })
+        .collect::<Vec<_>>()
+}
+
+#[island]
 fn Slot(index: usize) -> impl IntoView {
     let state = crate::state();
-    let timestamps = state.engine.save_timestamps;
+    let timestamps = state.engine.save_timestamps.value;
 
     let timestamp = move || {
         timestamps.get()[index - 1].as_ref().map_or_else(

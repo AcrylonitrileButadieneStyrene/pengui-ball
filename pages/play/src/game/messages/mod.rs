@@ -57,7 +57,7 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
             save::data(state, slot, save_file);
         }
         PlayMessage::SaveTimestamps(timestamps) => {
-            state.engine.save_timestamps.set(timestamps);
+            state.engine.save_timestamps.setter.set(timestamps);
         }
         PlayMessage::RoomSwitch => state.players.in_map.update(HashMap::clear),
         PlayMessage::SetSystem(system) => state.players.local.system().set(Some(system.into())),

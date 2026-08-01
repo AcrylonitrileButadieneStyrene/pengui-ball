@@ -29,6 +29,7 @@ fn handle(state: &crate::EngineState, message: EngineMessage) {
         EngineMessage::SetSave(id, data) => super::files::set_file(state.game.clone(), id, data),
         EngineMessage::GetSave(id) => super::files::get_file(state.game.clone(), id),
         EngineMessage::DeleteSave(id) => super::files::delete_file(state.game.clone(), id),
+        EngineMessage::GetSaveTimestamps => super::files::send_timestamps(state.game.clone()),
     }
 }
 

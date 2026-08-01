@@ -1,11 +1,15 @@
 use common::messages::play::ConnectionStatus;
 use leptos::{html::Iframe, prelude::*};
 
+mod save_timestamps;
+
+pub use save_timestamps::SaveTimestamps;
+
 pub struct State {
     pub frame: NodeRef<Iframe>,
     pub load_count: RwSignal<u32>,
     pub status: ReadSignal<ConnectionStatus>,
-    pub save_timestamps: RwSignal<Box<[Option<String>; 15]>>,
+    pub save_timestamps: SaveTimestamps,
 
     set_status: WriteSignal<ConnectionStatus>,
 }
@@ -13,13 +17,14 @@ pub struct State {
 impl Default for State {
     fn default() -> Self {
         let (status, set_status) = signal(ConnectionStatus::Disconnected);
+        let frame = NodeRef::new();
 
         Self {
-            frame: NodeRef::new(),
+            frame,
             load_count: RwSignal::new(0),
             status,
             set_status,
-            save_timestamps: RwSignal::new(Box::new([const { None }; 15])),
+            save_timestamps: SaveTimestamps::new(frame),
         }
     }
 }
