@@ -57,7 +57,7 @@ pub fn Author(uuid: Arc<str>, icon: AnyView) -> impl IntoView {
 fn author_name_with_system(name: Option<Arc<str>>, system: &str, game: &str) -> impl IntoView {
     view! {
         <span
-            class=style::name
+            class=format!("{} theme-{game}-{system}", style::name)
             style:background-image=format!("var(--{game}-{system}-gradient)")
             style=("--shadow-color", format!("var(--{game}-{system}-shadow)"))
         >
