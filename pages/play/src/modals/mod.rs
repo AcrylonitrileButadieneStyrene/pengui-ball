@@ -6,6 +6,7 @@ pub mod login;
 pub mod logout;
 pub mod saves;
 pub mod screenshots;
+pub mod settings;
 pub mod themes;
 
 stylance::import_style!(pub style, "mod.module.css");
@@ -19,6 +20,7 @@ pub enum Modals {
     Saves,
     Screenshots,
     Themes,
+    Settings,
 }
 
 #[component]
@@ -31,6 +33,7 @@ pub fn Modals() -> impl IntoView {
         <saves::Modal />
         <screenshots::Modal />
         <themes::Modal />
+        <settings::Modal />
     }
 }
 

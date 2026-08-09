@@ -35,7 +35,9 @@ pub fn Controls() -> impl IntoView {
                 <OpenModal modal=Modals::Screenshots>
                     <icon::Photograph />
                 </OpenModal>
-                <icon::Gear />
+                <OpenModal modal=Modals::Settings>
+                    <icon::Gear />
+                </OpenModal>
                 <Mute>
                     <icon::Sound />
                 </Mute>

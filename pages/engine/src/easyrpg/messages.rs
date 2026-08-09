@@ -30,6 +30,10 @@ fn handle(state: &crate::EngineState, message: EngineMessage) {
         EngineMessage::GetSave(id) => super::files::get_file(state.game.clone(), id),
         EngineMessage::DeleteSave(id) => super::files::delete_file(state.game.clone(), id),
         EngineMessage::GetSaveTimestamps => super::files::send_timestamps(state.game.clone()),
+        EngineMessage::SetVolumes { sound, music } => {
+            state.sound_volume.set(sound);
+            state.music_volume.set(music);
+        }
     }
 }
 
