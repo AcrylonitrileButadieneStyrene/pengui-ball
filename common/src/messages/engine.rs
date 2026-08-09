@@ -9,4 +9,5 @@ pub enum Message {
     GetSave(usize),
     DeleteSave(usize),
     GetSaveTimestamps,
+    SetVolumes { music: u8, sound: u8 },
 }
