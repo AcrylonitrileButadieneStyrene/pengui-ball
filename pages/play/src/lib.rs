@@ -27,6 +27,12 @@ pub fn state() -> State {
 }
 
 #[component]
+pub fn Redirect() -> impl IntoView {
+    let id = use_params_map().get().get("game").unwrap();
+    view! { <leptos_router::components::Redirect path=format!("/{id}/") /> }
+}
+
+#[component]
 pub fn Play() -> impl IntoView {
     let id = use_params_map().get().get("game").unwrap();
     let config = expect_context::<Arc<common::ServerConfiguration>>();

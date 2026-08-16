@@ -34,13 +34,5 @@ fn Slider(is_music: bool) -> impl IntoView {
         state.engine.send(message);
     };
 
-    view! {
-        <input
-            type="range"
-            min=1
-            max=100
-            value=100
-            on:input=on_change
-        />
-    }
+    view! { <input type="range" min=1 max=100 value=100 on:input=on_change /> }
 }
