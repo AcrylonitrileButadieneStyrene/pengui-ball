@@ -10,12 +10,12 @@ pub struct State {
 }
 
 impl State {
-    pub fn new() -> Self {
-        let user = user::resource();
+    pub fn new(game: &str) -> Self {
+        let user = user::resource(game);
 
         Self {
             user,
-            user_screenshots: screenshots::resource(),
+            user_screenshots: screenshots::resource(game),
             has_account: Signal::derive(move || {
                 user.read()
                     .as_ref()

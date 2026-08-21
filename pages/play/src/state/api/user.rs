@@ -28,19 +28,24 @@ pub enum UserError {
     Gloo(#[from] gloo_net::Error),
 }
 
-pub fn resource() -> LocalResource<Result<User, UserError>> {
-    let user = LocalResource::new(|| async {
-        let response = gloo_net::http::Request::get("api/info").send().await?;
-        if response.status() == 400 {
-            return Err(UserError::BadUser);
+pub fn resource(game: &str) -> LocalResource<Result<User, UserError>> {
+    let endpoint: std::sync::Arc<str> =
+        format!("https://api.ynoproject.net/{game}/api/info").into();
+    let user = LocalResource::new(move || {
+        let endpoint = endpoint.clone();
+        async move {
+            let response = gloo_net::http::Request::get(&endpoint).send().await?;
+            if response.status() == 400 {
+                return Err(UserError::BadUser);
+            }
+            Ok(response.json().await?)
         }
-        Ok(response.json().await?)
     });
 
     Effect::new(move || {
         if matches!(user.read().as_ref(), Some(Err(UserError::BadUser))) {
             leptos::task::spawn_local_scoped(async move {
-                let response = gloo_net::http::Request::get("/api/seiko/logout")
+                let response = gloo_net::http::Request::get("https://auth.ynoproject.net/logout")
                     .credentials(leptos::web_sys::RequestCredentials::Include)
                     .send()
                     .await

@@ -173,21 +173,27 @@ fn Location(location: types::ExpedLocation) -> impl IntoView {
 fn VM(vm: types::ExpedVM) -> impl IntoView {
     let types::ExpedVM {
         id,
+        game,
         experience,
         ends_at,
         complete,
-        ..
     } = vm;
 
     let node_ref = NodeRef::new();
-    let image = LocalResource::new(move || async move {
-        gloo_net::http::Request::get(&format!("api/vm?id={id}"))
-            .send()
-            .await
-            .ok()?
-            .binary()
-            .await
-            .ok()
+
+    let endpoint: std::sync::Arc<str> =
+        format!("https://api.ynoproject.net/{game}/api/vm?id={id}").into();
+    let image = LocalResource::new(move || {
+        let endpoint = endpoint.clone();
+        async move {
+            gloo_net::http::Request::get(&endpoint)
+                .send()
+                .await
+                .ok()?
+                .binary()
+                .await
+                .ok()
+        }
     });
 
     let previous_object = StoredValue::new(SendOption::new_local(None));

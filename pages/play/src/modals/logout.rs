@@ -17,7 +17,7 @@ fn LogoutButton() -> impl IntoView {
     let on_click = move |_| {
         let state = state.clone();
         leptos::task::spawn_local(async move {
-            gloo_net::http::Request::get("/api/seiko/logout")
+            gloo_net::http::Request::get("https://auth.ynoproject.net/logout")
                 .credentials(RequestCredentials::Include)
                 .send()
                 .await

@@ -31,7 +31,7 @@ pub struct PlayState {
 
 impl PlayState {
     fn new(game_id: Arc<str>) -> Self {
-        let api = api::State::new();
+        let api = api::State::new(&game_id);
 
         Self {
             chat: chat::State::new(Signal::derive(move || {

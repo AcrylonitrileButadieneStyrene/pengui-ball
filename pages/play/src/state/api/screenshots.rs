@@ -23,16 +23,18 @@ pub struct Screenshot {
     pub liked: bool,
 }
 
-pub fn resource() -> LocalResource<Vec<Screenshot>> {
-    LocalResource::new(|| async {
-        let Ok(response) =
-            gloo_net::http::Request::get("api/screenshot?command=getPlayerScreenshots")
-                .send()
-                .await
-        else {
-            return vec![];
-        };
+pub fn resource(game: &str) -> LocalResource<Vec<Screenshot>> {
+    let endpoint: std::sync::Arc<str> =
+        format!("https://api.ynoproject.net/{game}/api/screenshot?command=getPlayerScreenshots")
+            .into();
+    LocalResource::new(move || {
+        let endpoint = endpoint.clone();
+        async move {
+            let Ok(response) = gloo_net::http::Request::get(&endpoint).send().await else {
+                return vec![];
+            };
 
-        response.json().await.unwrap_or_default()
+            response.json().await.unwrap_or_default()
+        }
     })
 }
