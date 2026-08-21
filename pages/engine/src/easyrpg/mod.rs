@@ -19,7 +19,7 @@ pub fn LoadPlayer(children: Children) -> impl IntoView {
     Effect::new(callbacks::setup);
 
     view! {
-        <script src=format!("_yno/ynoengine-simd.js") onload=move || set_loaded(true) />
+        <script src="_yno/ynoengine-simd.js" onload=move || set_loaded(true) />
         {children()}
     }
 }

@@ -7,8 +7,8 @@ use leptos::{
 
 #[component]
 pub fn Door(index: usize, game: common::config::Game) -> impl IntoView {
-    let aria_label = format!("Play {} online", &game.name);
-    let logo_src = format!("https://ynoproject.net/images/logo_{}.png", &game.id);
+    let aria_label = format!("Play {} online", game.name);
+    let logo_src = format!("https://ynoproject.net/images/logo_{}.png", game.id);
 
     view! {
         <DoorWrapper id=game.id.clone() index>
