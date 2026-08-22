@@ -1,5 +1,5 @@
 .controls {
-    display: flex;
+    display: none;
     position: fixed;
     bottom: 50px;
     height: 300px;
@@ -7,7 +7,17 @@
     justify-content: space-between;
     pointer-events: none;
     user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
     opacity: 0.3;
+}
+
+@media (hover: none) and (pointer: coarse) {
+
+    body:has(iframe:global(.focused)) .controls,
+    .controls:focus-within {
+        display: flex;
+    }
 }
 
 .left {

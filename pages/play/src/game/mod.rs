@@ -22,6 +22,7 @@ fn Engine() -> impl IntoView {
     let state = crate::state();
     let frame = state.engine.frame;
     let status = state.session.status;
+    let is_focused = state.engine.is_focused;
     messages::setup_handler(state);
 
     Effect::new(move || {
@@ -38,15 +39,13 @@ fn Engine() -> impl IntoView {
         crate::state::engine::State::send_frame(frame, common::EngineMessage::Focus(false));
     });
 
-    // let UseWindowSizeReturn { height, width } = use_window_size();
-    // let adaptive_scale = move || {
-    //     let remaining_width = width.get() - 384.;
-    //     let remaining_height = height.get() - 192.;
-    //     (remaining_width / 320.)
-    //         .min(remaining_height / 240.)
-    //         .trunc()
-    //         .to_string()
-    // };
-
-    view! { <iframe node_ref=frame class=style::player src="./engine" title="Game Engine" /> }
+    view! {
+        <iframe
+            node_ref=frame
+            class=style::player
+            class:focused=is_focused
+            src="./engine"
+            title="Game Engine"
+        />
+    }
 }

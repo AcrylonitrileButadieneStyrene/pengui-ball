@@ -17,15 +17,24 @@ pub fn MobileControls() -> impl IntoView {
             <div class=style::right>
                 <button style="--k:z" />
                 <button style="--k:x" />
-                <button style="--k:o" /> // 1 one
-                <button style="--k:n" /> // 2 ni
-                <button style="--k:t" /> // 3 three
-                <button style="--k:f" /> // 4 four
-                <button style="--k:i" /> // 5 itsu
-                <button style="--k:r" /> // 6 roku
-                <button style="--k:g" /> // 7 seventh letter of the alphabet
-                <button style="--k:e" /> // 8 eight
-                <button style="--k:k" /> // 9 kyuu
+                // 1 one
+                <button style="--k:o" />
+                // 2 ni
+                <button style="--k:n" />
+                // 3 three
+                <button style="--k:t" />
+                // 4 four
+                <button style="--k:f" />
+                // 5 itsu
+                <button style="--k:i" />
+                // 6 roku
+                <button style="--k:r" />
+                // 7 seventh letter of the alphabet
+                <button style="--k:g" />
+                // 8 eight
+                <button style="--k:e" />
+                // 9 kyuu
+                <button style="--k:k" />
             </div>
         </Wrapper>
     }
@@ -43,17 +52,15 @@ fn Wrapper(children: Children) -> impl IntoView {
     view! {
         <div
             class=style::controls
-            on:touchdown=get_callback(true, send.clone())
-            on:touchup=get_callback(false, send.clone())
-            on:mousedown=get_callback(true, send.clone())
-            on:mouseup=get_callback(false, send)
+            on:touchstart=get_callback(true, send.clone())
+            on:touchend=get_callback(false, send.clone())
         >
             {children()}
         </div>
     }
 }
 
-fn get_callback(is_down: bool, send: impl Fn(u8, bool)) -> impl Fn(leptos::ev::MouseEvent) -> () {
+fn get_callback(is_down: bool, send: impl Fn(u8, bool)) -> impl Fn(leptos::ev::TouchEvent) -> () {
     move |event| {
         if let Some(key) =
             event_target::<leptos::web_sys::HtmlElement>(&event).get_attribute("style")

@@ -48,10 +48,13 @@ fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
         PlayMessage::PlayerSpriteUpdated(id, charset, index) => {
             player::sprite_update(state, id, charset, index);
         }
-        PlayMessage::RegainFocus(_shift_held) => {
+        PlayMessage::TakeFocus => {
             if let Some(element) = state.chat.input.get_untracked() {
                 element.focus().unwrap();
             }
+        }
+        PlayMessage::FocusState(focused) => {
+            state.engine.set_is_focused(focused);
         }
         PlayMessage::SaveData(slot, save_file) => {
             save::data(state, slot, save_file);

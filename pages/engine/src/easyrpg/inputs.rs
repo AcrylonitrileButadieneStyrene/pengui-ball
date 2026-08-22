@@ -2,7 +2,7 @@ use leptos::{html::Canvas, prelude::*};
 
 pub fn on_key_down(event: leptos::ev::KeyboardEvent) {
     if event.key() == "Tab" {
-        crate::send(common::PlayMessage::RegainFocus(event.shift_key()));
+        crate::send(common::PlayMessage::TakeFocus);
     }
 }
 

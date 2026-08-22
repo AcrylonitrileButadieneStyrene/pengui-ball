@@ -55,7 +55,13 @@ pub fn StartPlayer(children: Children) -> impl IntoView {
     });
 
     view! {
-        <canvas node_ref=node_ref id="canvas" tabindex=0 role="application" on:keydown=inputs::on_key_down />
+        <canvas
+            node_ref=node_ref
+            id="canvas"
+            tabindex=0
+            role="application"
+            on:keydown=inputs::on_key_down
+        />
         {children()}
     }
 }
