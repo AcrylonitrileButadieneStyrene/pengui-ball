@@ -1,6 +1,6 @@
 #![feature(lock_value_accessors)]
 
-#[cfg(all(not(feature = "ssr"), not(clippy), not(test)))]
+#[cfg(all(not(feature = "ssr"), not(clippy), not(test), not(doc)))]
 compile_error!("Use `cargo leptos serve`");
 
 mod serve;

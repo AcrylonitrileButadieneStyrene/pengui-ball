@@ -2,6 +2,7 @@ use leptos::prelude::*;
 
 mod callbacks;
 pub mod files;
+pub mod inputs;
 pub mod messages;
 pub mod state;
 
@@ -53,14 +54,8 @@ pub fn StartPlayer(children: Children) -> impl IntoView {
         });
     });
 
-    let on_keydown = move |event: leptos::ev::KeyboardEvent| {
-        if event.key() == "Tab" {
-            crate::send(common::PlayMessage::RegainFocus(event.shift_key()));
-        }
-    };
-
     view! {
-        <canvas node_ref=node_ref id="canvas" tabindex=0 role="application" on:keydown=on_keydown />
+        <canvas node_ref=node_ref id="canvas" tabindex=0 role="application" on:keydown=inputs::on_key_down />
         {children()}
     }
 }

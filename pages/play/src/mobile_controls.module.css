@@ -5,31 +5,43 @@
     height: 300px;
     width: calc(100% - 100px);
     justify-content: space-between;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.3;
 }
 
 .left {
     width: 300px;
     display: grid;
-    background-color: red;
     grid-template-areas:
-        ". u ."
-        "l c r"
-        ". d .";
+        ". w ."
+        "a c d"
+        ". s .";
 }
 
 .right {
     width: 300px;
     display: grid;
-    background-color: blue;
     grid-template-areas:
-        ". . z z"
-        ". . z z"
-        "x x o t"
-        "x x f n";
+        ". z z z"
+        "x o n t"
+        "x f i r"
+        "x g e k";
+    grid-template-rows: 150px repeat(3, 50px);
+    grid-template-columns: 150px repeat(3, 50px);
 }
 
-.left>*,
-.right>* {
+.right :nth-child(n+3) {
+    width: 40px;
+    margin: 5px;
+}
+
+.controls>*>*>* {
     grid-area: var(--k);
-    user-select: none;
+    pointer-events: all;
+    background-color: pink;
+}
+
+.controls>*>*>*:active {
+    background-color: hotpink;
 }

@@ -32,6 +32,9 @@ fn handle(state: &crate::EngineState, message: EngineMessage) {
         EngineMessage::GetSaveTimestamps => super::files::send_timestamps(state.game.clone()),
         EngineMessage::SetSoundVolume(value) => state.sound_volume.set(value),
         EngineMessage::SetMusicVolume(value) => state.music_volume.set(value),
+        EngineMessage::PressKey(keycode, is_down) => {
+            super::inputs::press(state.easyrpg_player.canvas, keycode, is_down)
+        }
     }
 }
 
