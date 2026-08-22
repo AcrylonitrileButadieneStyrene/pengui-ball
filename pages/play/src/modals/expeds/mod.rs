@@ -187,6 +187,7 @@ fn VM(vm: types::ExpedVM) -> impl IntoView {
         let endpoint = endpoint.clone();
         async move {
             gloo_net::http::Request::get(&endpoint)
+                .credentials(leptos::web_sys::RequestCredentials::Include)
                 .send()
                 .await
                 .ok()?

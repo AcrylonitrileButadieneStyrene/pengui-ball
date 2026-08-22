@@ -56,7 +56,8 @@ fn Friend(friend: Friend) -> impl IntoView {
             let req = gloo_net::http::Request::get(&format!(
                 "https://api.ynoproject.net/2kki/api/addplayerfriend?uuid={}",
                 &uuid
-            ));
+            ))
+            .credentials(leptos::web_sys::RequestCredentials::Include);
             leptos::task::spawn_local(async {
                 req.send().await.unwrap();
             });
@@ -69,7 +70,8 @@ fn Friend(friend: Friend) -> impl IntoView {
             let req = gloo_net::http::Request::get(&format!(
                 "https://api.ynoproject.net/2kki/api/removeplayerfriend?uuid={}",
                 &uuid
-            ));
+            ))
+            .credentials(leptos::web_sys::RequestCredentials::Include);
             leptos::task::spawn_local(async {
                 req.send().await.unwrap();
             });

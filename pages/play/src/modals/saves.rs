@@ -151,6 +151,7 @@ fn Sync() -> impl IntoView {
             }
 
             gloo_net::http::Request::get(&url)
+                .credentials(leptos::web_sys::RequestCredentials::Include)
                 .send()
                 .await
                 .ok()?

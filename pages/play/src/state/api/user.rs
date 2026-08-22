@@ -34,7 +34,10 @@ pub fn resource(game: &str) -> LocalResource<Result<User, UserError>> {
     let user = LocalResource::new(move || {
         let endpoint = endpoint.clone();
         async move {
-            let response = gloo_net::http::Request::get(&endpoint).send().await?;
+            let response = gloo_net::http::Request::get(&endpoint)
+                .credentials(leptos::web_sys::RequestCredentials::Include)
+                .send()
+                .await?;
             if response.status() == 400 {
                 return Err(UserError::BadUser);
             }
