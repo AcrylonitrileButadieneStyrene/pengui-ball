@@ -1,0 +1,35 @@
+.controls {
+    display: flex;
+    position: fixed;
+    bottom: 50px;
+    height: 300px;
+    width: calc(100% - 100px);
+    justify-content: space-between;
+}
+
+.left {
+    width: 300px;
+    display: grid;
+    background-color: red;
+    grid-template-areas:
+        ". u ."
+        "l c r"
+        ". d .";
+}
+
+.right {
+    width: 300px;
+    display: grid;
+    background-color: blue;
+    grid-template-areas:
+        ". . z z"
+        ". . z z"
+        "x x o t"
+        "x x f n";
+}
+
+.left>*,
+.right>* {
+    grid-area: var(--k);
+    user-select: none;
+}

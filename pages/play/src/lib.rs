@@ -14,6 +14,7 @@ mod components;
 mod game;
 mod header;
 mod layout;
+mod mobile_controls;
 mod modals;
 mod sidebar;
 mod state;
@@ -59,6 +60,7 @@ pub fn Play() -> impl IntoView {
 
         <state::Provider game_id=game.id.clone()>
             <layout::Layout />
+            <mobile_controls::MobileControls />
             <modals::Modals />
         </state::Provider>
 
