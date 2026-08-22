@@ -10,9 +10,12 @@
 }
 
 .layout>*>* {
+    padding: 12px;
+}
+
+.layout:not(:fullscreen)>*>* {
     border: solid 12px;
     border-image: var(--ui-theme-border);
-    padding: 12px;
 }
 
 .layout:not(:fullscreen):global(.chat-hidden) {
