@@ -1,13 +1,13 @@
 use leptos::{html::Iframe, prelude::*};
 
 pub struct SaveTimestamps {
-    pub value: ReadSignal<Box<[Option<String>; 15]>>,
-    pub setter: WriteSignal<Box<[Option<String>; 15]>>,
+    pub value: ReadSignal<Option<Box<[Option<String>; 15]>>>,
+    pub setter: WriteSignal<Option<Box<[Option<String>; 15]>>>,
     refetch: RwSignal<bool>,
 }
 
 impl std::ops::Deref for SaveTimestamps {
-    type Target = ReadSignal<Box<[Option<String>; 15]>>;
+    type Target = ReadSignal<Option<Box<[Option<String>; 15]>>>;
 
     fn deref(&self) -> &Self::Target {
         &self.value

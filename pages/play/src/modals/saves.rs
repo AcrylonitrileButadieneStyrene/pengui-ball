@@ -46,17 +46,21 @@ fn Slot(index: usize) -> impl IntoView {
     let timestamps = state.engine.save_timestamps.value;
 
     let timestamp = move || {
-        timestamps.get()[index - 1].as_ref().map_or_else(
-            || view! { <div>Empty</div> }.into_any(),
-            |timestamp| {
-                let formatted = chrono::DateTime::parse_from_rfc3339(timestamp)
-                    .unwrap()
-                    .with_timezone(&chrono::Local)
-                    .format("%-m/%-d/%y, %-I:%M %p")
-                    .to_string();
-                view! { <div>{formatted}</div> }.into_any()
-            },
-        )
+        timestamps
+            .get()
+            .as_ref()
+            .and_then(|timestamps| timestamps[index - 1].as_ref())
+            .map_or_else(
+                || view! { <div>Empty</div> }.into_any(),
+                |timestamp| {
+                    let formatted = chrono::DateTime::parse_from_rfc3339(timestamp)
+                        .unwrap()
+                        .with_timezone(&chrono::Local)
+                        .format("%-m/%-d/%y, %-I:%M %p")
+                        .to_string();
+                    view! { <div>{formatted}</div> }.into_any()
+                },
+            )
     };
 
     view! {
@@ -104,7 +108,7 @@ fn Controls(
                 let bytes = gloo_file::futures::read_as_bytes(&gloo_file::File::from(file))
                     .await
                     .unwrap();
-                engine::State::send_frame(frame, EngineMessage::SetSave(index, bytes.into()));
+                engine::State::send_frame(frame, EngineMessage::SetSave(index, bytes.into(), None));
             });
         }
     };
@@ -138,12 +142,13 @@ fn Sync() -> impl IntoView {
     let state = crate::state();
     let user = state.api.user;
 
-    let url = std::sync::Arc::<str>::from(format!(
+    let url: std::sync::Arc<str> = format!(
         "https://api.ynoproject.net/{}/api/savesync?command=timestamp",
         state.locations.game
-    ));
+    )
+    .into();
 
-    let timestamp = LocalResource::new(move || {
+    let cloud_timestamp = LocalResource::new(move || {
         let url = url.clone();
         async move {
             if user.read().is_none() {
@@ -161,7 +166,69 @@ fn Sync() -> impl IntoView {
         }
     });
 
-    Effect::new(move || {});
+    Effect::new(move || {
+        let Some(cloud) = cloud_timestamp.get() else {
+            return;
+        };
 
-    view! { <div>{move || timestamp.get()}</div> }
+        let Some(local) = state.engine.save_timestamps.value.get_untracked() else {
+            state.engine.save_timestamps.value.track();
+            return;
+        };
+
+        let local = local[0].as_deref();
+        if should_download(local, cloud.as_deref()) {
+            leptos::task::spawn_local(download_save(
+                state.locations.game.clone(),
+                state.engine.frame,
+                chrono::DateTime::parse_from_rfc3339(local.unwrap())
+                    .unwrap()
+                    .into(),
+            ));
+        }
+    });
+
+    view! {}
+}
+
+fn should_download(local: Option<&str>, cloud: Option<&str>) -> bool {
+    let Some(cloud) = cloud else {
+        return false;
+    };
+
+    let Some(local) = local else {
+        return true;
+    };
+
+    let Ok(cloud) = chrono::DateTime::parse_from_rfc3339(cloud) else {
+        return false;
+    };
+
+    let Ok(local) = chrono::DateTime::parse_from_rfc3339(local) else {
+        return false;
+    };
+
+    cloud > local
+}
+
+async fn download_save(
+    game: std::sync::Arc<str>,
+    frame: NodeRef<leptos::html::Iframe>,
+    timestamp: chrono::DateTime<chrono::Utc>,
+) {
+    let bytes = gloo_net::http::Request::get(&format!(
+        "https://api.ynoproject.net/{game}/api/savesync?command=get",
+    ))
+    .credentials(leptos::web_sys::RequestCredentials::Include)
+    .send()
+    .await
+    .unwrap()
+    .binary()
+    .await
+    .unwrap();
+
+    crate::state::engine::State::send_frame(
+        frame,
+        EngineMessage::SetSave(1, bytes.into(), Some(timestamp)),
+    );
 }

@@ -26,7 +26,18 @@ fn handle(state: &crate::EngineState, message: EngineMessage) {
                 crate::effects::events::focus::control_timer(state.defocus_timeout, !active);
             }
         }
-        EngineMessage::SetSave(id, data) => super::files::set_file(state.game.clone(), id, data),
+        EngineMessage::SetSave(id, data, timestamp) => super::files::set_file(
+            state.game.clone(),
+            id,
+            data,
+            timestamp.map(|timestamp| {
+                leptos::web_sys::js_sys::Date::new(
+                    &leptos::web_sys::wasm_bindgen::JsValue::from_f64(
+                        timestamp.timestamp_millis() as _
+                    ),
+                )
+            }),
+        ),
         EngineMessage::GetSave(id) => super::files::get_file(state.game.clone(), id),
         EngineMessage::DeleteSave(id) => super::files::delete_file(state.game.clone(), id),
         EngineMessage::GetSaveTimestamps => super::files::send_timestamps(state.game.clone()),

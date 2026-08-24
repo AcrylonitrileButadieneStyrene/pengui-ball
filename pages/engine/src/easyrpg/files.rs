@@ -29,9 +29,9 @@ pub fn get_file(game: Arc<str>, id: usize) {
     });
 }
 
-pub fn set_file(game: Arc<str>, id: usize, data: Arc<[u8]>) {
+pub fn set_file(game: Arc<str>, id: usize, data: Arc<[u8]>, timestamp: Option<Date>) {
     let file = File {
-        timestamp: Date::new_0(),
+        timestamp: timestamp.unwrap_or_else(Date::new_0),
         mode: 33206,
         contents: Uint8Array::new_from_slice(&data),
     };
