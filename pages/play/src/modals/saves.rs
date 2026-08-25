@@ -176,12 +176,11 @@ fn Sync() -> impl IntoView {
             return;
         };
 
-        let local = local[0].as_deref();
-        if should_download(local, cloud.as_deref()) {
+        if should_download(local[0].as_deref(), cloud.as_deref()) {
             leptos::task::spawn_local(download_save(
                 state.locations.game.clone(),
                 state.engine.frame,
-                chrono::DateTime::parse_from_rfc3339(local.unwrap())
+                chrono::DateTime::parse_from_rfc3339(cloud.as_deref().unwrap())
                     .unwrap()
                     .into(),
             ));
