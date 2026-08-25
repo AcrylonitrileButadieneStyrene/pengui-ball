@@ -2,6 +2,8 @@ use std::sync::Arc;
 
 use leptos::{prelude::*, wasm_bindgen::JsCast as _, web_sys};
 
+use crate::states::players::player::PlayerStoreFields;
+
 stylance::import_style!(pub style, "themes.module.css");
 
 #[component]
@@ -29,6 +31,8 @@ pub fn Modal() -> impl IntoView {
 
 #[island]
 fn Listener(game: Arc<str>, children: Children) -> impl IntoView {
+    let state = crate::state();
+    let system = state.players.local.system();
     let (selected, set_selected) = signal(None);
 
     let on_click = move |event: leptos::ev::MouseEvent| {
@@ -36,12 +40,12 @@ fn Listener(game: Arc<str>, children: Children) -> impl IntoView {
             && let Some(element) = target.dyn_ref::<web_sys::HtmlButtonElement>()
             && let Some(id) = element.dataset().get("id")
         {
-            set_selected(Some(id));
+            set_selected(Some(std::sync::Arc::<str>::from(id)));
         }
     };
 
     let style = move || {
-        selected().map(|id| format!(
+        selected().or_else(|| system.get()).map(|id| format!(
             ":root {{
                 --ui-theme-border-url: url('https://ynoproject.net/{game}/images/ui/{game}/{id}/border.png'); 
                 --ui-theme-background: url('https://ynoproject.net/{game}/images/ui/{game}/{id}/containerbg.png'); 
