@@ -53,14 +53,14 @@ fn Wrapper(children: Children) -> impl IntoView {
         <div
             class=style::controls
             on:touchstart=get_callback(true, send.clone())
-            on:touchend=get_callback(false, send.clone())
+            on:touchend=get_callback(false, send)
         >
             {children()}
         </div>
     }
 }
 
-fn get_callback(is_down: bool, send: impl Fn(u8, bool)) -> impl Fn(leptos::ev::TouchEvent) -> () {
+fn get_callback(is_down: bool, send: impl Fn(u8, bool)) -> impl Fn(leptos::ev::TouchEvent) {
     move |event| {
         if let Some(key) =
             event_target::<leptos::web_sys::HtmlElement>(&event).get_attribute("style")

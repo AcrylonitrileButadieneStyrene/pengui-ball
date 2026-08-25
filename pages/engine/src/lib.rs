@@ -1,4 +1,5 @@
 #![allow(non_snake_case)]
+#![allow(clippy::cast_precision_loss)]
 
 use std::sync::Arc;
 

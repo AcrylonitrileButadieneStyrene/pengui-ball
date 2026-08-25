@@ -16,7 +16,7 @@ impl std::ops::Deref for SaveTimestamps {
 
 impl SaveTimestamps {
     pub fn new(frame: NodeRef<Iframe>) -> Self {
-        let (value, setter) = signal(Default::default());
+        let (value, setter) = signal(Option::default());
         let refetch = RwSignal::new(false);
 
         let mut previous = false;

@@ -3,7 +3,7 @@ use std::sync::Arc;
 use common::messages::play::{PlayerConnectData, PlayerSyncData};
 use leptos::prelude::*;
 
-use crate::states::players::player::PlayerStoreFields;
+use crate::states::players::player::PlayerStoreFields as _;
 
 pub fn sync(state: &crate::state::PlayState, data: PlayerSyncData) {
     let PlayerSyncData {

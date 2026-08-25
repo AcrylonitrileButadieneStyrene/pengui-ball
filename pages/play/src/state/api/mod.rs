@@ -19,7 +19,7 @@ impl State {
             has_account: Signal::derive(move || {
                 user.read()
                     .as_ref()
-                    .is_some_and(|user| user.as_ref().ok().is_some_and(|user| user.registered))
+                    .is_some_and(|user| user.as_ref().is_ok_and(|user| user.registered))
             }),
         }
     }

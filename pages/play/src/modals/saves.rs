@@ -186,8 +186,6 @@ fn Sync() -> impl IntoView {
             ));
         }
     });
-
-    view! {}
 }
 
 fn should_download(local: Option<&str>, cloud: Option<&str>) -> bool {
@@ -210,6 +208,7 @@ fn should_download(local: Option<&str>, cloud: Option<&str>) -> bool {
     cloud > local
 }
 
+#[allow(clippy::future_not_send)]
 async fn download_save(
     game: std::sync::Arc<str>,
     frame: NodeRef<leptos::html::Iframe>,

@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-use crate::states::players::player::PlayerStoreFields;
+use crate::states::players::player::PlayerStoreFields as _;
 
 mod destination;
 mod guest_name;

@@ -13,11 +13,10 @@ pub fn data(state: &crate::state::PlayState, slot: usize, save_file: SaveFile) {
     link.set_download(&format!(
         "{}_Save{slot:>02}_{}.lsd",
         state.locations.game,
-        &chrono::DateTime::parse_from_rfc3339(&save_file.timestamp)
+        chrono::DateTime::parse_from_rfc3339(&save_file.timestamp)
             .unwrap()
             .with_timezone(&chrono::Local)
-            .format("%Y-%m-%d-%Hh%Mm%Ss")
-            .to_string(),
+            .format("%Y-%m-%d-%Hh%Mm%Ss"),
     ));
     link.click();
     link.remove();

@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use leptos::{prelude::*, wasm_bindgen::JsCast as _, web_sys};
 
-use crate::states::players::player::PlayerStoreFields;
+use crate::states::players::player::PlayerStoreFields as _;
 
 stylance::import_style!(pub style, "themes.module.css");
 

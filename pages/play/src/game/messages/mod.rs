@@ -8,7 +8,7 @@ use leptos::{
 };
 use leptos_use::core::ConnectionReadyState;
 
-use crate::states::players::player::PlayerStoreFields;
+use crate::states::players::player::PlayerStoreFields as _;
 
 mod player;
 mod save;

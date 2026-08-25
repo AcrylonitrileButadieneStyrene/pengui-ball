@@ -33,7 +33,7 @@ fn handle(state: &crate::EngineState, message: EngineMessage) {
             timestamp.map(|timestamp| {
                 leptos::web_sys::js_sys::Date::new(
                     &leptos::web_sys::wasm_bindgen::JsValue::from_f64(
-                        timestamp.timestamp_millis() as _
+                        timestamp.timestamp_millis() as _,
                     ),
                 )
             }),
@@ -44,7 +44,7 @@ fn handle(state: &crate::EngineState, message: EngineMessage) {
         EngineMessage::SetSoundVolume(value) => state.sound_volume.set(value),
         EngineMessage::SetMusicVolume(value) => state.music_volume.set(value),
         EngineMessage::PressKey(keycode, is_down) => {
-            super::inputs::press(state.easyrpg_player.canvas, keycode, is_down)
+            super::inputs::press(state.easyrpg_player.canvas, keycode, is_down);
         }
     }
 }
