@@ -15,7 +15,6 @@ fn LogoutButton() -> impl IntoView {
     let state = crate::state();
 
     let on_click = move |_| {
-        let state = state.clone();
         leptos::task::spawn_local(async move {
             gloo_net::http::Request::get("https://auth.ynoproject.net/logout")
                 .credentials(RequestCredentials::Include)
@@ -25,7 +24,7 @@ fn LogoutButton() -> impl IntoView {
             state.api.user.refetch();
             state.modal.set(None);
             state.session.reconnect();
-        });
+        })
     };
 
     view! { <button on:click=on_click>Log Out</button> }

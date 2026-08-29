@@ -42,10 +42,7 @@ pub fn Modal(when: Modals, children: Children) -> impl IntoView {
     let state = crate::state();
     let node_ref = NodeRef::new();
 
-    let on_close = {
-        let state = state.clone();
-        move |_| state.modal.set(None)
-    };
+    let on_close = move |_| state.modal.set(None);
 
     // if only there was a way to open a dialog modally without code
     Effect::new(move || {

@@ -41,16 +41,13 @@ fn CurrentUser() -> impl IntoView {
     let (once, set_once) = signal(true);
     let state = crate::state();
 
-    let on_click = {
-        let state = state.clone();
-        move |_| {
-            let modal = state.api.user.map(|user| match user {
-                Ok(user) if user.registered => crate::modals::Modals::LogOut,
-                Ok(_) => crate::modals::Modals::LogIn,
-                Err(_) => crate::modals::Modals::Cors,
-            });
-            state.modal.set(modal);
-        }
+    let on_click = move |_| {
+        let modal = state.api.user.map(|user| match user {
+            Ok(user) if user.registered => crate::modals::Modals::LogOut,
+            Ok(_) => crate::modals::Modals::LogIn,
+            Err(_) => crate::modals::Modals::Cors,
+        });
+        state.modal.set(modal);
     };
 
     move || {

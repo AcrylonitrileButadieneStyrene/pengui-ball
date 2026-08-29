@@ -30,7 +30,6 @@ pub fn ChatMessages() -> impl IntoView {
 
     let each = move || messages.get().into_iter().rev().collect::<Vec<_>>();
     let messages = move || {
-        let state = state.clone();
         view! {
             <For each=each key=|(id, _)| std::sync::Arc::as_ptr(id) let((_, (data, message)))>
                 {message.render(&data, &state)}

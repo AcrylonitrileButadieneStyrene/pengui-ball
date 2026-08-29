@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::Arc};
+use std::collections::HashMap;
 
 use common::PlayMessage;
 use leptos::{
@@ -13,7 +13,7 @@ use crate::states::players::player::PlayerStoreFields as _;
 mod player;
 mod save;
 
-pub fn setup_handler(state: Arc<crate::state::PlayState>) {
+pub fn setup_handler(state: crate::State) {
     window_event_listener(ev::message, move |ev| {
         let Some(message) = common::PlayMessage::de(ev.data()) else {
             return;
@@ -23,7 +23,7 @@ pub fn setup_handler(state: Arc<crate::state::PlayState>) {
     });
 }
 
-fn handle(state: &crate::state::PlayState, message: common::PlayMessage) {
+fn handle(state: crate::State, message: common::PlayMessage) {
     match message {
         PlayMessage::EngineLoaded => {
             Reflect::set(

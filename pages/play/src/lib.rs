@@ -8,7 +8,6 @@
 use std::sync::Arc;
 
 use leptos::prelude::*;
-use leptos_router::hooks::use_params_map;
 
 mod components;
 mod game;
@@ -21,21 +20,28 @@ mod state;
 mod states;
 
 pub type CurrentGame = Arc<common::config::Game>;
-pub type State = Arc<state::PlayState>;
+pub type State = &'static state::PlayState;
 
 pub fn state() -> State {
     expect_context::<State>()
 }
 
+fn game() -> String {
+    leptos_router::hooks::use_params_map()
+        .get()
+        .get("game")
+        .unwrap()
+}
+
 #[component]
 pub fn Redirect() -> impl IntoView {
-    let id = use_params_map().get().get("game").unwrap();
+    let id = game();
     view! { <leptos_router::components::Redirect path=format!("/{id}/") /> }
 }
 
 #[component]
 pub fn Play() -> impl IntoView {
-    let id = use_params_map().get().get("game").unwrap();
+    let id = game();
     let config = expect_context::<Arc<common::ServerConfiguration>>();
     let games = config.games.clone();
 

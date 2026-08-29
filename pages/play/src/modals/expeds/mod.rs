@@ -36,12 +36,9 @@ fn Inner() -> impl IntoView {
     let state = state();
     let expeds = state.expeds;
 
-    Effect::new({
-        let state = state.clone();
-        move || {
-            if state.session.status.get() == ConnectionReadyState::Open {
-                state.session.channel.send(Command::GetExpeds).unwrap();
-            }
+    Effect::new(move || {
+        if state.session.status.get() == ConnectionReadyState::Open {
+            state.session.channel.send(Command::GetExpeds).unwrap();
         }
     });
 

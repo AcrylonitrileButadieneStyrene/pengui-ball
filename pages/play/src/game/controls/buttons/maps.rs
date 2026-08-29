@@ -29,60 +29,57 @@ pub fn Maps() -> impl IntoView {
     let state = crate::state();
     let is_2kki = &*state.locations.game.clone() == "2kki";
 
-    let maps = LocalResource::<Vec<Map>>::new(move || {
-        let state = state.clone();
-        async move {
-            let Some(location) = state.locations.current_resolved.get() else {
+    let maps = LocalResource::<Vec<Map>>::new(move || async move {
+        let Some(location) = state.locations.current_resolved.get() else {
+            return vec![];
+        };
+
+        let endpoint = match (is_2kki, location) {
+            (_, LocationResolved::Pending | LocationResolved::Unknown) => return vec![],
+            (_, LocationResolved::Multiple(locations)) if locations.is_empty() => {
                 return vec![];
-            };
-
-            let endpoint = match (is_2kki, location) {
-                (_, LocationResolved::Pending | LocationResolved::Unknown) => return vec![],
-                (_, LocationResolved::Multiple(locations)) if locations.is_empty() => {
-                    return vec![];
-                }
-                (true, LocationResolved::Single { name, .. }) => [EXPLORER_BASE, &name].concat(),
-                (true, LocationResolved::Multiple(locations)) => [
-                    EXPLORER_BASE,
-                    &locations
-                        .iter()
-                        .map(|location| location.title.clone())
-                        .collect::<Vec<_>>()
-                        .join("&locationNames="),
-                ]
-                .concat(),
-                (false, LocationResolved::Single { name, .. }) => [WIKI_BASE, &name].concat(),
-                (false, LocationResolved::Multiple(locations)) => [
-                    WIKI_BASE,
-                    &locations
-                        .first()
-                        .map(|location| location.title.clone())
-                        .unwrap_or_default(),
-                ]
-                .concat(),
-            };
-
-            let Ok(request) = gloo_net::http::Request::get(&endpoint).send().await else {
-                return vec![];
-            };
-
-            if is_2kki {
-                request
-                    .json::<Vec<_>>()
-                    .await
-                    .unwrap_or_default()
-                    .into_iter()
-                    .map(Map::ExplorerMap)
-                    .collect()
-            } else {
-                request
-                    .json::<Vec<_>>()
-                    .await
-                    .unwrap_or_default()
-                    .into_iter()
-                    .map(Map::WikiMap)
-                    .collect()
             }
+            (true, LocationResolved::Single { name, .. }) => [EXPLORER_BASE, &name].concat(),
+            (true, LocationResolved::Multiple(locations)) => [
+                EXPLORER_BASE,
+                &locations
+                    .iter()
+                    .map(|location| location.title.clone())
+                    .collect::<Vec<_>>()
+                    .join("&locationNames="),
+            ]
+            .concat(),
+            (false, LocationResolved::Single { name, .. }) => [WIKI_BASE, &name].concat(),
+            (false, LocationResolved::Multiple(locations)) => [
+                WIKI_BASE,
+                &locations
+                    .first()
+                    .map(|location| location.title.clone())
+                    .unwrap_or_default(),
+            ]
+            .concat(),
+        };
+
+        let Ok(request) = gloo_net::http::Request::get(&endpoint).send().await else {
+            return vec![];
+        };
+
+        if is_2kki {
+            request
+                .json::<Vec<_>>()
+                .await
+                .unwrap_or_default()
+                .into_iter()
+                .map(Map::ExplorerMap)
+                .collect()
+        } else {
+            request
+                .json::<Vec<_>>()
+                .await
+                .unwrap_or_default()
+                .into_iter()
+                .map(Map::WikiMap)
+                .collect()
         }
     });
 

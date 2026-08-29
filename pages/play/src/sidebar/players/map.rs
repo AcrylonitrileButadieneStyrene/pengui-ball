@@ -9,7 +9,7 @@ pub fn Map() -> impl IntoView {
 
     view! {
         <For each=state.players.in_map key=|(id, _)| *id let((_, player))>
-            <Player state=state.clone() player />
+            <Player state player />
         </For>
     }
 }

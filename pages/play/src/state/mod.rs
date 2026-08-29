@@ -11,7 +11,7 @@ use crate::sidebar::session::SessionState;
 
 #[island]
 pub fn Provider(game_id: Arc<str>, children: Children) -> impl IntoView {
-    provide_context(Arc::new(PlayState::new(game_id)));
+    provide_context::<crate::State>(PlayState::new(game_id).into());
     children()
 }
 
@@ -53,5 +53,11 @@ impl PlayState {
             locations: Arc::new(crate::states::locations::Locations::new(game_id)),
             players: Arc::new(crate::states::players::Players::new()),
         }
+    }
+}
+
+impl From<PlayState> for crate::State {
+    fn from(value: PlayState) -> Self {
+        Box::leak(Box::new(value))
     }
 }

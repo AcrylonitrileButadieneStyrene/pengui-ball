@@ -52,12 +52,9 @@ fn Connection(game: Arc<str>, children: Children) -> impl IntoView {
         UseWebSocketOptions::default()
             .immediate(false)
             .reconnect_limit(leptos_use::ReconnectLimit::Limited(0))
-            .on_message({
-                let state = state.clone();
-                move |message: &String| {
-                    let parts = message.split('\u{FFFF}').collect::<Vec<_>>();
-                    handler::on_message(&state, &parts);
-                }
+            .on_message(move |message: &String| {
+                let parts = message.split('\u{FFFF}').collect::<Vec<_>>();
+                handler::on_message(&state, &parts);
             }),
     );
 
@@ -122,10 +119,7 @@ fn Connection(game: Arc<str>, children: Children) -> impl IntoView {
     }
 }
 
-async fn send_messages(
-    state: Arc<crate::state::PlayState>,
-    send: Arc<dyn Fn(&String) + Send + Sync>,
-) {
+async fn send_messages(state: crate::State, send: Arc<dyn Fn(&String) + Send + Sync>) {
     let receiver = state.session.channel.take_receiver().unwrap();
     while let Ok(message) = receiver.recv_async().await {
         let vec = match message {
