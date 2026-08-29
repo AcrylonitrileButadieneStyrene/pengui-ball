@@ -7,11 +7,11 @@ pub fn setup_handler(state: crate::EngineState) {
             return;
         };
 
-        handle(&state, message);
+        handle(state, message);
     });
 }
 
-fn handle(state: &crate::EngineState, message: EngineMessage) {
+fn handle(state: crate::EngineState, message: EngineMessage) {
     match message {
         EngineMessage::Connect => {
             state

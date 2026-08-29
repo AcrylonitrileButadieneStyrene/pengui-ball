@@ -1,3 +1,4 @@
+#[allow(clippy::duplicated_attributes)]
 #[derive(Debug, logos::Logos)]
 pub enum Token {
     #[regex(r"\\.", |lex| str_trim(lex, 1, 0))]

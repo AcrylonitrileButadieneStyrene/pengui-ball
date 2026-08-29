@@ -54,7 +54,7 @@ fn Connection(game: Arc<str>, children: Children) -> impl IntoView {
             .reconnect_limit(leptos_use::ReconnectLimit::Limited(0))
             .on_message(move |message: &String| {
                 let parts = message.split('\u{FFFF}').collect::<Vec<_>>();
-                handler::on_message(&state, &parts);
+                handler::on_message(state, &parts);
             }),
     );
 

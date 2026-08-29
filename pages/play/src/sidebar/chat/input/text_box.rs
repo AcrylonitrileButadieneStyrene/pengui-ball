@@ -42,7 +42,7 @@ pub fn TextBox() -> impl IntoView {
             if let Some(content) = this.text_content()
                 && !content.is_empty()
             {
-                send(&state, content);
+                send(state, content);
             }
             this.set_text_content(None);
         }
@@ -117,7 +117,7 @@ fn clamp(input: &str, length: usize) -> &str {
     &input[..end]
 }
 
-fn send(state: &crate::State, content: String) {
+fn send(state: crate::State, content: String) {
     let text = content.clone();
     let (command, filter) = match state.chat.destination.get_untracked() {
         MessageDestination::Map => (

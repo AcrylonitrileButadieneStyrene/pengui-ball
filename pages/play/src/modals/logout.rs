@@ -24,7 +24,7 @@ fn LogoutButton() -> impl IntoView {
             state.api.user.refetch();
             state.modal.set(None);
             state.session.reconnect();
-        })
+        });
     };
 
     view! { <button on:click=on_click>Log Out</button> }

@@ -52,7 +52,7 @@ fn Wrapper(children: Children) -> impl IntoView {
     view! {
         <div
             class=style::controls
-            on:touchstart=get_callback(true, send.clone())
+            on:touchstart=get_callback(true, send)
             on:touchend=get_callback(false, send)
         >
             {children()}

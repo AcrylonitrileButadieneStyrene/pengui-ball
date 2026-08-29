@@ -4,8 +4,7 @@
 #![feature(random)]
 #![feature(impl_trait_in_fn_trait_return)]
 #![allow(non_snake_case)]
-
-use std::sync::Arc;
+#![allow(clippy::empty_enums)]
 
 use leptos::prelude::*;
 
@@ -19,7 +18,7 @@ mod sidebar;
 mod state;
 mod states;
 
-pub type CurrentGame = Arc<common::config::Game>;
+pub type CurrentGame = &'static common::config::Game;
 pub type State = &'static state::PlayState;
 
 pub fn state() -> State {
@@ -42,15 +41,15 @@ pub fn Redirect() -> impl IntoView {
 #[component]
 pub fn Play() -> impl IntoView {
     let id = game();
-    let config = expect_context::<Arc<common::ServerConfiguration>>();
+    let config = expect_context::<std::sync::Arc<common::ServerConfiguration>>();
     let games = config.games.clone();
 
     let Some(game) = games.into_iter().find(|game| *game.id == id) else {
         return view! { <leptos_router::components::Redirect path="/" /> }.into_any();
     };
 
-    let game = Arc::new(game);
-    provide_context(game.clone());
+    let game = Box::leak(Box::new(game));
+    provide_context::<crate::CurrentGame>(game);
 
     view! {
         <leptos_meta::Link rel="stylesheet" href="/css/play.css" />

@@ -32,7 +32,7 @@ pub fn ChatMessages() -> impl IntoView {
     let messages = move || {
         view! {
             <For each=each key=|(id, _)| std::sync::Arc::as_ptr(id) let((_, (data, message)))>
-                {message.render(&data, &state)}
+                {message.render(&data, state)}
             </For>
         }
     };

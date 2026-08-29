@@ -19,7 +19,7 @@ pub fn setup_handler(state: crate::State) {
             return;
         };
 
-        handle(&state, message);
+        handle(state, message);
     });
 }
 

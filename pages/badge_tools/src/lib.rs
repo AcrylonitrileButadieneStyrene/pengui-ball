@@ -1,4 +1,5 @@
 #![allow(non_snake_case)]
+#![allow(clippy::empty_enums)]
 
 use leptos::prelude::*;
 
