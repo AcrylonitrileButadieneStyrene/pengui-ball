@@ -8,8 +8,8 @@ mod volume;
 pub fn Effects() -> impl IntoView {
     let state = expect_context::<crate::EngineState>();
 
-    volume::effect(state.clone());
-    events::focus::effect(state.clone());
+    volume::effect(state);
+    events::focus::effect(state);
     events::error::effect();
     save_timestamps::effect(state);
 }

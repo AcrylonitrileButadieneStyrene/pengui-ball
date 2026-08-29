@@ -12,7 +12,7 @@ mod state;
 
 pub use easyrpg::messages::send;
 
-pub type EngineState = std::sync::Arc<state::EngineState>;
+pub type EngineState = &'static state::EngineState;
 
 #[component]
 pub fn Engine() -> impl IntoView {
@@ -32,7 +32,7 @@ pub fn Engine() -> impl IntoView {
 
         <state::Provider game>
             <easyrpg::LoadPlayer>
-                <easyrpg::StartPlayer>{None::<()>}</easyrpg::StartPlayer>
+                <easyrpg::StartPlayer />
             </easyrpg::LoadPlayer>
             <effects::Effects />
         </state::Provider>

@@ -26,7 +26,7 @@ pub fn LoadPlayer(children: Children) -> impl IntoView {
 }
 
 #[island]
-pub fn StartPlayer(children: Children) -> impl IntoView {
+pub fn StartPlayer() -> impl IntoView {
     let loaded = expect_context::<Loaded>();
     let state = expect_context::<crate::EngineState>();
     let node_ref = state.easyrpg_player.canvas;
@@ -36,7 +36,6 @@ pub fn StartPlayer(children: Children) -> impl IntoView {
             return;
         }
 
-        let state = state.clone();
         leptos::task::spawn_local(async move {
             let config = crate::easyrpg::state::Configuration {
                 websocket_url: format!("wss://api.ynoproject.net/{}/", state.game),
@@ -62,6 +61,5 @@ pub fn StartPlayer(children: Children) -> impl IntoView {
             role="application"
             on:keydown=inputs::on_key_down
         />
-        {children()}
     }
 }
