@@ -2,76 +2,127 @@ use std::{collections::HashMap, sync::Arc};
 
 use leptos::prelude::*;
 
-mod badge;
+mod language;
+mod metadata;
+
+use language::BadgeTranslation;
+use metadata::BadgeMetadata;
+
+type RawMetadata = Box<[Arc<BadgeMetadata>]>;
+type RawLanguage = HashMap<Arc<str>, HashMap<Arc<str>, Arc<BadgeTranslation>>>;
 
 pub struct Badges {
-    pub all: Memo<AllBadges>,
-    pub games: Memo<GameBadges>,
+    pub metadata: Memo<BadgesMetadata>,
+    pub by_group: Memo<BadgesCategory>,
+    pub language: Memo<BadgesLanguage>,
 
-    resource: LocalResource<Option<Box<[Arc<badge::Badge>]>>>,
+    metadata_resource: LocalResource<RawMetadata>,
+    language_resource: LocalResource<RawLanguage>,
 }
 
 impl Badges {
     pub fn new(game: &str) -> Self {
-        let resource = badges_resource(game);
+        let metadata_resource = metadata_resource(game);
+        let language_resource = language_resource(game, "en");
         Self {
-            all: Memo::new(all_badges(resource)),
-            games: Memo::new(game_badges(resource)),
-            resource,
+            metadata: Memo::new(metadata(metadata_resource)),
+            by_group: Memo::new(category(metadata_resource)),
+            language: Memo::new(language(language_resource)),
+            metadata_resource,
+            language_resource,
         }
     }
 
     pub fn refetch(&self) {
-        self.resource.refetch();
+        self.metadata_resource.refetch();
+        self.language_resource.refetch();
     }
 }
 
-fn badges_resource(game: &str) -> LocalResource<Option<Box<[Arc<badge::Badge>]>>> {
+fn metadata_resource(game: &str) -> LocalResource<RawMetadata> {
     let uri: std::sync::Arc<str> =
         format!("https://api.ynoproject.net/{game}/api/badge?command=list").into();
     LocalResource::new(move || {
         let uri = uri.clone();
         async move {
-            gloo_net::http::Request::get(&uri)
+            let Ok(response) = gloo_net::http::Request::get(&uri)
                 .credentials(leptos::web_sys::RequestCredentials::Include)
                 .send()
                 .await
-                .ok()?
-                .json::<Box<[Arc<badge::Badge>]>>()
-                .await
-                .ok()
+            else {
+                return Box::default();
+            };
+
+            response.json().await.unwrap_or_default()
         }
     })
 }
 
-type AllBadges = HashMap<Arc<str>, Arc<badge::Badge>>;
-fn all_badges(
-    resource: LocalResource<Option<Box<[Arc<badge::Badge>]>>>,
-) -> impl Fn(Option<&AllBadges>) -> AllBadges {
+type BadgesMetadata = HashMap<Arc<str>, Arc<BadgeMetadata>>;
+fn metadata(
+    resource: LocalResource<RawMetadata>,
+) -> impl Fn(Option<&BadgesMetadata>) -> BadgesMetadata {
     move |_| {
         resource
             .read()
             .as_ref()
-            .flatten()
             .map(|badges| {
                 badges
                     .iter()
                     .map(|badge| (badge.badge_id.clone(), badge.clone()))
-                    .collect::<HashMap<Arc<str>, Arc<badge::Badge>>>()
+                    .collect::<HashMap<Arc<str>, Arc<BadgeMetadata>>>()
             })
             .unwrap_or_default()
     }
 }
 
-type GameBadges = HashMap<Arc<str>, HashMap<Option<Arc<str>>, Arc<[Arc<badge::Badge>]>>>;
-fn game_badges(
-    resource: LocalResource<Option<Box<[Arc<badge::Badge>]>>>,
-) -> impl Fn(Option<&GameBadges>) -> GameBadges {
+fn language_resource(game: &str, language: &str) -> LocalResource<RawLanguage> {
+    let uri: std::sync::Arc<str> =
+        format!("https://ynoproject.net/{game}/lang/badge/{language}.json").into();
+    LocalResource::new(move || {
+        let uri = uri.clone();
+        async move {
+            let Ok(response) = gloo_net::http::Request::get(&uri)
+                .credentials(leptos::web_sys::RequestCredentials::Include)
+                .send()
+                .await
+            else {
+                return HashMap::default();
+            };
+
+            response.json().await.unwrap_or_default()
+        }
+    })
+}
+
+type BadgesLanguage = HashMap<Arc<str>, Arc<BadgeTranslation>>;
+fn language(
+    resource: LocalResource<RawLanguage>,
+) -> impl Fn(Option<&BadgesLanguage>) -> BadgesLanguage {
     move |_| {
         resource
             .read()
             .as_ref()
-            .flatten()
+            .map(|badges| {
+                badges
+                    .iter()
+                    .flat_map(|(_, badges)| badges)
+                    .map(|(badge_id, badge)| (badge_id.clone(), badge.clone()))
+                    .collect::<HashMap<Arc<str>, Arc<BadgeTranslation>>>()
+            })
+            .unwrap_or_default()
+    }
+}
+
+type BadgesCategory =
+    HashMap<Arc<str>, HashMap<Option<Arc<str>>, Arc<[Arc<metadata::BadgeMetadata>]>>>;
+fn category(
+    resource: LocalResource<RawMetadata>,
+) -> impl Fn(Option<&BadgesCategory>) -> BadgesCategory {
+    move |_| {
+        resource
+            .read()
+            .as_ref()
             .map(|badges| {
                 badges.iter().fold(HashMap::new(), |mut map, badge| {
                     map.entry(badge.game.clone())

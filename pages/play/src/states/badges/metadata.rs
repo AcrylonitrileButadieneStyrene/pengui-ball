@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 #[derive(serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Badge {
+pub struct BadgeMetadata {
     pub badge_id: Arc<str>,
     pub game: Arc<str>,
     pub group: Arc<str>,
@@ -25,21 +25,21 @@ pub struct Badge {
     pub new_unlock: bool,
 }
 
-impl PartialEq for Badge {
+impl PartialEq for BadgeMetadata {
     fn eq(&self, other: &Self) -> bool {
         self.badge_id == other.badge_id
     }
 }
 
-impl Eq for Badge {}
+impl Eq for BadgeMetadata {}
 
-impl PartialOrd for Badge {
+impl PartialOrd for BadgeMetadata {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         Some(self.cmp(other))
     }
 }
 
-impl Ord for Badge {
+impl Ord for BadgeMetadata {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.map_id.cmp(&other.map_id)
     }

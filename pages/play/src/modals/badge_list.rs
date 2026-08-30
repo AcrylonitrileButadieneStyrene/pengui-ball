@@ -18,7 +18,7 @@ fn Inner() -> impl IntoView {
     move || {
         state
             .badges
-            .games
+            .by_group
             .get()
             .get("2kki")
             .and_then(|game| game.get(&Some("4_ch".into())).cloned())
