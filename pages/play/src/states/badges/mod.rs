@@ -5,8 +5,8 @@ use leptos::prelude::*;
 mod language;
 mod metadata;
 
-use language::BadgeTranslation;
-use metadata::BadgeMetadata;
+pub use language::BadgeTranslation;
+pub use metadata::BadgeMetadata;
 
 type RawMetadata = Box<[Arc<BadgeMetadata>]>;
 type RawLanguage = HashMap<Arc<str>, HashMap<Arc<str>, Arc<BadgeTranslation>>>;

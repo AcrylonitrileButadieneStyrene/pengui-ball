@@ -1,0 +1,21 @@
+.games {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.games label {
+    border: solid 4px;
+    border-image: var(--ui-theme-border);
+    padding: 8px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.games label:has(input:checked) {
+    background-color: red;
+}
+
+.games label input {
+    display: none;
+}
