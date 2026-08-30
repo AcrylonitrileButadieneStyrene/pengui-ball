@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use leptos::prelude::*;
 
 stylance::import_style!(pub style, "badge_list.module.css");
@@ -16,26 +18,32 @@ pub fn Modal() -> impl IntoView {
     }
 }
 
-// struct SelectedGame(std::sync::Arc<str>);
-
 #[island]
 fn WithGameSelector(children: Children) -> impl IntoView {
     let state = crate::state();
 
     view! {
         <div class=style::games>
-            <label>
-                <input type="radio" name="badge-list-game" value="all" autocomplete="off" checked />
-                <span>All</span>
-            </label>
+            <GameTab id="all" label="All" default=true />
             <For each=state.badges.by_group key=|(game, _)| game.clone() let((game, _))>
-                <label>
-                    <input type="radio" name="badge-list-game" value=game.clone() autocomplete="off" />
-                    <span>{game}</span>
-                </label>
+                <GameTab id=game.clone() label=game />
             </For>
         </div>
         {children()}
+    }
+}
+
+#[component]
+fn GameTab(
+    #[prop(into)] id: Arc<str>,
+    #[prop(into)] label: Arc<str>,
+    #[prop(optional)] default: bool,
+) -> impl IntoView {
+    view! {
+        <label>
+            <input type="radio" name="badge-list-game" value=id autocomplete="off" prop:checked=default />
+            <span>{label}</span>
+        </label>
     }
 }
 
