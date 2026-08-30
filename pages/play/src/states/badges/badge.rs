@@ -1,9 +1,11 @@
+use std::sync::Arc;
+
 #[derive(serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Badge {
-    pub badge_id: Box<str>,
-    pub game: std::sync::Arc<str>,
-    pub group: Box<str>,
+    pub badge_id: Arc<str>,
+    pub game: Arc<str>,
+    pub group: Arc<str>,
     pub bp: u32,
     pub map_id: u32,
     pub map_x: u32,

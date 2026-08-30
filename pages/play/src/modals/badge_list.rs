@@ -21,7 +21,7 @@ fn Inner() -> impl IntoView {
             .games
             .get()
             .get("2kki")
-            .cloned()
+            .and_then(|game| game.get(&Some("4_ch".into())).cloned())
             .unwrap_or_default()
             .into_iter()
             .map(|badge| badge.badge_id.to_string())
