@@ -31,9 +31,39 @@ pub fn Header() -> impl IntoView {
             </a>
 
             <div class=style::middle />
+            <Badges game=game.id.clone() />
             <CurrentUser />
         </header>
     }.into_any()
+}
+
+#[island]
+fn Badges(game: std::sync::Arc<str>) -> impl IntoView {
+    let state = crate::state();
+    let badge = move || {
+        state
+            .api
+            .user
+            .read()
+            .as_ref()
+            .and_then(|user| user.as_ref().ok())
+            .map(|user| {
+                format!(
+                    "https://ynoproject.net/{game}/images/badge/{}.png",
+                    user.badge
+                )
+            })
+    };
+
+    let on_click = |_| {
+        state.modal.set(Some(crate::modals::Modals::BadgeList));
+    };
+
+    view! {
+        <button class=style::badge on:click=on_click>
+            <img src=badge width=39 height=39 />
+        </button>
+    }
 }
 
 #[island]

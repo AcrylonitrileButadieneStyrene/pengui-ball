@@ -8,7 +8,7 @@ pub struct User {
     pub registered: bool,
     pub name: Arc<str>,
     pub rank: u32,
-    pub badge: String,
+    pub badge: Arc<str>,
     #[serde(rename = "badgeSlotRows")]
     pub badge_slot_rows: u32,
     #[serde(rename = "badgeSlotCols")]

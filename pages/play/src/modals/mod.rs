@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 
+pub mod badge_list;
 pub mod cors;
 pub mod expeds;
 pub mod login;
@@ -13,27 +14,29 @@ stylance::import_style!(pub style, "mod.module.css");
 
 #[derive(Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum Modals {
+    BadgeList,
     Cors,
     Expeds,
     LogIn,
     LogOut,
     Saves,
     Screenshots,
-    Themes,
     Settings,
+    Themes,
 }
 
 #[component]
 pub fn Modals() -> impl IntoView {
     view! {
+        <badge_list::Modal />
         <cors::Modal />
         <expeds::Modal />
         <login::Modal />
         <logout::Modal />
         <saves::Modal />
         <screenshots::Modal />
-        <themes::Modal />
         <settings::Modal />
+        <themes::Modal />
     }
 }
 
