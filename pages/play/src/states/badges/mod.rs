@@ -10,32 +10,39 @@ pub use metadata::BadgeMetadata;
 
 type RawMetadata = Box<[Arc<BadgeMetadata>]>;
 type RawLanguage = HashMap<Arc<str>, HashMap<Arc<str>, Arc<BadgeTranslation>>>;
+type RawCategory = HashMap<Arc<str>, HashMap<Arc<str>, Arc<str>>>;
 
 pub struct Badges {
-    pub metadata: Memo<BadgesMetadata>,
-    pub by_group: Memo<BadgesCategory>,
-    pub language: Memo<BadgesLanguage>,
+    pub badge_by_id: Memo<BadgeById>,
+    pub badge_by_category: Memo<BadgeByCategory>,
+    pub badge_to_translation: Memo<BadgeToTranslation>,
+    pub category_to_translation: Memo<CategoryToTranslation>,
 
     metadata_resource: LocalResource<RawMetadata>,
     language_resource: LocalResource<RawLanguage>,
+    category_resource: LocalResource<RawCategory>,
 }
 
 impl Badges {
     pub fn new(game: &str) -> Self {
         let metadata_resource = metadata_resource(game);
         let language_resource = language_resource(game, "en");
+        let category_resource = category_resource(game, "en");
         Self {
-            metadata: Memo::new(metadata(metadata_resource)),
-            by_group: Memo::new(category(metadata_resource)),
-            language: Memo::new(language(language_resource)),
+            badge_by_id: Memo::new(badge_by_id(metadata_resource)),
+            badge_by_category: Memo::new(by_game_category(metadata_resource)),
+            badge_to_translation: Memo::new(badge_to_language(language_resource)),
+            category_to_translation: Memo::new(category_to_translation(category_resource)),
             metadata_resource,
             language_resource,
+            category_resource,
         }
     }
 
     pub fn refetch(&self) {
         self.metadata_resource.refetch();
         self.language_resource.refetch();
+        self.category_resource.refetch();
     }
 }
 
@@ -58,10 +65,8 @@ fn metadata_resource(game: &str) -> LocalResource<RawMetadata> {
     })
 }
 
-type BadgesMetadata = HashMap<Arc<str>, Arc<BadgeMetadata>>;
-fn metadata(
-    resource: LocalResource<RawMetadata>,
-) -> impl Fn(Option<&BadgesMetadata>) -> BadgesMetadata {
+type BadgeById = HashMap<Arc<str>, Arc<BadgeMetadata>>;
+fn badge_by_id(resource: LocalResource<RawMetadata>) -> impl Fn(Option<&BadgeById>) -> BadgeById {
     move |_| {
         resource
             .read()
@@ -95,10 +100,10 @@ fn language_resource(game: &str, language: &str) -> LocalResource<RawLanguage> {
     })
 }
 
-type BadgesLanguage = HashMap<Arc<str>, Arc<BadgeTranslation>>;
-fn language(
+type BadgeToTranslation = HashMap<Arc<str>, Arc<BadgeTranslation>>;
+fn badge_to_language(
     resource: LocalResource<RawLanguage>,
-) -> impl Fn(Option<&BadgesLanguage>) -> BadgesLanguage {
+) -> impl Fn(Option<&BadgeToTranslation>) -> BadgeToTranslation {
     move |_| {
         resource
             .read()
@@ -114,11 +119,11 @@ fn language(
     }
 }
 
-type BadgesCategory =
+type BadgeByCategory =
     HashMap<Arc<str>, HashMap<Option<Arc<str>>, Arc<[Arc<metadata::BadgeMetadata>]>>>;
-fn category(
+fn by_game_category(
     resource: LocalResource<RawMetadata>,
-) -> impl Fn(Option<&BadgesCategory>) -> BadgesCategory {
+) -> impl Fn(Option<&BadgeByCategory>) -> BadgeByCategory {
     move |_| {
         resource
             .read()
@@ -161,4 +166,30 @@ fn category(
             })
             .unwrap_or_default()
     }
+}
+
+fn category_resource(game: &str, language: &str) -> LocalResource<RawCategory> {
+    let uri: std::sync::Arc<str> =
+        format!("https://ynoproject.net/{game}/lang/badge/groups/{language}.json").into();
+    LocalResource::new(move || {
+        let uri = uri.clone();
+        async move {
+            let Ok(response) = gloo_net::http::Request::get(&uri)
+                .credentials(leptos::web_sys::RequestCredentials::Include)
+                .send()
+                .await
+            else {
+                return HashMap::default();
+            };
+
+            response.json().await.unwrap_or_default()
+        }
+    })
+}
+
+type CategoryToTranslation = RawCategory;
+fn category_to_translation(
+    resource: LocalResource<RawCategory>,
+) -> impl Fn(Option<&CategoryToTranslation>) -> CategoryToTranslation {
+    move |_| resource.get().unwrap_or_default()
 }
