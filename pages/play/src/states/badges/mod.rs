@@ -17,32 +17,42 @@ pub struct Badges {
     pub badge_by_category: Memo<BadgeByCategory>,
     pub badge_to_translation: Memo<BadgeToTranslation>,
     pub category_to_translation: Memo<CategoryToTranslation>,
+    resources: Resources,
+}
 
-    metadata_resource: LocalResource<RawMetadata>,
-    language_resource: LocalResource<RawLanguage>,
-    category_resource: LocalResource<RawCategory>,
+struct Resources {
+    pub metadata: LocalResource<RawMetadata>,
+    pub language: LocalResource<RawLanguage>,
+    pub category: LocalResource<RawCategory>,
 }
 
 impl Badges {
     pub fn new(game: &str) -> Self {
-        let metadata_resource = metadata_resource(game);
-        let language_resource = language_resource(game, "en");
-        let category_resource = category_resource(game, "en");
+        let resources = Resources {
+            metadata: metadata_resource(game),
+            language: language_resource(game, "en"),
+            category: category_resource(game, "en"),
+        };
+
         Self {
-            badge_by_id: Memo::new(badge_by_id(metadata_resource)),
-            badge_by_category: Memo::new(by_game_category(metadata_resource)),
-            badge_to_translation: Memo::new(badge_to_language(language_resource)),
-            category_to_translation: Memo::new(category_to_translation(category_resource)),
-            metadata_resource,
-            language_resource,
-            category_resource,
+            badge_by_id: Memo::new(badge_by_id(resources.metadata)),
+            badge_by_category: Memo::new(by_game_category(resources.metadata)),
+            badge_to_translation: Memo::new(badge_to_language(resources.language)),
+            category_to_translation: Memo::new(category_to_translation(resources.category)),
+            resources,
         }
     }
 
     pub fn refetch(&self) {
-        self.metadata_resource.refetch();
-        self.language_resource.refetch();
-        self.category_resource.refetch();
+        self.resources.refetch();
+    }
+}
+
+impl Resources {
+    pub fn refetch(&self) {
+        self.metadata.refetch();
+        self.language.refetch();
+        self.category.refetch();
     }
 }
 

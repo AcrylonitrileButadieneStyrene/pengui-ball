@@ -16,6 +16,25 @@ pub fn Modal() -> impl IntoView {
 
 #[island]
 fn Inner() -> impl IntoView {
+    let state = crate::state();
+
+    let mut prev = None;
+    Effect::new(move || {
+        if prev.is_some() {
+            state.badges.refetch();
+        }
+
+        prev = state
+            .api
+            .user
+            .read()
+            .as_ref()
+            .map(Result::as_ref)
+            .map(Result::ok)
+            .flatten()
+            .cloned();
+    });
+
     let selected_game = RwSignal::<Option<Arc<str>>>::default();
     let selected_group = RwSignal::<Option<Arc<str>>>::default();
 

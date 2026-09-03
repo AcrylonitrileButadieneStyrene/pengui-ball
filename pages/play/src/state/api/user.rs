@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-#[derive(serde::Deserialize)]
+#[derive(Clone, PartialEq, Eq, serde::Deserialize)]
 pub struct User {
     pub uuid: Arc<str>,
     pub registered: bool,
