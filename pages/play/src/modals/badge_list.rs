@@ -21,8 +21,8 @@ fn Inner() -> impl IntoView {
 
     view! {
         <GameSelector selected_game />
-        <GroupSelector selected_game selected_group />
-        <List />
+        <GroupSelector selected_game=selected_game.read_only() selected_group />
+        <List selected_game=selected_game.read_only() selected_group=selected_group.read_only() />
     }
 }
 
@@ -45,7 +45,7 @@ fn GameSelector(selected_game: RwSignal<Option<Arc<str>>>) -> impl IntoView {
     }
 }
 
-#[component]
+#[component(transparent)]
 fn SelectorTab(#[prop(into)] id: Arc<str>, #[prop(into)] label: Arc<str>) -> impl IntoView {
     view! {
         <AttributeInterceptor let:attrs>
@@ -59,62 +59,80 @@ fn SelectorTab(#[prop(into)] id: Arc<str>, #[prop(into)] label: Arc<str>) -> imp
 
 #[component]
 fn GroupSelector(
-    selected_game: RwSignal<Option<Arc<str>>>,
+    selected_game: ReadSignal<Option<Arc<str>>>,
     selected_group: RwSignal<Option<Arc<str>>>,
 ) -> impl IntoView {
     let state = crate::state();
-    let all_group = NodeRef::new();
+    let all_group = NodeRef::<leptos::html::Input>::new();
+
+    Effect::new(move || {
+        selected_game.track();
+        if let Some(all) = all_group.get() {
+            all.set_checked(true);
+        }
+    });
 
     let categories = move || {
-        selected_game.get().and_then(|game| {
-            let by_game = state.badges.category_to_translation.read();
-            by_game.get(&game).cloned()
-        })
+        selected_game
+            .get()
+            .and_then(|game| {
+                let by_game = state.badges.category_to_translation.read();
+                by_game.get(&game).cloned()
+            })
+            .unwrap_or_default()
+    };
+
+    let on_change = move |event| {
+        let game = event_target_value(&event);
+        selected_group.set(to_selection(game));
     };
 
     view! {
-        <div class=style::games>
-            <label>
-                <input
-                    type="radio"
-                    name="badge-list-group"
-                    value="all"
-                    autocomplete="off"
-                    checked
-                    node_ref=all_group
-                />
-                <span>All</span>
-            </label>
-            <For each=state.badges.badge_by_category key=|(game, _)| game.clone() let((game, _))>
-                <label>
-                    <input
-                        type="radio"
-                        name="badge-list-group"
-                        value=game.clone()
-                        autocomplete="off"
-                    />
-                    <span>{game}</span>
-                </label>
+        <div class=style::games on:change=on_change>
+            <SelectorTab id="all" label="All" {..} name="badge-list-group" checked=true node_ref=all_group />
+            <For each=categories key=|(group, _)| group.clone() let((group, _))>
+                <SelectorTab id=group.clone() label=group.clone() {..} name="badge-list-group" />
             </For>
         </div>
     }
 }
 
 #[component]
-fn List() -> impl IntoView {
+fn List(
+    selected_game: ReadSignal<Option<Arc<str>>>,
+    selected_group: ReadSignal<Option<Arc<str>>>,
+) -> impl IntoView {
     let state = crate::state();
 
-    move || {
-        state
-            .badges
-            .badge_by_category
-            .get()
-            .get("2kki")
-            .and_then(|game| game.get(&Some("4_ch".into())).cloned())
-            .unwrap_or_default()
-            .into_iter()
-            .map(|badge| badge.badge_id.to_string())
-            .collect::<Vec<_>>()
+    let badges = Memo::new(move |_| {
+        let badges = state.badges.badge_by_category.get();
+
+        if let Some(game) = selected_game.get()
+            && let Some(badges) = badges.get(&game)
+        {
+            if let Some(group) = selected_group.get()
+                && let Some(badges) = badges.get(&Some(group))
+            {
+                badges.to_vec()
+            } else {
+                badges
+                    .iter()
+                    .flat_map(|(_group, badges)| badges.to_vec())
+                    .collect::<Vec<_>>()
+            }
+        } else {
+            badges
+                .iter()
+                .flat_map(|(_game, groups)| groups.clone())
+                .flat_map(|(_group, badges)| badges.to_vec())
+                .collect::<Vec<_>>()
+        }
+    });
+
+    view! {
+        <For each=badges key=|badge| badge.badge_id.clone() let(badge)>
+            <div>{badge.badge_id.clone()}</div>
+        </For>
     }
 }
 
