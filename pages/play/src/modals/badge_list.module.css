@@ -19,3 +19,16 @@
 .games label input {
     display: none;
 }
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.badge {
+    width: 98px;
+    height: 98px;
+    padding: 14px;
+    margin: 22px;
+}

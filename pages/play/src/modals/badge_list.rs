@@ -17,22 +17,28 @@ pub fn Modal() -> impl IntoView {
 #[island]
 fn Inner() -> impl IntoView {
     let state = crate::state();
+    let (throttle, set_throttle) = signal(0);
+    let throttle: Signal<usize> = leptos_use::signal_throttled_with_options(
+        throttle,
+        60_000.,
+        leptos_use::ThrottleOptions {
+            trailing: false,
+            leading: true,
+        },
+    );
 
-    let mut prev = None;
     Effect::new(move || {
-        if prev.is_some() {
+        if state.modal.get() == Some(super::Modals::BadgeList) {
+            set_throttle.update(|x| {
+                *x = x.checked_add(1).unwrap_or(1);
+            });
+        }
+    });
+
+    Effect::new(move || {
+        if throttle.get() != 0 {
             state.badges.refetch();
         }
-
-        prev = state
-            .api
-            .user
-            .read()
-            .as_ref()
-            .map(Result::as_ref)
-            .map(Result::ok)
-            .flatten()
-            .cloned();
     });
 
     let selected_game = RwSignal::<Option<Arc<str>>>::default();
@@ -61,18 +67,6 @@ fn GameSelector(selected_game: RwSignal<Option<Arc<str>>>) -> impl IntoView {
                 <SelectorTab id=game.clone() label=game.clone() {..} name="badge-list-game" />
             </For>
         </div>
-    }
-}
-
-#[component(transparent)]
-fn SelectorTab(#[prop(into)] id: Arc<str>, #[prop(into)] label: Arc<str>) -> impl IntoView {
-    view! {
-        <AttributeInterceptor let:attrs>
-            <label>
-                <input type="radio" value=id.clone() autocomplete="off" {..attrs} />
-                <span>{label.clone()}</span>
-            </label>
-        </AttributeInterceptor>
     }
 }
 
@@ -116,6 +110,26 @@ fn GroupSelector(
     }
 }
 
+fn to_selection(value: String) -> Option<Arc<str>> {
+    if value == "all" {
+        None::<Arc<str>>
+    } else {
+        Some(value.into())
+    }
+}
+
+#[component(transparent)]
+fn SelectorTab(#[prop(into)] id: Arc<str>, #[prop(into)] label: Arc<str>) -> impl IntoView {
+    view! {
+        <AttributeInterceptor let:attrs>
+            <label>
+                <input type="radio" value=id.clone() autocomplete="off" {..attrs} />
+                <span>{label.clone()}</span>
+            </label>
+        </AttributeInterceptor>
+    }
+}
+
 #[component]
 fn List(
     selected_game: ReadSignal<Option<Arc<str>>>,
@@ -125,8 +139,7 @@ fn List(
 
     let badges = Memo::new(move |_| {
         let badges = state.badges.badge_by_category.get();
-
-        if let Some(game) = selected_game.get()
+        let badges = if let Some(game) = selected_game.get()
             && let Some(badges) = badges.get(&game)
         {
             if let Some(group) = selected_group.get()
@@ -145,20 +158,45 @@ fn List(
                 .flat_map(|(_game, groups)| groups.clone())
                 .flat_map(|(_group, badges)| badges.to_vec())
                 .collect::<Vec<_>>()
-        }
+        };
+
+        let translations = state.badges.badge_to_translation.get();
+        badges
+            .into_iter()
+            .map(|badge| {
+                let translation = translations.get(&badge.badge_id).cloned();
+                (badge, translation)
+            })
+            .collect::<Vec<_>>()
     });
 
     view! {
-        <For each=badges key=|badge| badge.badge_id.clone() let(badge)>
-            <div>{badge.badge_id.clone()}</div>
-        </For>
+        <div class=style::container>
+            <For each=badges key=|(badge,_)| badge.badge_id.clone() let((meta,lang))>
+                <Badge meta lang />
+            </For>
+        </div>
     }
 }
 
-fn to_selection(value: String) -> Option<Arc<str>> {
-    if value == "all" {
-        None::<Arc<str>>
+#[component]
+fn Badge(
+    meta: Arc<crate::states::badges::BadgeMetadata>,
+    lang: Option<Arc<crate::states::badges::BadgeTranslation>>,
+) -> impl IntoView {
+    let src = if meta.animated {
+        format!(
+            "https://ynoproject.net/2kki/images/badge/{}.gif",
+            meta.badge_id
+        )
     } else {
-        Some(value.into())
+        format!(
+            "https://ynoproject.net/2kki/images/badge/{}.png",
+            meta.badge_id
+        )
+    };
+
+    view! {
+        <img class=style::badge src=src loading="lazy" />
     }
 }
