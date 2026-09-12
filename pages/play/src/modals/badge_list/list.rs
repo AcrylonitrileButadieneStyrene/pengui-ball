@@ -19,7 +19,11 @@ pub fn List(
             .collect::<Vec<_>>()
     };
 
-    view! { <div class=super::style::container>{view}</div> }
+    view! {
+        <div class=super::style::scroller>
+            <div class=super::style::container>{view}</div>
+        </div>
+    }
 }
 
 #[component]
@@ -38,7 +42,11 @@ fn Game(
         })
         .collect::<Vec<_>>();
 
-    view! { <div prop:style=move || if visible() { "display:children;" } else { "display:none;" }>{view}</div> }
+    view! {
+        <div prop:style=move || {
+            if visible() { "display:children;" } else { "display:none;" }
+        }>{view}</div>
+    }
 }
 
 #[component]
@@ -65,7 +73,11 @@ fn Category(
         })
         .collect::<Vec<_>>();
 
-    view! { <div prop:style=move || if visible() { "display:children;" } else { "display:none;" }>{view}</div> }
+    view! {
+        <div prop:style=move || {
+            if visible() { "display:children;" } else { "display:none;" }
+        }>{view}</div>
+    }
 }
 
 #[component]

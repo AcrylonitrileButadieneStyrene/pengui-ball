@@ -11,6 +11,11 @@
     max-height: calc(100% - 112px);
 }
 
+.modal[open] {
+    display: flex;
+    flex-direction: column;
+}
+
 @media not (prefers-reduced-motion: reduce) {
     .modal::backdrop {
         backdrop-filter: blur(5px);

@@ -24,7 +24,14 @@
     display: none;
 }
 
+.scroller {
+    position: relative;
+    flex: 100vh;
+    overflow-y: scroll;
+}
+
 .container {
+    position: absolute;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;

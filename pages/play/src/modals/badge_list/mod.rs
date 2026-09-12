@@ -42,6 +42,11 @@ fn Inner(
     let selected_game = RwSignal::<Option<Arc<str>>>::default();
     let selected_group = RwSignal::<Option<Arc<str>>>::default();
 
+    Effect::new(move || {
+        selected_game.track();
+        selected_group.set(None);
+    });
+
     view! {
         <GameSelector badges selected_game />
         <GroupSelector selected_game=selected_game.read_only() selected_group />
