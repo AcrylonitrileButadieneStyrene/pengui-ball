@@ -22,5 +22,6 @@
 }
 
 .badge {
-    
+	border-image: var(--ui-theme-border-url) 8 repeat;
+	padding: 0px;
 }
