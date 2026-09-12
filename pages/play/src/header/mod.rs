@@ -60,7 +60,7 @@ fn Badges(game: std::sync::Arc<str>) -> impl IntoView {
     };
 
     view! {
-        <button class=style::badge on:click=on_click>
+        <button class=format!("button pop-out {}", style::badge) on:click=on_click>
             <img src=badge width=39 height=39 />
         </button>
     }
