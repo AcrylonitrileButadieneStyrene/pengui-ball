@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["common", "components/locations", "pages/*", "server", "shared"]
+members = ["common", "components/*", "pages/*", "server", "shared"]
 
 [workspace.lints.clippy]
 nursery = { level = "warn", priority = -1 }

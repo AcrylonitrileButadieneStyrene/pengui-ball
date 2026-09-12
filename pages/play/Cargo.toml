@@ -7,7 +7,7 @@ edition = "2024"
 workspace = true
 
 [dependencies]
-chat.path = "../chat"
+chat.path = "../../components/chat"
 chrono.workspace = true
 common.path = "../../common"
 flume = "0.12.0"
