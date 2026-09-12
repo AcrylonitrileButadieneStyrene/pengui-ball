@@ -99,7 +99,7 @@ fn GameSelector(
         <div class=style::selector on:change=on_change>
             <SelectorTab id="all" label="All" {..} name="badge-list-game" checked=true />
             <For each=badges key=|(game, _)| game.clone() let((id, badges::BadgeGame { name, .. }))>
-                <SelectorTab id=id.clone() label=name.clone() {..} name="badge-list-game" />
+                <SelectorTab label=name id {..} name="badge-list-game" />
             </For>
         </div>
     }
@@ -151,7 +151,7 @@ fn GroupSelector(
                 node_ref=all_group
             />
             <For each=categories key=|(group, _)| group.clone() let((id, name))>
-                <SelectorTab id=id.clone() label=name.clone() {..} name="badge-list-group" />
+                <SelectorTab label=name id {..} name="badge-list-group" />
             </For>
         </div>
     }

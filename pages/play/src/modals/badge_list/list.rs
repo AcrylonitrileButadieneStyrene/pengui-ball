@@ -26,9 +26,11 @@ pub fn List(
     }
 }
 
+type BadgeList = [Arc<super::badges::Badge>];
+
 #[component]
 fn Game(
-    badges: Arc<IndexMap<Option<Arc<str>>, Arc<[Arc<super::badges::Badge>]>>>,
+    badges: Arc<IndexMap<Option<Arc<str>>, Arc<BadgeList>>>,
     game_id: Arc<str>,
     selected_game: ReadSignal<Option<Arc<str>>>,
     selected_group: ReadSignal<Option<Arc<str>>>,

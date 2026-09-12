@@ -8,10 +8,13 @@ use crate::states::badges::{BadgeMetadata, BadgeToTranslation, BadgeTranslation}
 
 pub type Badges = Memo<IndexMap<Arc<str>, BadgeGame>>;
 
+type GameKey = Option<Arc<str>>;
+type BadgeList = [Arc<Badge>];
+
 #[derive(Debug, Clone)]
 pub struct BadgeGame {
     pub name: Arc<str>,
-    pub badges: Arc<IndexMap<Option<Arc<str>>, Arc<[Arc<Badge>]>>>,
+    pub badges: Arc<IndexMap<GameKey, Arc<BadgeList>>>,
 }
 
 impl PartialEq for BadgeGame {
@@ -31,52 +34,51 @@ pub fn get_sorted(
     current_game: Arc<str>,
     games: Arc<IndexMap<Arc<str>, Arc<str>>>,
 ) -> Badges {
-    Memo::new({
-        let games = games.clone();
-        move |_| {
-            let mut badges = state.badges.badge_by_category.get();
-            let translations = state.badges.badge_to_translation.get();
+    Memo::new(move |_| {
+        let mut badges = state.badges.badge_by_category.get();
+        let translations = state.badges.badge_to_translation.get();
 
-            let current_game_name = games
-                .get(&current_game)
-                .cloned()
-                .unwrap_or_else(|| current_game.clone());
+        let current_game_name = games
+            .get(&current_game)
+            .cloned()
+            .unwrap_or_else(|| current_game.clone());
 
-            let mut result = IndexMap::new();
-            for (game_id, game_name) in std::iter::once((current_game.clone(), current_game_name))
-                .chain(std::iter::once(("ynoproject".into(), "YNOproject".into())))
-                .chain(games.iter().map(|(id, name)| (id.clone(), name.clone())))
-            {
-                if let Some(badges) = badges.remove(&game_id) {
-                    result.insert(
-                        game_id.clone(),
-                        BadgeGame {
-                            name: game_name,
-                            badges: sort_categories(badges, &translations),
-                        },
-                    );
-                }
-            }
-
-            result.extend(badges.drain().map(|(id, badges)| {
-                (
-                    id.clone(),
+        let mut result = IndexMap::new();
+        for (game_id, game_name) in std::iter::once((current_game.clone(), current_game_name))
+            .chain(std::iter::once(("ynoproject".into(), "YNOproject".into())))
+            .chain(games.iter().map(|(id, name)| (id.clone(), name.clone())))
+        {
+            if let Some(badges) = badges.remove(&game_id) {
+                result.insert(
+                    game_id.clone(),
                     BadgeGame {
-                        name: id,
+                        name: game_name,
                         badges: sort_categories(badges, &translations),
                     },
-                )
-            }));
-
-            result
+                );
+            }
         }
+
+        result.extend(badges.drain().map(|(id, badges)| {
+            (
+                id.clone(),
+                BadgeGame {
+                    name: id,
+                    badges: sort_categories(badges, &translations),
+                },
+            )
+        }));
+
+        result
     })
 }
+
+type CategoryToBadge = Arc<IndexMap<Option<Arc<str>>, Arc<[Arc<Badge>]>>>;
 
 fn sort_categories(
     input: HashMap<Option<Arc<str>>, Arc<[Arc<BadgeMetadata>]>>,
     translations: &BadgeToTranslation,
-) -> Arc<IndexMap<Option<Arc<str>>, Arc<[Arc<Badge>]>>> {
+) -> CategoryToBadge {
     Arc::new(
         input
             .into_iter()
@@ -86,15 +88,16 @@ fn sort_categories(
     )
 }
 
+type WithTranslationsArgs = (Option<Arc<str>>, Arc<[Arc<BadgeMetadata>]>);
+type WithTranslationsResult = (Option<Arc<str>>, Arc<[Arc<Badge>]>);
 fn with_translations(
     translations: &BadgeToTranslation,
-) -> impl Fn((Option<Arc<str>>, Arc<[Arc<BadgeMetadata>]>)) -> (Option<Arc<str>>, Arc<[Arc<Badge>]>)
-{
+) -> impl Fn(WithTranslationsArgs) -> WithTranslationsResult {
     |(key, badges)| {
         (
             key,
             badges
-                .into_iter()
+                .iter()
                 .map(|badge| get_translation(badge.clone(), translations))
                 .collect(),
         )

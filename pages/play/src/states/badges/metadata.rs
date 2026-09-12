@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
+#[allow(clippy::struct_excessive_bools)]
 pub struct BadgeMetadata {
     pub badge_id: Arc<str>,
     pub game: Arc<str>,

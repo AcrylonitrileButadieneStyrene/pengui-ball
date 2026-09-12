@@ -120,8 +120,8 @@ fn badge_to_language(
             .as_ref()
             .map(|badges| {
                 badges
-                    .iter()
-                    .flat_map(|(_, badges)| badges)
+                    .values()
+                    .flatten()
                     .map(|(badge_id, badge)| (badge_id.clone(), badge.clone()))
                     .collect::<HashMap<Arc<str>, Arc<BadgeTranslation>>>()
             })
@@ -161,7 +161,7 @@ fn by_game_category(
                                         Some(badge.group.clone())
                                     })
                                     .or_insert_with(Vec::new)
-                                    .push(badge.clone());
+                                    .push(badge);
                                     map
                                 })
                                 .into_iter()

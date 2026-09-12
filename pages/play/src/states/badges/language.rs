@@ -1,2 +1,2 @@
-#[derive(Debug, PartialEq, serde::Deserialize)]
+#[derive(Debug, PartialEq, Eq, serde::Deserialize)]
 pub struct BadgeTranslation {}
