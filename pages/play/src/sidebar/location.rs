@@ -19,7 +19,7 @@ fn location_inner(location: Location) -> Option<impl IntoView> {
         LocationResolved::Pending => return None,
         LocationResolved::Unknown => {
             let Location { map, x, y, .. } = location;
-            view! { <span>Unknown Location: {format!("Map{map:>04}({x}, {y})")}</span> }.into_any()
+            view! { <span>{format!("Map{map:>04}({x}, {y})")}</span> }.into_any()
         }
         LocationResolved::Single {
             name,
