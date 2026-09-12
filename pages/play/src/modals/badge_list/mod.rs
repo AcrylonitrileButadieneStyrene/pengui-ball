@@ -2,20 +2,52 @@ use std::sync::Arc;
 
 use leptos::{attribute_interceptor::AttributeInterceptor, prelude::*};
 
-stylance::import_style!(pub style, "badge_list.module.css");
+mod badges;
+
+stylance::import_style!(pub style, "mod.module.css");
 
 #[component]
 pub fn Modal() -> impl IntoView {
+    let config = expect_context::<std::sync::Arc<common::ServerConfiguration>>();
+    let current_game = expect_context::<crate::CurrentGame>();
+
+    let games = Arc::new(
+        config
+            .games
+            .iter()
+            .map(|game| (game.id.clone(), game.name.clone()))
+            .collect(),
+    );
+
     view! {
         <super::Modal when=super::Modals::BadgeList>
             <h1>Badges</h1>
-            <Inner />
+            <Inner current_game=current_game.id.clone() games />
         </super::Modal>
     }
 }
 
 #[island]
-fn Inner() -> impl IntoView {
+fn Inner(
+    current_game: Arc<str>,
+    games: Arc<indexmap::IndexMap<Arc<str>, Arc<str>>>,
+) -> impl IntoView {
+    let state = crate::state();
+    let badges = badges::get_sorted(state, current_game, games);
+
+    use_refetch();
+
+    let selected_game = RwSignal::<Option<Arc<str>>>::default();
+    let selected_group = RwSignal::<Option<Arc<str>>>::default();
+
+    view! {
+        <GameSelector badges selected_game />
+        <GroupSelector selected_game=selected_game.read_only() selected_group />
+        <List selected_game=selected_game.read_only() selected_group=selected_group.read_only() />
+    }
+}
+
+fn use_refetch() {
     let state = crate::state();
     let (throttle, set_throttle) = signal(0);
     let throttle: Signal<usize> = leptos_use::signal_throttled_with_options(
@@ -40,21 +72,13 @@ fn Inner() -> impl IntoView {
             state.badges.refetch();
         }
     });
-
-    let selected_game = RwSignal::<Option<Arc<str>>>::default();
-    let selected_group = RwSignal::<Option<Arc<str>>>::default();
-
-    view! {
-        <GameSelector selected_game />
-        <GroupSelector selected_game=selected_game.read_only() selected_group />
-        <List selected_game=selected_game.read_only() selected_group=selected_group.read_only() />
-    }
 }
 
 #[component]
-fn GameSelector(selected_game: RwSignal<Option<Arc<str>>>) -> impl IntoView {
-    let state = crate::state();
-
+fn GameSelector(
+    badges: badges::Badges,
+    selected_game: RwSignal<Option<Arc<str>>>,
+) -> impl IntoView {
     let on_change = move |event| {
         let game = event_target_value(&event);
         selected_game.set(to_selection(game));
@@ -63,8 +87,13 @@ fn GameSelector(selected_game: RwSignal<Option<Arc<str>>>) -> impl IntoView {
     view! {
         <div class=style::games on:change=on_change>
             <SelectorTab id="all" label="All" {..} name="badge-list-game" checked=true />
-            <For each=state.badges.badge_by_category key=|(game, _)| game.clone() let((game, _))>
-                <SelectorTab id=game.clone() label=game.clone() {..} name="badge-list-game" />
+            <For each=badges key=|(game, _)| game.clone() let((id, badges::BadgeGame { name, .. }))>
+                <SelectorTab
+                    id=id.clone()
+                    label=name.clone()
+                    {..}
+                    name="badge-list-game"
+                />
             </For>
         </div>
     }
@@ -102,7 +131,14 @@ fn GroupSelector(
 
     view! {
         <div class=style::games on:change=on_change>
-            <SelectorTab id="all" label="All" {..} name="badge-list-group" checked=true node_ref=all_group />
+            <SelectorTab
+                id="all"
+                label="All"
+                {..}
+                name="badge-list-group"
+                checked=true
+                node_ref=all_group
+            />
             <For each=categories key=|(group, _)| group.clone() let((group, _))>
                 <SelectorTab id=group.clone() label=group.clone() {..} name="badge-list-group" />
             </For>
@@ -172,7 +208,7 @@ fn List(
 
     view! {
         <div class=style::container>
-            <For each=badges key=|(badge,_)| badge.badge_id.clone() let((meta,lang))>
+            <For each=badges key=|(badge, _)| badge.badge_id.clone() let((meta, lang))>
                 <Badge meta lang />
             </For>
         </div>
@@ -196,7 +232,5 @@ fn Badge(
         )
     };
 
-    view! {
-        <img class=style::badge src=src loading="lazy" />
-    }
+    view! { <img class=style::badge src=src loading="lazy" /> }
 }

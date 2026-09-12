@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-#[derive(serde::Deserialize)]
+#[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BadgeMetadata {
     pub badge_id: Arc<str>,

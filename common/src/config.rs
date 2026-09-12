@@ -12,7 +12,7 @@ pub struct ServerConfiguration {
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Game {
     pub id: Arc<str>,
-    pub name: String,
+    pub name: Arc<str>,
     #[serde(default)]
     pub permission: PermissionStatus,
 }
