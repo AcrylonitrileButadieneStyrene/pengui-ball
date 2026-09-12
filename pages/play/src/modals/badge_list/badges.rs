@@ -1,6 +1,7 @@
 use std::{collections::HashMap, sync::Arc};
 
 use indexmap::IndexMap;
+use itertools::Itertools;
 use leptos::prelude::*;
 
 use crate::states::badges::BadgeMetadata;
@@ -10,7 +11,7 @@ pub type Badges = Memo<IndexMap<Arc<str>, BadgeGame>>;
 #[derive(Debug, Clone)]
 pub struct BadgeGame {
     pub name: Arc<str>,
-    pub badges: Arc<HashMap<Option<Arc<str>>, Arc<[Arc<BadgeMetadata>]>>>,
+    pub badges: Arc<IndexMap<Option<Arc<str>>, Arc<[Arc<BadgeMetadata>]>>>,
 }
 
 impl PartialEq for BadgeGame {
@@ -44,7 +45,7 @@ pub fn get_sorted(
                         game_id.clone(),
                         BadgeGame {
                             name: game_name,
-                            badges: Arc::new(badges),
+                            badges: sort_categories(badges),
                         },
                     );
                 }
@@ -55,14 +56,23 @@ pub fn get_sorted(
                     id.clone(),
                     BadgeGame {
                         name: id,
-                        badges: Arc::new(badges),
+                        badges: sort_categories(badges),
                     },
                 )
             }));
 
-            leptos::logging::log!("{result:?}");
-
             result
         }
     })
+}
+
+fn sort_categories(
+    input: HashMap<Option<Arc<str>>, Arc<[Arc<BadgeMetadata>]>>,
+) -> Arc<IndexMap<Option<Arc<str>>, Arc<[Arc<BadgeMetadata>]>>> {
+    Arc::new(
+        input
+            .into_iter()
+            .sorted_by_key(|(key, _)| key.clone())
+            .collect(),
+    )
 }

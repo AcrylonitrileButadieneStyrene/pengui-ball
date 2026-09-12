@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use itertools::Itertools;
 use leptos::{attribute_interceptor::AttributeInterceptor, prelude::*};
 
 mod badges;
@@ -85,7 +86,7 @@ fn GameSelector(
     };
 
     view! {
-        <div class=style::games on:change=on_change>
+        <div class=style::selector on:change=on_change>
             <SelectorTab id="all" label="All" {..} name="badge-list-game" checked=true />
             <For each=badges key=|(game, _)| game.clone() let((id, badges::BadgeGame { name, .. }))>
                 <SelectorTab
@@ -119,7 +120,12 @@ fn GroupSelector(
             .get()
             .and_then(|game| {
                 let by_game = state.badges.category_to_translation.read();
-                by_game.get(&game).cloned()
+                by_game.get(&game).cloned().map(|categories| {
+                    categories
+                        .into_iter()
+                        .sorted_by_key(|(category, _)| category.clone())
+                        .collect::<indexmap::IndexMap<_, _>>()
+                })
             })
             .unwrap_or_default()
     };
@@ -130,7 +136,7 @@ fn GroupSelector(
     };
 
     view! {
-        <div class=style::games on:change=on_change>
+        <div class=format!("{} {}", style::selector, style::categories) on:change=on_change>
             <SelectorTab
                 id="all"
                 label="All"
@@ -139,8 +145,8 @@ fn GroupSelector(
                 checked=true
                 node_ref=all_group
             />
-            <For each=categories key=|(group, _)| group.clone() let((group, _))>
-                <SelectorTab id=group.clone() label=group.clone() {..} name="badge-list-group" />
+            <For each=categories key=|(group, _)| group.clone() let((id, name))>
+                <SelectorTab id=id.clone() label=name.clone() {..} name="badge-list-group" />
             </For>
         </div>
     }
