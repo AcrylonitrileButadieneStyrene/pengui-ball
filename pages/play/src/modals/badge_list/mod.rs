@@ -4,6 +4,7 @@ use itertools::Itertools;
 use leptos::{attribute_interceptor::AttributeInterceptor, prelude::*};
 
 mod badges;
+mod list;
 
 stylance::import_style!(pub style, "mod.module.css");
 
@@ -44,7 +45,11 @@ fn Inner(
     view! {
         <GameSelector badges selected_game />
         <GroupSelector selected_game=selected_game.read_only() selected_group />
-        <List selected_game=selected_game.read_only() selected_group=selected_group.read_only() />
+        <list::List
+            badges
+            selected_game=selected_game.read_only()
+            selected_group=selected_group.read_only()
+        />
     }
 }
 
@@ -89,12 +94,7 @@ fn GameSelector(
         <div class=style::selector on:change=on_change>
             <SelectorTab id="all" label="All" {..} name="badge-list-game" checked=true />
             <For each=badges key=|(game, _)| game.clone() let((id, badges::BadgeGame { name, .. }))>
-                <SelectorTab
-                    id=id.clone()
-                    label=name.clone()
-                    {..}
-                    name="badge-list-game"
-                />
+                <SelectorTab id=id.clone() label=name.clone() {..} name="badge-list-game" />
             </For>
         </div>
     }
@@ -170,73 +170,4 @@ fn SelectorTab(#[prop(into)] id: Arc<str>, #[prop(into)] label: Arc<str>) -> imp
             </label>
         </AttributeInterceptor>
     }
-}
-
-#[component]
-fn List(
-    selected_game: ReadSignal<Option<Arc<str>>>,
-    selected_group: ReadSignal<Option<Arc<str>>>,
-) -> impl IntoView {
-    let state = crate::state();
-
-    let badges = Memo::new(move |_| {
-        let badges = state.badges.badge_by_category.get();
-        let badges = if let Some(game) = selected_game.get()
-            && let Some(badges) = badges.get(&game)
-        {
-            if let Some(group) = selected_group.get()
-                && let Some(badges) = badges.get(&Some(group))
-            {
-                badges.to_vec()
-            } else {
-                badges
-                    .iter()
-                    .flat_map(|(_group, badges)| badges.to_vec())
-                    .collect::<Vec<_>>()
-            }
-        } else {
-            badges
-                .iter()
-                .flat_map(|(_game, groups)| groups.clone())
-                .flat_map(|(_group, badges)| badges.to_vec())
-                .collect::<Vec<_>>()
-        };
-
-        let translations = state.badges.badge_to_translation.get();
-        badges
-            .into_iter()
-            .map(|badge| {
-                let translation = translations.get(&badge.badge_id).cloned();
-                (badge, translation)
-            })
-            .collect::<Vec<_>>()
-    });
-
-    view! {
-        <div class=style::container>
-            <For each=badges key=|(badge, _)| badge.badge_id.clone() let((meta, lang))>
-                <Badge meta lang />
-            </For>
-        </div>
-    }
-}
-
-#[component]
-fn Badge(
-    meta: Arc<crate::states::badges::BadgeMetadata>,
-    lang: Option<Arc<crate::states::badges::BadgeTranslation>>,
-) -> impl IntoView {
-    let src = if meta.animated {
-        format!(
-            "https://ynoproject.net/2kki/images/badge/{}.gif",
-            meta.badge_id
-        )
-    } else {
-        format!(
-            "https://ynoproject.net/2kki/images/badge/{}.png",
-            meta.badge_id
-        )
-    };
-
-    view! { <img class=style::badge src=src loading="lazy" /> }
 }

@@ -8,9 +8,9 @@ mod metadata;
 pub use language::BadgeTranslation;
 pub use metadata::BadgeMetadata;
 
-type RawMetadata = Box<[Arc<BadgeMetadata>]>;
-type RawLanguage = HashMap<Arc<str>, HashMap<Arc<str>, Arc<BadgeTranslation>>>;
-type RawCategory = HashMap<Arc<str>, HashMap<Arc<str>, Arc<str>>>;
+pub type RawMetadata = Box<[Arc<BadgeMetadata>]>;
+pub type RawLanguage = HashMap<Arc<str>, HashMap<Arc<str>, Arc<BadgeTranslation>>>;
+pub type RawCategory = HashMap<Arc<str>, HashMap<Arc<str>, Arc<str>>>;
 
 pub struct Badges {
     pub badge_by_id: Memo<BadgeById>,
@@ -75,7 +75,7 @@ fn metadata_resource(game: &str) -> LocalResource<RawMetadata> {
     })
 }
 
-type BadgeById = HashMap<Arc<str>, Arc<BadgeMetadata>>;
+pub type BadgeById = HashMap<Arc<str>, Arc<BadgeMetadata>>;
 fn badge_by_id(resource: LocalResource<RawMetadata>) -> impl Fn(Option<&BadgeById>) -> BadgeById {
     move |_| {
         resource
@@ -110,7 +110,7 @@ fn language_resource(game: &str, language: &str) -> LocalResource<RawLanguage> {
     })
 }
 
-type BadgeToTranslation = HashMap<Arc<str>, Arc<BadgeTranslation>>;
+pub type BadgeToTranslation = HashMap<Arc<str>, Arc<BadgeTranslation>>;
 fn badge_to_language(
     resource: LocalResource<RawLanguage>,
 ) -> impl Fn(Option<&BadgeToTranslation>) -> BadgeToTranslation {
@@ -129,7 +129,7 @@ fn badge_to_language(
     }
 }
 
-type BadgeByCategory =
+pub type BadgeByCategory =
     HashMap<Arc<str>, HashMap<Option<Arc<str>>, Arc<[Arc<metadata::BadgeMetadata>]>>>;
 fn by_game_category(
     resource: LocalResource<RawMetadata>,
@@ -197,7 +197,7 @@ fn category_resource(game: &str, language: &str) -> LocalResource<RawCategory> {
     })
 }
 
-type CategoryToTranslation = RawCategory;
+pub type CategoryToTranslation = RawCategory;
 fn category_to_translation(
     resource: LocalResource<RawCategory>,
 ) -> impl Fn(Option<&CategoryToTranslation>) -> CategoryToTranslation {

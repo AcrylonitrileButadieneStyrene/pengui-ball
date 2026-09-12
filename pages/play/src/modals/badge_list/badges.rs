@@ -4,20 +4,26 @@ use indexmap::IndexMap;
 use itertools::Itertools;
 use leptos::prelude::*;
 
-use crate::states::badges::BadgeMetadata;
+use crate::states::badges::{BadgeMetadata, BadgeToTranslation, BadgeTranslation};
 
 pub type Badges = Memo<IndexMap<Arc<str>, BadgeGame>>;
 
 #[derive(Debug, Clone)]
 pub struct BadgeGame {
     pub name: Arc<str>,
-    pub badges: Arc<IndexMap<Option<Arc<str>>, Arc<[Arc<BadgeMetadata>]>>>,
+    pub badges: Arc<IndexMap<Option<Arc<str>>, Arc<[Arc<Badge>]>>>,
 }
 
 impl PartialEq for BadgeGame {
     fn eq(&self, other: &Self) -> bool {
         self.name == other.name
     }
+}
+
+#[derive(Debug)]
+pub struct Badge {
+    pub metadata: Arc<BadgeMetadata>,
+    pub language: Option<Arc<BadgeTranslation>>,
 }
 
 pub fn get_sorted(
@@ -29,6 +35,7 @@ pub fn get_sorted(
         let games = games.clone();
         move |_| {
             let mut badges = state.badges.badge_by_category.get();
+            let translations = state.badges.badge_to_translation.get();
 
             let current_game_name = games
                 .get(&current_game)
@@ -45,7 +52,7 @@ pub fn get_sorted(
                         game_id.clone(),
                         BadgeGame {
                             name: game_name,
-                            badges: sort_categories(badges),
+                            badges: sort_categories(badges, &translations),
                         },
                     );
                 }
@@ -56,7 +63,7 @@ pub fn get_sorted(
                     id.clone(),
                     BadgeGame {
                         name: id,
-                        badges: sort_categories(badges),
+                        badges: sort_categories(badges, &translations),
                     },
                 )
             }));
@@ -68,11 +75,35 @@ pub fn get_sorted(
 
 fn sort_categories(
     input: HashMap<Option<Arc<str>>, Arc<[Arc<BadgeMetadata>]>>,
-) -> Arc<IndexMap<Option<Arc<str>>, Arc<[Arc<BadgeMetadata>]>>> {
+    translations: &BadgeToTranslation,
+) -> Arc<IndexMap<Option<Arc<str>>, Arc<[Arc<Badge>]>>> {
     Arc::new(
         input
             .into_iter()
             .sorted_by_key(|(key, _)| key.clone())
+            .map(with_translations(translations))
             .collect(),
     )
+}
+
+fn with_translations(
+    translations: &BadgeToTranslation,
+) -> impl Fn((Option<Arc<str>>, Arc<[Arc<BadgeMetadata>]>)) -> (Option<Arc<str>>, Arc<[Arc<Badge>]>)
+{
+    |(key, badges)| {
+        (
+            key,
+            badges
+                .into_iter()
+                .map(|badge| get_translation(badge.clone(), translations))
+                .collect(),
+        )
+    }
+}
+
+fn get_translation(badge: Arc<BadgeMetadata>, translations: &BadgeToTranslation) -> Arc<Badge> {
+    Arc::new(Badge {
+        language: translations.get(&badge.badge_id).cloned(),
+        metadata: badge,
+    })
 }
