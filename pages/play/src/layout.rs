@@ -16,7 +16,7 @@ pub fn Layout() -> impl IntoView {
 #[island]
 fn Main(children: Children) -> impl IntoView {
     let state = crate::state();
-    let chat_hidden = move || state.config.game.read().chat_hidden;
+    let chat_hidden = move || state.settings.game.read().chat_hidden;
 
     view! { <main class:chat-hidden=chat_hidden>{children()}</main> }
 }

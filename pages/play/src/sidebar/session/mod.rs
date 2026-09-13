@@ -13,16 +13,12 @@ mod state;
 pub use command::Command;
 pub use state::State as SessionState;
 
-use crate::CurrentGame;
-
 stylance::import_style!(pub style, "mod.module.css");
 
 #[component]
 pub fn Session() -> impl IntoView {
-    let game = expect_context::<CurrentGame>();
-
     view! {
-        <Connection game=game.id.clone()>
+        <Connection game=crate::state().config.current_game_id.clone()>
             <svg viewBox="0 0 18 18">
                 <path d="m0 7q1.5-7 9-7 3 0 5.5 2.5l2-2.5 1.5 8h-8l2-2.5q-5-3.5-8 1.5h-4" />
                 <path d="M18 11q-1.5 7-9 7-3 0-5.5-2.5l-2 2.5-1.5-8h8l-2 2.5q5 3.5 8-1.5h4" />

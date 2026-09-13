@@ -3,7 +3,7 @@ use leptos::prelude::*;
 #[island]
 pub fn ToggleChat(children: Children) -> impl IntoView {
     let state = crate::state();
-    let game_config = state.config.game;
+    let game_config = state.settings.game;
     let chat_hidden = move || game_config.get().chat_hidden;
 
     let on_click = move |_| game_config.update(|config| config.chat_hidden ^= true);

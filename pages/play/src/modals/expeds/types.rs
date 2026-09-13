@@ -45,6 +45,18 @@ impl From<i8> for ExpedLocationType {
     }
 }
 
+impl ExpedLocationType {
+    pub const fn to_static_str(self) -> &'static str {
+        match self {
+            Self::Free => "Free Expedition",
+            Self::Daily => "Daily",
+            Self::Weekly => "Weekly",
+            Self::Weekend => "Weekend",
+            Self::Special => "Special",
+        }
+    }
+}
+
 #[derive(Clone, Debug, serde::Deserialize)]
 pub struct ExpedVM {
     pub id: u32,

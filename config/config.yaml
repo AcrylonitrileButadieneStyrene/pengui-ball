@@ -1,54 +1,54 @@
 games:
-  - id: "yume"
+  "yume":
     name: "Yume Nikki"
     permission: Yume1kki
-  - id: "2kki"
+  "2kki":
     name: "Yume 2kki"
     permission: Yume2kki
-  - id: "flow"
+  "flow":
     name: ".flow"
-  - id: "unevendream"
+  "unevendream":
     name: "Uneven Dream"
-  - id: "deepdreams"
+  "deepdreams":
     name: "Deep Dreams"
-  - id: "someday"
+  "someday":
     name: "Someday"
-  - id: "amillusion"
+  "amillusion":
     name: "Amillusion"
-  - id: "braingirl"
+  "braingirl":
     name: "Braingirl"
-  - id: "muma"
+  "muma":
     name: "Muma|Rope"
-  - id: "genie"
+  "genie":
     name: "Dream Genie"
-  - id: "mikan"
+  "mikan":
     name: "Mikan Muzou"
-  - id: "ultraviolet"
+  "ultraviolet":
     name: "Ultraviolet"
-  - id: "sheawaits"
+  "sheawaits":
     name: "She Awaits"
-  - id: "oversomnia"
+  "oversomnia":
     name: "Oversomnia"
-  - id: "tsushin"
+  "tsushin":
     name: "Yume Tsushin"
-  - id: "nostalgic"
+  "nostalgic":
     name: "NostAlgic"
-  - id: "oneshot"
+  "oneshot":
     name: "OneShot"
-  - id: "if"
+  "if":
     name: "If"
-  - id: "unaccomplished"
+  "unaccomplished":
     name: "Unaccomplished"
-  - id: "fog"
+  "fog":
     name: "FOG"
-  - id: "cold"
+  "cold":
     name: "[COLD]"
-  - id: "loveyou"
+  "loveyou":
     name: "loveyou"
-  - id: "okuri"
+  "okuri":
     name: "Okuri"
-  - id: "scarynikki"
+  "scarynikki":
     name: "Scary Nikki"
-  - id: "space"
+  "space":
     name: "Space Funeral"
   

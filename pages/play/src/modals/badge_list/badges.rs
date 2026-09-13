@@ -1,5 +1,6 @@
 use std::{collections::HashMap, sync::Arc};
 
+use common::config::Game;
 use indexmap::IndexMap;
 use itertools::Itertools;
 use leptos::prelude::*;
@@ -31,22 +32,23 @@ pub struct Badge {
 
 pub fn get_sorted(
     state: crate::State,
-    current_game: Arc<str>,
-    games: Arc<IndexMap<Arc<str>, Arc<str>>>,
+    current_game: Arc<Game>,
+    current_game_id: Arc<str>,
+    games: Arc<IndexMap<Arc<str>, Arc<Game>>>,
 ) -> Badges {
     Memo::new(move |_| {
         let mut badges = state.badges.badge_by_category.get();
         let translations = state.badges.badge_to_translation.get();
 
-        let current_game_name = games
-            .get(&current_game)
-            .cloned()
-            .unwrap_or_else(|| current_game.clone());
-
         let mut result = IndexMap::new();
-        for (game_id, game_name) in std::iter::once((current_game.clone(), current_game_name))
-            .chain(std::iter::once(("ynoproject".into(), "YNOproject".into())))
-            .chain(games.iter().map(|(id, name)| (id.clone(), name.clone())))
+        for (game_id, game_name) in
+            std::iter::once((current_game_id.clone(), current_game.name.clone()))
+                .chain(std::iter::once(("ynoproject".into(), "YNOproject".into())))
+                .chain(
+                    games
+                        .iter()
+                        .map(|(id, game)| (id.clone(), game.name.clone())),
+                )
         {
             if let Some(badges) = badges.remove(&game_id) {
                 result.insert(

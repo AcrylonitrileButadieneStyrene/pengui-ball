@@ -37,11 +37,9 @@ fn transform_early(options: &Options, seen_large_emoji: &mut bool) -> impl FnMut
                 .replace('>', "&gt;"),
         ),
         Token::Screenshot(id) if let Some(author) = options.screenshots => {
-            let (id, temp) = if id.starts_with("t") {
-                (&id[1..], true)
-            } else {
-                (&*id, false)
-            };
+            let (id, temp) = id
+                .strip_prefix('t')
+                .map_or_else(|| (&*id, false), |id| (id, true));
 
             // todo: parse options
             let (id, _options) = if let Some((id, options)) = id.split_once(':') {

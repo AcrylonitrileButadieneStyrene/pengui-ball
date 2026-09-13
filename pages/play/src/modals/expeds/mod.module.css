@@ -12,7 +12,6 @@
 .location,
 .vm {
     display: grid;
-    grid-template-columns: 1fr min-content 72px 38px;
     width: 470px;
     border: solid 4px;
     border-image: var(--ui-theme-border);
@@ -20,18 +19,22 @@
 }
 
 .location {
+    grid-template-columns: min-content 1fr min-content 72px 38px;
     grid-template-areas:
-        "title available experience checkbox"
-        "stars ends-at   experience checkbox";
+        "title title available experience checkbox"
+        "stars game  ends-at   experience checkbox";
 }
 
 .vm {
+    grid-template-columns: min-content 1fr 72px 38px;
+    grid-template-rows: 1fr min-content 1fr;
     grid-template-areas:
         "image available experience checkbox"
-        "image ends-at   experience checkbox";
+        "image ends-at   experience checkbox"
+        "image game      experience checkbox";
 }
 
-.location a {
+.location a:first-child {
     grid-area: title;
     width: min-content;
     white-space: nowrap;
@@ -56,6 +59,7 @@
 .ends-at {
     grid-area: ends-at;
     white-space: nowrap;
+    text-align: right;
 }
 
 .experience {
@@ -76,4 +80,15 @@
 
 .checkbox:global(.toggled)::after {
     content: "✔";
+}
+
+.game {
+    grid-area: game;
+    color: white;
+    height: min-content;
+    text-align: center;
+}
+
+.vm .game {
+    text-align: right;
 }

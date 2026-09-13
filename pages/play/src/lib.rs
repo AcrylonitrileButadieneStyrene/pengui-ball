@@ -18,7 +18,6 @@ mod sidebar;
 mod state;
 mod states;
 
-pub type CurrentGame = &'static common::config::Game;
 pub type State = &'static state::PlayState;
 
 pub fn state() -> State {
@@ -40,46 +39,42 @@ pub fn Redirect() -> impl IntoView {
 
 #[component]
 pub fn Play() -> impl IntoView {
-    let id = game();
     let config = expect_context::<std::sync::Arc<common::ServerConfiguration>>();
-    let games = config.games.clone();
+    let motd = config.motd.clone().map(|motd| {
+        view! {
+            <pre>
+                <code>{motd}</code>
+            </pre>
+        }
+    });
 
-    let Some(game) = games.into_iter().find(|game| *game.id == id) else {
+    let game_id: std::sync::Arc<str> = game().into();
+    let Some(config) = state::config::Builder::new(&config).with_game(game_id.clone()) else {
         return view! { <leptos_router::components::Redirect path="/" /> }.into_any();
     };
 
-    let game = Box::leak(Box::new(game));
-    provide_context::<crate::CurrentGame>(game);
+    let permission = config.current_game.permission;
 
     view! {
         <leptos_meta::Link rel="stylesheet" href="/css/play.css" />
         <leptos_meta::Link rel="stylesheet" href="/css/themes.css" />
-        <leptos_meta::Title text=format!("{} Online - YNOproject", game.name) />
+        <leptos_meta::Title text=format!("{} Online - YNOproject", config.current_game.name) />
         <leptos_meta::Meta
             name="description"
             content=format!(
                 "Play multiplayer {} for free! Ad-free and no registration required.",
-                game.name,
+                config.current_game.name,
             )
         />
 
-        <state::Provider game_id=game.id.clone()>
+        <state::Provider game_id config>
             <layout::Layout />
             <mobile_controls::MobileControls />
             <modals::Modals />
         </state::Provider>
 
-        <PermissionDisclaimer permission=game.permission />
-        {config
-            .motd
-            .clone()
-            .map(|motd| {
-                view! {
-                    <pre>
-                        <code>{motd}</code>
-                    </pre>
-                }
-            })}
+        <PermissionDisclaimer permission />
+        {motd}
     }
     .into_any()
 }

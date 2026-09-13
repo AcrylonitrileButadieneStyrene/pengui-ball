@@ -5,17 +5,20 @@ pub fn Doors() -> impl IntoView {
     let config = expect_context::<std::sync::Arc<common::ServerConfiguration>>();
     let games = config.games.clone();
 
+    let doors = move || {
+        games
+            .iter()
+            .map(|(game_id, game)| (game_id.clone(), game.clone()))
+            .enumerate()
+            .map(|(index, (game_id, game))| {
+                view! { <super::door::Door index game_id game /> }
+            })
+            .collect::<Vec<_>>()
+    };
+
     view! {
         <main class="doors">
-            <DoorsContext>
-                <For
-                    each=move || games.clone().into_iter().enumerate()
-                    key=|game| game.clone()
-                    let((index, game))
-                >
-                    <super::door::Door index game />
-                </For>
-            </DoorsContext>
+            <DoorsContext>{doors}</DoorsContext>
         </main>
     }
 }

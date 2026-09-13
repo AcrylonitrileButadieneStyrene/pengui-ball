@@ -13,7 +13,7 @@ common.path = "../../common"
 flume = "0.12.0"
 gloo-file = { version = "0.4.0", features = ["futures"] }
 gloo-net.workspace = true
-indexmap = { version = "2.13.0", features = ["serde"] }
+indexmap.workspace = true
 itertools = "0.14.0"
 leptos.workspace = true
 leptos_meta.workspace = true

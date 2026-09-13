@@ -36,7 +36,9 @@ pub fn NameTags() -> impl IntoView {
             <span>Nametags</span>
             <select on:change=on_change prop:value=move || to_string(selected())>
                 <option value="None">None</option>
-                <option value="Classic" selected>Classic</option>
+                <option value="Classic" selected>
+                    Classic
+                </option>
                 <option value="Compact">Compact</option>
                 <option value="Slim">Slim</option>
             </select>

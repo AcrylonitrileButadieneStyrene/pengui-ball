@@ -26,7 +26,7 @@ pub fn Chat() -> impl IntoView {
 pub fn ChatMessages() -> impl IntoView {
     let state = crate::state();
     let messages = state.chat.messages;
-    let game_config = state.config.game;
+    let game_config = state.settings.game;
 
     let each = move || messages.get().into_iter().rev().collect::<Vec<_>>();
     let messages = move || {

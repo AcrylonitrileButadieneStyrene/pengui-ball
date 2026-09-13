@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use itertools::Itertools;
 use leptos::{prelude::*, reactive::send_wrapper_ext::SendOption};
 use leptos_use::core::ConnectionReadyState;
@@ -94,21 +96,13 @@ fn Inner() -> impl IntoView {
                 .chunk_by(|location| location.r#type)
                 .into_iter()
                 .map(|(r#type, locations)| {
-                    let header = match r#type {
-                        types::ExpedLocationType::Free => "Free Expedition",
-                        types::ExpedLocationType::Daily => "Daily",
-                        types::ExpedLocationType::Weekly => "Weekly",
-                        types::ExpedLocationType::Weekend => "Weekend",
-                        types::ExpedLocationType::Special => "Special",
-                    };
-
                     let views = locations
                         .map(|location| {
                             view! { <Location location=location.clone() /> }
                         })
                         .collect::<Vec<_>>();
                     view! {
-                        <div class=style::header>{header}</div>
+                        <div class=style::header>{r#type.to_static_str()}</div>
                         {views}
                     }
                 })
@@ -161,7 +155,7 @@ fn Location(location: types::ExpedLocation) -> impl IntoView {
                     clip-path=format!("inset(0 {}px 0 0)", (10 - depth) * 9)
                 />
             </svg>
-            <Details ends_at experience complete />
+            <Details game ends_at experience complete />
         </div>
     }
 }
@@ -211,18 +205,28 @@ fn VM(vm: types::ExpedVM) -> impl IntoView {
     view! {
         <div class=style::vm>
             <img node_ref=node_ref />
-            <Details ends_at experience complete />
+            <Details game ends_at experience complete />
         </div>
     }
 }
 
 #[component]
 fn Details(
+    game: Arc<str>,
     ends_at: chrono::DateTime<chrono::Local>,
     experience: u8,
     complete: bool,
 ) -> impl IntoView {
+    let state = crate::state();
+
     view! {
+        <a class=style::game href=format!("/{game}/")>
+            {state
+                .config
+                .all_games
+                .get(&game)
+                .map_or_else(|| game.clone(), |game| game.name.clone())}
+        </a>
         <div class=style::available>Available Until</div>
         <div class=style::ends_at>{ends_at.format("%-m/%d/%y, %-I:%M %p").to_string()}</div>
         <div class=style::experience>{format!("{experience} ExP")}</div>

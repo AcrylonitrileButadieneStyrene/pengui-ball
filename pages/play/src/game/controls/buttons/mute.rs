@@ -3,7 +3,7 @@ use leptos::prelude::*;
 #[island]
 pub fn Mute(children: Children) -> impl IntoView {
     let state = crate::state();
-    let game_config = state.config.game;
+    let game_config = state.settings.game;
     let muted = move || game_config.get().muted;
 
     Effect::new(move || {

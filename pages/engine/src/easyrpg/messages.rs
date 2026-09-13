@@ -46,9 +46,9 @@ fn handle(state: crate::EngineState, message: EngineMessage) {
         EngineMessage::PressKey(keycode, is_down) => {
             super::inputs::press(state.easyrpg_player.canvas, keycode, is_down);
         }
-        EngineMessage::SetNameTagMode(value) => {leptos::logging::log!("setting name tag mode to {value}");state
+        EngineMessage::SetNameTagMode(value) => state
             .easyrpg_player
-            .call(move |engine| engine.api().set_nametag_mode(value))},
+            .call(move |engine| engine.api().set_nametag_mode(value)),
     }
 }
 

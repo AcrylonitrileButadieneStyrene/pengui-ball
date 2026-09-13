@@ -10,32 +10,23 @@ stylance::import_style!(pub style, "mod.module.css");
 
 #[component]
 pub fn Modal() -> impl IntoView {
-    let config = expect_context::<std::sync::Arc<common::ServerConfiguration>>();
-    let current_game = expect_context::<crate::CurrentGame>();
-
-    let games = Arc::new(
-        config
-            .games
-            .iter()
-            .map(|game| (game.id.clone(), game.name.clone()))
-            .collect(),
-    );
-
     view! {
         <super::Modal when=super::Modals::BadgeList>
             <h1>Badges</h1>
-            <Inner current_game=current_game.id.clone() games />
+            <Inner />
         </super::Modal>
     }
 }
 
 #[island]
-fn Inner(
-    current_game: Arc<str>,
-    games: Arc<indexmap::IndexMap<Arc<str>, Arc<str>>>,
-) -> impl IntoView {
+fn Inner() -> impl IntoView {
     let state = crate::state();
-    let badges = badges::get_sorted(state, current_game, games);
+    let badges = badges::get_sorted(
+        state,
+        state.config.current_game.clone(),
+        state.config.current_game_id.clone(),
+        state.config.all_games.clone(),
+    );
 
     use_refetch();
 

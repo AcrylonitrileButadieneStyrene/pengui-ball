@@ -8,17 +8,20 @@ stylance::import_style!(pub style, "themes.module.css");
 
 #[component]
 pub fn Modal() -> impl IntoView {
+    let state = crate::state();
+    let game = state.config.current_game_id.clone();
+
     let config = expect_context::<std::sync::Arc<common::ServerConfiguration>>();
-    let game = expect_context::<crate::CurrentGame>();
-    let themes = config.themes.get(&game.id).cloned();
+
+    let themes = config.themes.get(&game).cloned();
 
     let render = move |themes: Vec<_>| {
         let icons = themes
             .into_iter()
-            .map(|theme| view! { <Icon game=game.id.clone() theme /> })
+            .map(|theme| view! { <Icon game=game.clone() theme /> })
             .collect::<Vec<_>>();
 
-        view! { <Listener game=game.id.clone()>{icons}</Listener> }.into_any()
+        view! { <Listener game>{icons}</Listener> }.into_any()
     };
 
     view! {

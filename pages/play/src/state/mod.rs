@@ -4,25 +4,31 @@ use leptos::prelude::*;
 
 pub mod api;
 pub mod chat;
-mod config;
+pub mod config;
 pub mod engine;
+mod settings;
 
 use crate::sidebar::session::SessionState;
 
 #[island]
-pub fn Provider(game_id: Arc<str>, children: Children) -> impl IntoView {
-    provide_context::<crate::State>(PlayState::new(game_id).into());
+pub fn Provider(
+    game_id: Arc<str>,
+    config: config::Configuration,
+    children: Children,
+) -> impl IntoView {
+    provide_context::<crate::State>(PlayState::new(game_id, config).into());
     children()
 }
 
 pub struct PlayState {
-    pub chat: chat::State,
     pub api: api::State,
+    pub chat: chat::State,
+    pub config: config::Configuration,
     pub engine: engine::State,
-    pub session: SessionState,
-    pub config: config::State,
-    pub modal: RwSignal<Option<crate::modals::Modals>>,
     pub expeds: RwSignal<Option<crate::modals::expeds::types::Expeds>>,
+    pub session: SessionState,
+    pub settings: settings::State,
+    pub modal: RwSignal<Option<crate::modals::Modals>>,
 
     pub badges: crate::states::Badges,
     pub players: crate::states::Players,
@@ -31,7 +37,7 @@ pub struct PlayState {
 }
 
 impl PlayState {
-    fn new(game_id: Arc<str>) -> Self {
+    fn new(game_id: Arc<str>, config: config::Configuration) -> Self {
         let api = api::State::new(&game_id);
 
         Self {
@@ -43,12 +49,13 @@ impl PlayState {
                     .and_then(Result::ok)
                     .map(|user| user.uuid.clone())
             })),
-            session: SessionState::default(),
-            engine: engine::State::default(),
             api,
-            config: config::State::new(&game_id),
-            modal: RwSignal::new(None),
+            config,
+            engine: engine::State::default(),
             expeds: RwSignal::new(None),
+            session: SessionState::default(),
+            settings: settings::State::new(&game_id),
+            modal: RwSignal::new(None),
 
             badges: Arc::new(crate::states::badges::Badges::new(&game_id)),
             players: Arc::new(crate::states::players::Players::new()),

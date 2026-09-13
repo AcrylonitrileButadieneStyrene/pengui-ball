@@ -6,14 +6,17 @@ stylance::import_style!(pub style, "mod.module.css");
 
 #[component]
 pub fn Header() -> impl IntoView {
-    let game = expect_context::<crate::CurrentGame>();
+    let state = crate::state();
 
     view! {
         <header class=style::header>
             <logo::Logo />
             <img
                 class=style::game_logo
-                src=format!("https://ynoproject.net/images/logo_{}.png", game.id)
+                src=format!(
+                    "https://ynoproject.net/images/logo_{}.png",
+                    state.config.current_game_id,
+                )
             />
             <a
                 class=style::project_logo
@@ -31,7 +34,7 @@ pub fn Header() -> impl IntoView {
             </a>
 
             <div class=style::middle />
-            <Badges game=game.id.clone() />
+            <Badges game=state.config.current_game_id.clone() />
             <CurrentUser />
         </header>
     }.into_any()

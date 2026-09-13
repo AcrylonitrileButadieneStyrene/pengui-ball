@@ -14,7 +14,7 @@ pub fn BadgeTools() -> impl IntoView {
 
         <div class="center">
             <main>
-                <Inner games=config.games.iter().map(|game| game.id.clone()).collect() />
+                <Inner games=config.games.keys().cloned().collect() />
             </main>
         </div>
     }

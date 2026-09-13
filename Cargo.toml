@@ -22,6 +22,7 @@ gloo-net = { version = "0.7.0", default-features = false, features = [
     "http",
     "json",
 ] }
+indexmap = { version = "2.13.0", features = ["serde"] }
 leptos = { version = "0.8.20", features = ["nightly", "islands"] }
 leptos_router = { version = "0.8.15", features = ["nightly"] }
 leptos_meta = "0.8.6"

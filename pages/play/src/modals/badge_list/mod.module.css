@@ -37,6 +37,10 @@
     justify-content: space-around;
 }
 
+.container div {
+    display: contents;
+}
+
 .badge {
     width: 98px;
     height: 98px;

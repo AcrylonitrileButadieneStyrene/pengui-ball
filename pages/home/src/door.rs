@@ -6,15 +6,15 @@ use leptos::{
 };
 
 #[component]
-pub fn Door(index: usize, game: common::config::Game) -> impl IntoView {
+pub fn Door(index: usize, game_id: Arc<str>, game: Arc<common::config::Game>) -> impl IntoView {
     let aria_label = format!("Play {} online", game.name);
-    let logo_src = format!("https://ynoproject.net/images/logo_{}.png", game.id);
+    let logo_src = format!("https://ynoproject.net/images/logo_{game_id}.png");
 
     view! {
-        <DoorWrapper id=game.id.clone() index>
+        <DoorWrapper id=game_id.clone() index>
             <div class="door" style=("--i", index.to_string()) aria-label=aria_label>
                 <DoorSpotlight index />
-                <DoorImage id=game.id.clone() index />
+                <DoorImage id=game_id.clone() index />
                 <img class="logo" src=logo_src alt="" height=60 />
                 <img
                     class="shadow"

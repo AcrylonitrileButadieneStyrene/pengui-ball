@@ -2,7 +2,7 @@ use std::{collections::HashMap, sync::Arc};
 
 #[derive(Debug, serde::Deserialize)]
 pub struct ServerConfiguration {
-    pub games: Vec<Game>,
+    pub games: Arc<indexmap::IndexMap<Arc<str>, Arc<Game>>>,
     #[serde(skip)]
     pub themes: HashMap<Arc<str>, Vec<Arc<str>>>,
     #[serde(default)]
@@ -11,7 +11,6 @@ pub struct ServerConfiguration {
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Game {
-    pub id: Arc<str>,
     pub name: Arc<str>,
     #[serde(default)]
     pub permission: PermissionStatus,
@@ -19,7 +18,7 @@ pub struct Game {
 
 impl PartialEq for Game {
     fn eq(&self, other: &Self) -> bool {
-        self.id == other.id
+        self.name == other.name
     }
 }
 
@@ -27,7 +26,7 @@ impl Eq for Game {}
 
 impl std::hash::Hash for Game {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.id.hash(state);
+        self.name.hash(state);
     }
 }
 

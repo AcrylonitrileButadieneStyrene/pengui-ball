@@ -6,7 +6,7 @@ stylance::import_style!(pub style, "private.module.css");
 #[island]
 pub fn Private(children: Children) -> impl IntoView {
     let state = crate::state();
-    let config = state.config.game;
+    let config = state.settings.game;
 
     let on_click =
         move |_| config.update(|config| config.private_mode = (config.private_mode + 1) % 3);

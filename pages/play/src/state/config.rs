@@ -1,55 +1,33 @@
-use leptos::prelude::*;
-use leptos_use::storage::{UseStorageOptions, use_local_storage_with_options};
+use std::sync::Arc;
 
-pub struct State {
-    pub global: RwSignal<GlobalConfig>,
-    pub game: RwSignal<GameConfig>,
+use common::config::Game;
+
+#[derive(serde::Serialize, serde::Deserialize)]
+pub struct Configuration {
+    pub current_game_id: Arc<str>,
+    pub current_game: Arc<Game>,
+    pub all_games: Arc<indexmap::IndexMap<Arc<str>, Arc<Game>>>,
 }
 
-#[derive(Clone, Default, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-#[serde(default)]
-pub struct GlobalConfig {}
-
-#[derive(Clone, Default, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-#[serde(default)]
-pub struct GameConfig {
-    pub private_mode: u8,
-    pub muted: bool,
-    pub chat_hidden: bool,
+pub struct Builder {
+    all_games: Arc<indexmap::IndexMap<Arc<str>, Arc<Game>>>,
 }
 
-impl State {
-    pub fn new(game_id: &str) -> Self {
+impl Builder {
+    pub fn new(config: &common::ServerConfiguration) -> Self {
         Self {
-            global: new_rw("config"),
-            game: new_rw(format!("config_{game_id}")),
+            all_games: config.games.clone(),
         }
     }
-}
 
-fn new_rw<T>(id: impl Into<Signal<String>>) -> RwSignal<T>
-where
-    T: Clone
-        + Default
-        + PartialEq
-        + serde::Serialize
-        + for<'a> serde::Deserialize<'a>
-        + Send
-        + Sync
-        + 'static,
-{
-    let (get, set, _) = use_local_storage_with_options::<T, codee::string::JsonSerdeCodec>(
-        id,
-        UseStorageOptions::default().delay_during_hydration(true),
-    );
-
-    let rw = RwSignal::new(get.get_untracked());
-    Effect::new(move || rw.set(get.get()));
-    Effect::new(move || {
-        let new = rw.get();
-        if new != get.get_untracked() {
-            set.set(new);
-        }
-    });
-    rw
+    pub fn with_game(self, game_id: Arc<str>) -> Option<Configuration> {
+        self.all_games
+            .get(&game_id)
+            .cloned()
+            .map(|current_game| Configuration {
+                current_game_id: game_id,
+                current_game,
+                all_games: self.all_games,
+            })
+    }
 }
