@@ -37,9 +37,22 @@ fn transform_early(options: &Options, seen_large_emoji: &mut bool) -> impl FnMut
                 .replace('>', "&gt;"),
         ),
         Token::Screenshot(id) if let Some(author) = options.screenshots => {
-            // todo: parse temporary and options
+            let (id, temp) = if id.starts_with("t") {
+                (&id[1..], true)
+            } else {
+                (&*id, false)
+            };
+
+            // todo: parse options
+            let (id, _options) = if let Some((id, options)) = id.split_once(':') {
+                (id, Some(options))
+            } else {
+                (id, None)
+            };
+
             Token::Screenshot(format!(
-                "https://ugc.ynoproject.net/screenshots/{author}/{id}.png"
+                "https://ugc.ynoproject.net/screenshots{}/{author}/{id}.png",
+                if temp { "/temp" } else { "" }
             ))
         }
         Token::Screenshot(text) => Token::Text(format!("[{text}]")),
