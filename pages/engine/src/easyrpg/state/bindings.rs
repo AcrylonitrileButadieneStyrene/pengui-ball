@@ -27,4 +27,7 @@ extern "C" {
 
     #[wasm_bindgen(method, js_name = setMusicVolume)]
     pub fn set_music_volume(this: &PlayerAPIJSObject, value: u8);
+
+    #[wasm_bindgen(method, js_name = setNametagMode)]
+    pub fn set_nametag_mode(this: &PlayerAPIJSObject, value: u8);
 }

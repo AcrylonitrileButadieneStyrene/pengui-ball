@@ -12,4 +12,5 @@ pub enum Message {
     SetMusicVolume(u8),
     SetSoundVolume(u8),
     PressKey(u8, bool),
+    SetNameTagMode(u8),
 }

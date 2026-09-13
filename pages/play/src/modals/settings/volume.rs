@@ -1,18 +1,16 @@
 use leptos::prelude::*;
 
 #[component]
-pub fn Modal() -> impl IntoView {
+pub fn Volume() -> impl IntoView {
     view! {
-        <super::Modal when=super::Modals::Settings>
-            <label>
-                <span>Sound Volume</span>
-                <Slider is_music=false />
-            </label>
-            <label>
-                <span>Music Volume</span>
-                <Slider is_music=true />
-            </label>
-        </super::Modal>
+        <label>
+            <span>Sound Volume</span>
+            <Slider is_music=false />
+        </label>
+        <label>
+            <span>Music Volume</span>
+            <Slider is_music=true />
+        </label>
     }
 }
 
