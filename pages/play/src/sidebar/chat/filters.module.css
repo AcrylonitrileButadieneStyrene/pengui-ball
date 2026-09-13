@@ -1,14 +1,28 @@
 .filters {
     display: flex;
-    gap: 2px;
+    justify-content: space-around;
+    margin: 0 6px;
 }
 
 .filters label {
-    color: red;
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    color: #FF3636;
+    background-color: oklch(0.3 0.2348 26.76);
 }
 
 .filters label:has(input:checked) {
-    color: lime;
+    color: #54FF65;
+    background-color: oklch(0.3 0.2415 144.66);
+}
+
+.filters label:first-child {
+    border-end-start-radius: 12px;
+}
+
+.filters label:last-child {
+    border-end-end-radius: 12px;
 }
 
 .filters input {

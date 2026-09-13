@@ -37,7 +37,7 @@ pub fn Filters() -> impl IntoView {
 #[component]
 fn Filter(of: Filter) -> impl IntoView {
     view! {
-        <label class="button pop-out" style:padding="0">
+        <label style:padding="0">
             {of.to_string()}
             <Handler filter=of />
         </label>
