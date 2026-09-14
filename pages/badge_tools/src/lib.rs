@@ -1,11 +1,13 @@
 #![allow(non_snake_case)]
 #![allow(clippy::empty_enums)]
 
+use std::sync::Arc;
+
 use leptos::prelude::*;
 
 #[component]
 pub fn BadgeTools() -> impl IntoView {
-    let config = expect_context::<std::sync::Arc<common::ServerConfiguration>>();
+    let config = expect_context::<Arc<common::ServerConfiguration>>();
 
     view! {
         <leptos_meta::Link rel="stylesheet" href="/css/badge_tools.css" />
@@ -21,23 +23,24 @@ pub fn BadgeTools() -> impl IntoView {
 }
 
 #[island]
-fn Inner(games: Vec<std::sync::Arc<str>>) -> impl IntoView {
+fn Inner(games: Vec<Arc<str>>) -> impl IntoView {
     let (selected, set_selected) = signal("None".to_string());
     let (map, set_map) = signal(0);
     let (x, set_x) = signal(0u16);
     let (y, set_y) = signal(0u16);
 
-    let resolver = locations::Resolver::default();
+    let resolver = Arc::new(locations::Resolver::default());
+    provide_context(resolver.clone());
+
     let location = move || {
-        let resolved = resolver.resolve(&locations::Location {
+        let location = locations::Location {
             game: selected().into(),
             map: map(),
             previous: None,
             x: x().cast_signed(),
             y: y().cast_signed(),
-        });
-
-        format!("{resolved:#?}")
+        };
+        view! { <locations::Location location /> }
     };
 
     view! {
@@ -53,7 +56,7 @@ fn Inner(games: Vec<std::sync::Arc<str>>) -> impl IntoView {
 fn GameSelector(
     selected: ReadSignal<String>,
     set_selected: WriteSignal<String>,
-    games: Vec<std::sync::Arc<str>>,
+    games: Vec<Arc<str>>,
 ) -> impl IntoView {
     let games = games
         .into_iter()

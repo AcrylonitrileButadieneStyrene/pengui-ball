@@ -1,9 +1,6 @@
 use leptos::prelude::*;
 
-use crate::{
-    sidebar::{location::Location, players::to_last_online},
-    states::players::friend::Friend,
-};
+use crate::{sidebar::players::to_last_online, states::players::friend::Friend};
 
 stylance::import_style!(pub style, "friends.module.css");
 
@@ -85,7 +82,7 @@ fn Friend(friend: Friend) -> impl IntoView {
                 x: friend.x,
                 y: friend.y,
             });
-            view! { <Location location /> }.into_any()
+            view! { <locations::Location location /> }.into_any()
         }
         (true, _, false) => view! { <span>{to_last_online(friend.last_active)}</span> }.into_any(),
         (false, true, _) => view! {

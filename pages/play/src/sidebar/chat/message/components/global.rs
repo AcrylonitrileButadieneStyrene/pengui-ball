@@ -15,7 +15,7 @@ impl super::ChatMessageComponent for GlobalMessage {
 
     fn header(&self) -> AnyView {
         let location = self.location.clone();
-        view! { <crate::sidebar::location::Location location /> }.into_any()
+        view! { <locations::Location location /> }.into_any()
     }
 
     fn icon(&self) -> AnyView {

@@ -73,7 +73,7 @@ fn screenshot() -> impl Fn(&Screenshot) -> AnyView {
             >
                 <img src=image loading="lazy" />
                 <div style=("background-image", background)></div>
-                <crate::sidebar::location::Location location />
+                <locations::Location location />
             </div>
         }
         .into_any()

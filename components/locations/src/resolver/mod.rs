@@ -73,7 +73,7 @@ impl Resolver {
         if let Some(map) = locations.maps.get(&*format!("{map:>04}"))
             && let Some((name, article)) = classic::resolve(map, previous, x, y)
         {
-            LocationResolved::Single {
+            LocationResolved::Classic {
                 wiki: locations
                     .root
                     .as_ref()
@@ -113,7 +113,7 @@ impl Resolver {
                     .as_ref()
                     .ok()
                     .cloned()
-                    .map_or(LocationResolved::Unknown, LocationResolved::Multiple)
+                    .map_or(LocationResolved::Unknown, LocationResolved::Explorer)
             },
         )
     }
@@ -123,9 +123,9 @@ impl Resolver {
 pub enum LocationResolved {
     Pending,
     Unknown,
-    Single {
+    Classic {
         name: Arc<str>,
         wiki: Option<Arc<str>>,
     },
-    Multiple(Arc<[explorer::Location]>),
+    Explorer(Arc<[explorer::Location]>),
 }

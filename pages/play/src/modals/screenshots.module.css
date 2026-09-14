@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     justify-content: space-evenly;
     gap: 44px;
+    overflow-y: scroll;
 }
 
 .screenshot {
@@ -24,7 +25,8 @@
     border-image: var(--ui-theme-border);
 }
 
-.screenshot>a {
+.screenshot>a,
+.screenshot>span {
     display: inline-block;
     width: 176px;
     word-break: keep-all;

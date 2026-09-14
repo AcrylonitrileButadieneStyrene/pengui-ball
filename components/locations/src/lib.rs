@@ -1,8 +1,11 @@
 #![feature(nonpoison_mutex)]
 #![feature(sync_nonpoison)]
+#![feature(iter_intersperse)]
 
+mod component;
 mod resolver;
 
+pub use component::Location;
 pub use resolver::{LocationResolved, Resolver};
 
 #[derive(Clone, Debug)]

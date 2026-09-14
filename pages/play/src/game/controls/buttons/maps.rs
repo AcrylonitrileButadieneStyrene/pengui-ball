@@ -36,11 +36,11 @@ pub fn Maps() -> impl IntoView {
 
         let endpoint = match (is_2kki, location) {
             (_, LocationResolved::Pending | LocationResolved::Unknown) => return vec![],
-            (_, LocationResolved::Multiple(locations)) if locations.is_empty() => {
+            (_, LocationResolved::Explorer(locations)) if locations.is_empty() => {
                 return vec![];
             }
-            (true, LocationResolved::Single { name, .. }) => [EXPLORER_BASE, &name].concat(),
-            (true, LocationResolved::Multiple(locations)) => [
+            (true, LocationResolved::Classic { name, .. }) => [EXPLORER_BASE, &name].concat(),
+            (true, LocationResolved::Explorer(locations)) => [
                 EXPLORER_BASE,
                 &locations
                     .iter()
@@ -49,8 +49,8 @@ pub fn Maps() -> impl IntoView {
                     .join("&locationNames="),
             ]
             .concat(),
-            (false, LocationResolved::Single { name, .. }) => [WIKI_BASE, &name].concat(),
-            (false, LocationResolved::Multiple(locations)) => [
+            (false, LocationResolved::Classic { name, .. }) => [WIKI_BASE, &name].concat(),
+            (false, LocationResolved::Explorer(locations)) => [
                 WIKI_BASE,
                 &locations
                     .first()
