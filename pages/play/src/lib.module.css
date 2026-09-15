@@ -26,8 +26,8 @@ body {
     animation: scroll-progress linear;
     animation-timeline: scroll(root);
 
-    -webkit-text-stroke: 2px black;
-    paint-order: stroke;
+    /* -webkit-text-stroke: 2px black;
+    paint-order: stroke; */
 }
 
 @property --scroll {
@@ -48,7 +48,7 @@ body {
 
 :global(.button) {
     color: white;
-    background-color: rgb(45, 17, 23);
+    background: 0;
     border: solid 8px;
     border-image: var(--ui-theme-border);
     padding: 4px;

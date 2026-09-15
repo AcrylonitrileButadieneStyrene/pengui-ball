@@ -21,7 +21,7 @@
 
 .tabs>label:global(.button):has(input:checked) {
     z-index: 1;
-    margin-bottom: -8px;
+    margin-bottom: -2px;
     border-bottom: 0;
 }
 
