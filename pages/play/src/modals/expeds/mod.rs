@@ -54,7 +54,10 @@ fn Inner() -> impl IntoView {
         };
 
         let locations = match state.locations.current_resolved.get() {
-            Some(LocationResolved::Classic { name, .. }) => vec![name],
+            Some(LocationResolved::Classic(locations)) => locations
+                .iter()
+                .map(|location| location.name.clone())
+                .collect::<Vec<_>>(),
             Some(LocationResolved::Explorer(locations)) => locations
                 .iter()
                 .map(|location| location.title.clone())

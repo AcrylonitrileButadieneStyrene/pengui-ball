@@ -5,6 +5,9 @@ use std::{
 
 use leptos::prelude::*;
 
+mod coordinates;
+use coordinates::Coordinates;
+
 pub type Container = Mutex<HashMap<Arc<str>, LocalResource<Result<LocationData, gloo_net::Error>>>>;
 
 #[derive(Debug, serde::Deserialize)]
@@ -34,20 +37,9 @@ pub enum LocationItem {
 }
 
 #[derive(Debug, serde::Deserialize)]
-pub struct Coordinates {
-    pub x1: i16,
-    pub y1: i16,
-    pub x2: i16,
-    pub y2: i16,
-}
-
-impl Coordinates {
-    pub const fn contains(&self, x: i16, y: i16) -> bool {
-        (if self.x1 == -1 { true } else { self.x1 <= x })
-            && if self.x2 == -1 { true } else { x <= self.x2 }
-            && if self.y1 == -1 { true } else { self.y1 <= y }
-            && if self.y2 == -1 { true } else { y <= self.y2 }
-    }
+pub struct Location {
+    pub name: Arc<str>,
+    pub wiki: Option<Arc<str>>,
 }
 
 pub fn fetch_with_owner(
@@ -76,29 +68,32 @@ pub fn resolve(
     previous: Option<u16>,
     x: i16,
     y: i16,
-) -> Option<(Arc<str>, Option<Arc<str>>)> {
+) -> Vec<(Arc<str>, Option<Arc<str>>)> {
     match item {
-        LocationItem::Literal(name) => Some((name.clone(), None)),
+        LocationItem::Literal(name) => vec![(name.clone(), None)],
         LocationItem::Object {
             title,
             url_title,
             coords,
             ..
-        } => {
-            if coords.as_ref().is_some_and(|coords| !coords.contains(x, y)) {
-                None
-            } else {
-                Some((title.clone(), url_title.clone()))
-            }
-        }
-        LocationItem::Array(items) => items.iter().find_map(|item| resolve(item, previous, x, y)),
-        LocationItem::Dynamic(items) => items.iter().find_map(|(from, item)| {
-            let from = &**from;
-            if previous.map_or(from == "else", |prev| from == format!("{prev:>04}")) {
-                resolve(item, previous, x, y)
-            } else {
-                None
-            }
-        }),
+        } => coords
+            .as_ref()
+            .is_none_or(|coords| coords.contains(x, y))
+            .then(move || vec![(title.clone(), url_title.clone())])
+            .unwrap_or_default(),
+        LocationItem::Array(items) => items
+            .iter()
+            .flat_map(|item| resolve(item, previous, x, y))
+            .collect(),
+        LocationItem::Dynamic(items) => items
+            .iter()
+            .flat_map(|(from, item)| {
+                let from = &**from;
+                previous
+                    .map_or(from == "else", |prev| from == format!("{prev:>04}"))
+                    .then(|| resolve(item, previous, x, y))
+                    .unwrap_or_default()
+            })
+            .collect(),
     }
 }

@@ -46,5 +46,5 @@ parse_eq!(
 parse_eq!(
     emoji_large,
     "[:test:]",
-    r#"<img src="test-url" class="screenshot">"#
+    r#"<img src="test-url" class="emoji screenshot">"#
 );

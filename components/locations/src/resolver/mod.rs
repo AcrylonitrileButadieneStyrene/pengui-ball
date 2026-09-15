@@ -7,8 +7,8 @@ use leptos::prelude::*;
 
 use super::Location;
 
-mod classic;
-mod explorer;
+pub mod classic;
+pub mod explorer;
 
 pub struct Resolver {
     owner: Owner,
@@ -70,19 +70,26 @@ impl Resolver {
             return LocationResolved::Pending;
         };
 
-        if let Some(map) = locations.maps.get(&*format!("{map:>04}"))
-            && let Some((name, article)) = classic::resolve(map, previous, x, y)
-        {
-            LocationResolved::Classic {
-                wiki: locations
-                    .root
-                    .as_ref()
-                    .map(|root| Arc::from(root.to_string() + article.as_ref().unwrap_or(&name))),
-                name,
-            }
-        } else {
-            LocationResolved::Unknown
-        }
+        locations
+            .maps
+            .get(&*format!("{map:>04}"))
+            .map_or(LocationResolved::Unknown, |map| {
+                let locations = classic::resolve(map, previous, x, y)
+                    .iter()
+                    .map(|(name, article)| classic::Location {
+                        wiki: locations.root.as_ref().map(|root| {
+                            Arc::from(root.to_string() + article.as_ref().unwrap_or(&name))
+                        }),
+                        name: name.clone(),
+                    })
+                    .collect::<Vec<_>>();
+
+                if locations.is_empty() {
+                    LocationResolved::Unknown
+                } else {
+                    LocationResolved::Classic(locations.into())
+                }
+            })
     }
 
     fn resolve_2kki(&self, location: &Location) -> LocationResolved {
@@ -123,9 +130,6 @@ impl Resolver {
 pub enum LocationResolved {
     Pending,
     Unknown,
-    Classic {
-        name: Arc<str>,
-        wiki: Option<Arc<str>>,
-    },
+    Classic(Arc<[classic::Location]>),
     Explorer(Arc<[explorer::Location]>),
 }

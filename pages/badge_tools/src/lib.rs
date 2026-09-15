@@ -30,7 +30,7 @@ fn Inner(games: Vec<Arc<str>>) -> impl IntoView {
     let (y, set_y) = signal(0u16);
 
     let resolver = Arc::new(locations::Resolver::default());
-    provide_context(resolver.clone());
+    provide_context(resolver);
 
     let location = move || {
         let location = locations::Location {

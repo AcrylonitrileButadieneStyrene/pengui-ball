@@ -39,7 +39,15 @@ pub fn Maps() -> impl IntoView {
             (_, LocationResolved::Explorer(locations)) if locations.is_empty() => {
                 return vec![];
             }
-            (true, LocationResolved::Classic { name, .. }) => [EXPLORER_BASE, &name].concat(),
+            (true, LocationResolved::Classic(locations)) => [
+                EXPLORER_BASE,
+                &locations
+                    .iter()
+                    .map(|location| location.name.clone())
+                    .collect::<Vec<_>>()
+                    .join("&locationNames="),
+            ]
+            .concat(),
             (true, LocationResolved::Explorer(locations)) => [
                 EXPLORER_BASE,
                 &locations
@@ -49,7 +57,14 @@ pub fn Maps() -> impl IntoView {
                     .join("&locationNames="),
             ]
             .concat(),
-            (false, LocationResolved::Classic { name, .. }) => [WIKI_BASE, &name].concat(),
+            (false, LocationResolved::Classic(locations)) => [
+                WIKI_BASE,
+                &locations
+                    .first()
+                    .map(|location| location.name.clone())
+                    .unwrap_or_default(),
+            ]
+            .concat(),
             (false, LocationResolved::Explorer(locations)) => [
                 WIKI_BASE,
                 &locations

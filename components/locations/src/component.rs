@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 
-use crate::LocationResolved;
+use crate::{LocationResolved, resolver::classic};
 
 #[component]
 #[allow(non_snake_case)]
@@ -18,18 +18,15 @@ fn location_inner(location: crate::Location) -> Option<impl IntoView> {
             let crate::Location { map, x, y, .. } = location;
             view! { <span>{format!("Map{map:>04}({x}, {y})")}</span> }.into_any()
         }
-        LocationResolved::Classic {
-            name,
-            wiki: Some(wiki),
-        } => view! {
-            <a href=wiki target="yumeWiki">
-                {name}
-            </a>
-        }
-        .into_any(),
-        LocationResolved::Classic { name, wiki: None } => view! { <span>{name}</span> }.into_any(),
-        LocationResolved::Explorer(worlds) => {
-            let nodes = worlds
+        LocationResolved::Classic(worlds) => wrap_multiple(
+            worlds
+                .iter()
+                .map(classic_world_inner)
+                .intersperse_with(|| view! { <span>{" | "}</span> }.into_any())
+                .collect::<Vec<_>>(),
+        ),
+        LocationResolved::Explorer(worlds) => wrap_multiple(
+            worlds
                 .iter()
                 .map(|world| {
                     view! {
@@ -43,14 +40,25 @@ fn location_inner(location: crate::Location) -> Option<impl IntoView> {
                     .into_any()
                 })
                 .intersperse_with(|| view! { <span>{" | "}</span> }.into_any())
-                .collect::<Vec<_>>();
-            if nodes.len() > 1 {
-                view! { <span>{nodes}</span> }.into_any()
-            } else {
-                nodes.into_any()
-            }
-        }
+                .collect::<Vec<_>>(),
+        ),
     };
 
     Some(result)
+}
+
+fn wrap_multiple(views: Vec<AnyView>) -> AnyView {
+    if views.len() > 1 {
+        view! { <span>{views}</span> }.into_any()
+    } else {
+        views.into_any()
+    }
+}
+
+fn classic_world_inner(world: &classic::Location) -> AnyView {
+    let name = world.name.clone();
+    match &world.wiki {
+        None => view! { <span>{name}</span> }.into_any(),
+        Some(wiki) => view! { <a href=wiki.clone() target="yumeWiki">{name}</a> }.into_any(),
+    }
 }
