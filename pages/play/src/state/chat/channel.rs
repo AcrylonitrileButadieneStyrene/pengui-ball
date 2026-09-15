@@ -42,7 +42,8 @@ impl ChatChannel {
 
         self.messages.update(|messages| {
             if let Some((id, _)) = removed_overflow {
-                messages.shift_remove(&id).unwrap();
+                // this can somehow fail
+                messages.shift_remove(&id);
             }
 
             messages.insert(message.id.clone(), (message, data));
