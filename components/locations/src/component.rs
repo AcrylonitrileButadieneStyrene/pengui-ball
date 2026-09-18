@@ -10,15 +10,21 @@ pub fn Location(
     #[prop(into, optional)] location: Option<Signal<Option<crate::Location>>>,
     #[prop(into, optional)] resolved: Option<Signal<Option<crate::LocationResolved>>>,
 ) -> impl IntoView {
-    if let Some(location) = location {
-        let view = move || location.get().and_then(location_inner);
-        view! { <Suspense fallback=|| ()>{view}</Suspense> }.into_any()
-    } else if let Some(resolved) = resolved {
-        let view = move || resolved.get().and_then(location_resolved_inner);
-        view! { <Suspense fallback=|| ()>{view}</Suspense> }.into_any()
-    } else {
-        panic!("Location component requires either `location` or `resolved` prop");
-    }
+    location.map_or_else(
+        || {
+            resolved.map_or_else(
+                || panic!("Location component requires either `location` or `resolved` prop"),
+                |resolved| {
+                    let view = move || resolved.get().and_then(location_resolved_inner);
+                    view! { <Suspense fallback=|| ()>{view}</Suspense> }.into_any()
+                },
+            )
+        },
+        |location| {
+            let view = move || location.get().and_then(location_inner);
+            view! { <Suspense fallback=|| ()>{view}</Suspense> }.into_any()
+        },
+    )
 }
 
 fn location_inner(location: crate::Location) -> Option<impl IntoView> {

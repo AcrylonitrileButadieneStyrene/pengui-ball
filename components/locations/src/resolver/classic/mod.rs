@@ -76,11 +76,13 @@ pub fn resolve(
             url_title,
             coords,
             ..
-        } => coords
-            .as_ref()
-            .is_none_or(|coords| coords.contains(x, y))
-            .then(move || vec![(title.clone(), url_title.clone())])
-            .unwrap_or_default(),
+        } => {
+            if coords.as_ref().is_none_or(|coords| coords.contains(x, y)) {
+                vec![(title.clone(), url_title.clone())]
+            } else {
+                Vec::new()
+            }
+        }
         LocationItem::Array(items) => items
             .iter()
             .flat_map(|item| resolve(item, previous, x, y))
@@ -89,10 +91,12 @@ pub fn resolve(
             .iter()
             .flat_map(|(from, item)| {
                 let from = &**from;
-                previous
-                    .map_or(from == "else", |prev| from == format!("{prev:>04}"))
-                    .then(|| resolve(item, previous, x, y))
-                    .unwrap_or_default()
+
+                if previous.map_or(from == "else", |prev| from == format!("{prev:>04}")) {
+                    resolve(item, previous, x, y)
+                } else {
+                    Vec::new()
+                }
             })
             .collect(),
     }

@@ -49,14 +49,11 @@ impl Resolver {
 
     pub fn resolve(&self, location: &Location) -> LocationResolved {
         let resolved = self.resolve_wiki(location);
-        let ret =
-            if matches!(resolved, LocationResolved::Unknown { .. }) && &*location.game == "2kki" {
-                self.resolve_2kki(location)
-            } else {
-                resolved
-            };
-        leptos::logging::log!("{ret:?}");
-        ret
+        if matches!(resolved, LocationResolved::Unknown { .. }) && &*location.game == "2kki" {
+            self.resolve_2kki(location)
+        } else {
+            resolved
+        }
     }
 
     fn resolve_wiki(&self, location: &Location) -> LocationResolved {
@@ -73,27 +70,26 @@ impl Resolver {
             return LocationResolved::Pending;
         };
 
-        let unknown = LocationResolved::Unknown { map, x, y };
-        locations
-            .maps
-            .get(&*format!("{map:>04}"))
-            .map_or(unknown.clone(), move |map| {
-                let locations = classic::resolve(map, previous, x, y)
+        locations.maps.get(&*format!("{map:>04}")).map_or(
+            LocationResolved::Unknown { map, x, y },
+            move |location| {
+                let locations = classic::resolve(location, previous, x, y)
                     .iter()
                     .map(|(name, article)| classic::Location {
                         wiki: locations.root.as_ref().map(|root| {
-                            Arc::from(root.to_string() + article.as_ref().unwrap_or(&name))
+                            Arc::from(root.to_string() + article.as_ref().unwrap_or(name))
                         }),
                         name: name.clone(),
                     })
                     .collect::<Vec<_>>();
 
                 if locations.is_empty() {
-                    unknown
+                    LocationResolved::Unknown { map, x, y }
                 } else {
                     LocationResolved::Classic(locations.into())
                 }
-            })
+            },
+        )
     }
 
     fn resolve_2kki(&self, location: &Location) -> LocationResolved {

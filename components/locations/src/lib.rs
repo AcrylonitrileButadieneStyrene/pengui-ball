@@ -1,6 +1,7 @@
 #![feature(nonpoison_mutex)]
 #![feature(sync_nonpoison)]
 #![feature(iter_intersperse)]
+#![allow(clippy::empty_enums)]
 
 mod component;
 mod resolver;
