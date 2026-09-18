@@ -1,6 +1,5 @@
 use std::{
     collections::HashMap,
-    fmt::Write as _,
     sync::{Arc, nonpoison::Mutex},
 };
 
@@ -34,10 +33,10 @@ pub fn fetch(explorer: Container, map: u16, previous: Option<u16>) {
         .lock()
         .insert((map, previous), Value::Pending(pending));
 
-    let mut endpoint = format!("/explorer/getMapLocationNames?mapId={map:>04}");
-    if let Some(previous) = previous {
-        write!(endpoint, "&prevMapId={previous:>04}").unwrap();
-    }
+    let endpoint = format!("/explorer/getMapLocationNames?mapId={map:>04}");
+    // if let Some(previous) = previous {
+    //     write!(endpoint, "&prevMapId={previous:>04}").unwrap();
+    // }
 
     leptos::task::spawn_local(async move {
         let value = match gloo_net::http::Request::get(&endpoint).send().await {

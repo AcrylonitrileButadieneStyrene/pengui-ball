@@ -49,11 +49,14 @@ impl Resolver {
 
     pub fn resolve(&self, location: &Location) -> LocationResolved {
         let resolved = self.resolve_wiki(location);
-        if matches!(resolved, LocationResolved::Unknown) && &*location.game == "2kki" {
-            self.resolve_2kki(location)
-        } else {
-            resolved
-        }
+        let ret =
+            if matches!(resolved, LocationResolved::Unknown { .. }) && &*location.game == "2kki" {
+                self.resolve_2kki(location)
+            } else {
+                resolved
+            };
+        leptos::logging::log!("{ret:?}");
+        ret
     }
 
     fn resolve_wiki(&self, location: &Location) -> LocationResolved {
@@ -70,10 +73,11 @@ impl Resolver {
             return LocationResolved::Pending;
         };
 
+        let unknown = LocationResolved::Unknown { map, x, y };
         locations
             .maps
             .get(&*format!("{map:>04}"))
-            .map_or(LocationResolved::Unknown, |map| {
+            .map_or(unknown.clone(), move |map| {
                 let locations = classic::resolve(map, previous, x, y)
                     .iter()
                     .map(|(name, article)| classic::Location {
@@ -85,7 +89,7 @@ impl Resolver {
                     .collect::<Vec<_>>();
 
                 if locations.is_empty() {
-                    LocationResolved::Unknown
+                    unknown
                 } else {
                     LocationResolved::Classic(locations.into())
                 }
@@ -93,34 +97,34 @@ impl Resolver {
     }
 
     fn resolve_2kki(&self, location: &Location) -> LocationResolved {
-        let value = self
-            .explorer
-            .lock()
-            .get(&(location.map, location.previous))
-            .cloned();
+        let Location {
+            map,
+            x,
+            y,
+            previous,
+            ..
+        } = *location;
+
+        let value = self.explorer.lock().get(&(map, previous)).cloned();
         value.map_or_else(
             || {
-                explorer::fetch_with_owner(
-                    self.explorer.clone(),
-                    location.map,
-                    location.previous,
-                    &self.owner,
-                );
+                explorer::fetch_with_owner(self.explorer.clone(), map, previous, &self.owner);
                 LocationResolved::Pending
             },
             |entry| {
+                let unknown = LocationResolved::Unknown { map, x, y };
                 let Some(entry) = (match entry {
                     explorer::Value::Pending(val) => val.get(),
                     explorer::Value::Resolved(val) => Some(val),
                 }) else {
-                    return LocationResolved::Unknown;
+                    return unknown;
                 };
 
                 (*entry)
                     .as_ref()
                     .ok()
                     .cloned()
-                    .map_or(LocationResolved::Unknown, LocationResolved::Explorer)
+                    .map_or(unknown, LocationResolved::Explorer)
             },
         )
     }
@@ -129,7 +133,7 @@ impl Resolver {
 #[derive(Clone, Debug)]
 pub enum LocationResolved {
     Pending,
-    Unknown,
+    Unknown { map: u16, x: i16, y: i16 },
     Classic(Arc<[classic::Location]>),
     Explorer(Arc<[explorer::Location]>),
 }

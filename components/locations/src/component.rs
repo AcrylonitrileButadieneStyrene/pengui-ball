@@ -6,16 +6,29 @@ use crate::{LocationResolved, resolver::classic};
 
 #[component]
 #[allow(non_snake_case)]
-pub fn Location(#[prop(into)] location: Signal<Option<crate::Location>>) -> impl IntoView {
-    let view = move || location.get().and_then(location_inner);
-    view! { <Suspense fallback=|| ()>{view}</Suspense> }
+pub fn Location(
+    #[prop(into, optional)] location: Option<Signal<Option<crate::Location>>>,
+    #[prop(into, optional)] resolved: Option<Signal<Option<crate::LocationResolved>>>,
+) -> impl IntoView {
+    if let Some(location) = location {
+        let view = move || location.get().and_then(location_inner);
+        view! { <Suspense fallback=|| ()>{view}</Suspense> }.into_any()
+    } else if let Some(resolved) = resolved {
+        let view = move || resolved.get().and_then(location_resolved_inner);
+        view! { <Suspense fallback=|| ()>{view}</Suspense> }.into_any()
+    } else {
+        panic!("Location component requires either `location` or `resolved` prop");
+    }
 }
 
 fn location_inner(location: crate::Location) -> Option<impl IntoView> {
-    let result = match expect_context::<Arc<crate::Resolver>>().resolve(&location) {
+    location_resolved_inner(expect_context::<Arc<crate::Resolver>>().resolve(&location))
+}
+
+fn location_resolved_inner(location: crate::LocationResolved) -> Option<AnyView> {
+    let result = match location {
         LocationResolved::Pending => return None,
-        LocationResolved::Unknown => {
-            let crate::Location { map, x, y, .. } = location;
+        LocationResolved::Unknown { map, x, y } => {
             view! { <span>{format!("Map{map:>04}({x}, {y})")}</span> }.into_any()
         }
         LocationResolved::Classic(worlds) => wrap_multiple(
@@ -31,7 +44,7 @@ fn location_inner(location: crate::Location) -> Option<impl IntoView> {
                 .map(|world| {
                     view! {
                         <a
-                            href=format!("https://yume.wiki/{}/{}", location.game, world.title)
+                            href=format!("https://yume.wiki/2kki/{}", world.title)
                             target="yumeWiki"
                         >
                             {world.title.clone()}
