@@ -69,8 +69,27 @@ pub fn resolve(
     x: i16,
     y: i16,
 ) -> Vec<(Arc<str>, Option<Arc<str>>)> {
+    let result = resolve_inner(item, previous, x, y);
+    let largest = result
+        .iter()
+        .map(|(_name, _wiki, priority)| *priority)
+        .max()
+        .unwrap_or_default();
+    result
+        .into_iter()
+        .filter(|(_name, _wiki, priority)| *priority >= largest)
+        .map(|(name, wiki, _priority)| (name, wiki))
+        .collect()
+}
+
+fn resolve_inner(
+    item: &LocationItem,
+    previous: Option<u16>,
+    x: i16,
+    y: i16,
+) -> Vec<(Arc<str>, Option<Arc<str>>, u8)> {
     match item {
-        LocationItem::Literal(name) => vec![(name.clone(), None)],
+        LocationItem::Literal(name) => vec![(name.clone(), None, 0)],
         LocationItem::Object {
             title,
             url_title,
@@ -78,14 +97,14 @@ pub fn resolve(
             ..
         } => {
             if coords.as_ref().is_none_or(|coords| coords.contains(x, y)) {
-                vec![(title.clone(), url_title.clone())]
+                vec![(title.clone(), url_title.clone(), 1)]
             } else {
                 Vec::new()
             }
         }
         LocationItem::Array(items) => items
             .iter()
-            .flat_map(|item| resolve(item, previous, x, y))
+            .flat_map(|item| resolve_inner(item, previous, x, y))
             .collect(),
         LocationItem::Dynamic(items) => items
             .iter()
@@ -93,7 +112,7 @@ pub fn resolve(
                 let from = &**from;
 
                 if previous.map_or(from == "else", |prev| from == format!("{prev:>04}")) {
-                    resolve(item, previous, x, y)
+                    resolve_inner(item, previous, x, y)
                 } else {
                     Vec::new()
                 }
