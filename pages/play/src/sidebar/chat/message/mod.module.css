@@ -70,3 +70,8 @@
     height: 120px;
     max-height: unset;
 }
+
+:global(.spoiler):not(:hover) {
+    background-color: #444;
+    color: #444;
+}
