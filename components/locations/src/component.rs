@@ -33,7 +33,7 @@ fn location_inner(location: crate::Location) -> Option<impl IntoView> {
 
 fn location_resolved_inner(location: crate::LocationResolved) -> Option<AnyView> {
     let result = match location {
-        LocationResolved::Pending => return None,
+        LocationResolved::None | LocationResolved::Pending => return None,
         LocationResolved::Unknown { map, x, y } => {
             view! { <span>{format!("Map{map:>04}({x}, {y})")}</span> }.into_any()
         }

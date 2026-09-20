@@ -35,7 +35,12 @@ pub fn Maps() -> impl IntoView {
         };
 
         let endpoint = match (is_2kki, location) {
-            (_, LocationResolved::Pending | LocationResolved::Unknown { .. }) => return vec![],
+            (
+                _,
+                LocationResolved::None
+                | LocationResolved::Pending
+                | LocationResolved::Unknown { .. },
+            ) => return vec![],
             (_, LocationResolved::Explorer(locations)) if locations.is_empty() => {
                 return vec![];
             }

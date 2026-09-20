@@ -48,6 +48,18 @@ impl Resolver {
     }
 
     pub fn resolve(&self, location: &Location) -> LocationResolved {
+        if matches!(
+            location,
+            Location {
+                map: 0,
+                x: -1,
+                y: -1,
+                ..
+            }
+        ) {
+            return LocationResolved::None;
+        }
+
         let resolved = self.resolve_wiki(location);
         if matches!(resolved, LocationResolved::Unknown { .. }) && &*location.game == "2kki" {
             self.resolve_2kki(location)
@@ -128,6 +140,7 @@ impl Resolver {
 
 #[derive(Clone, Debug)]
 pub enum LocationResolved {
+    None,
     Pending,
     Unknown { map: u16, x: i16, y: i16 },
     Classic(Arc<[classic::Location]>),
