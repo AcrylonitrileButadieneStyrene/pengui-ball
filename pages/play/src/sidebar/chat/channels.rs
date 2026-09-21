@@ -25,7 +25,7 @@ fn Channel(of: MessageDestination) -> impl IntoView {
 #[island]
 fn Handler(of: MessageDestination) -> impl IntoView {
     let state = crate::state();
-    let filter = of.to_channel(&state.chat).filter;
+    let visible = of.to_channel(&state.chat).visible;
     let destination = state.chat.destination;
 
     let on_change = move |event: leptos::ev::Event| {
@@ -35,14 +35,14 @@ fn Handler(of: MessageDestination) -> impl IntoView {
         let active = destination.get_untracked() == Some(of);
 
         if !checked && active {
-            filter.set(true);
+            visible.set(false);
 
             for variant in MessageDestination::VARIANTS {
                 if *variant == of {
                     continue;
                 }
 
-                if !variant.to_channel(&state.chat).filter.get_untracked() {
+                if variant.to_channel(&state.chat).visible.get_untracked() {
                     destination.set(Some(*variant));
                     return;
                 }
@@ -50,14 +50,14 @@ fn Handler(of: MessageDestination) -> impl IntoView {
 
             destination.set(None);
         } else {
-            filter.set(false);
+            visible.set(true);
             destination.set(Some(of));
         }
     };
 
     let is_checked = move || destination.get() == Some(of);
     view! {
-        <input type="checkbox" prop:checked=move || !filter.get() on:change=on_change />
+        <input type="checkbox" prop:checked=visible on:change=on_change />
         <input type="radio" name="chat-destination" prop:checked=is_checked />
     }
 }

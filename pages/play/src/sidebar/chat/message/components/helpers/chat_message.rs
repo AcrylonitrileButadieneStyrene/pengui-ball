@@ -54,7 +54,7 @@ impl<T: ChatMessageComponent + Send + Sync> MessageComponent for T {
 
         view! {
             <Message
-                filtered=message.filtered
+                visible=message.visible
                 header=move || {
                     view! {
                         {header}

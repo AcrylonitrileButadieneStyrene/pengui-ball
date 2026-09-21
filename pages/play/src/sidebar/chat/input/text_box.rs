@@ -119,27 +119,31 @@ fn clamp(input: &str, length: usize) -> &str {
 
 fn send(state: crate::State, content: String) {
     let text = content.clone();
-    let (command, filter) = match state.chat.destination.get_untracked() {
+    let (command, visible) = match state.chat.destination.get_untracked() {
         None => {
             leptos::logging::warn!("Tried to send message to no destination");
             return;
         }
         Some(MessageDestination::Map) => (
             Command::SayMap(content),
-            &state.chat.channel::<MapMessage>().filter,
+            &state.chat.channel::<MapMessage>().visible,
         ),
         Some(MessageDestination::Party) => (
             Command::SayParty(content),
-            &state.chat.channel::<PartyMessage>().filter,
+            &state.chat.channel::<PartyMessage>().visible,
         ),
         Some(MessageDestination::Global) => (
             Command::SayGlobal(content),
-            &state.chat.channel::<GlobalMessage>().filter,
+            &state.chat.channel::<GlobalMessage>().visible,
         ),
     };
 
     state.chat.add(
-        MessageItem::new(None::<std::sync::Arc<str>>, text.into(), filter.read_only()),
+        MessageItem::new(
+            None::<std::sync::Arc<str>>,
+            text.into(),
+            visible.read_only(),
+        ),
         SendingMessage,
     );
     state.session.channel.send(command).unwrap();

@@ -15,7 +15,7 @@ pub fn item<T: MessageComponent + 'static>(
     MessageItem::new(
         id,
         Arc::from(text),
-        state.chat.channel::<T>().filter.read_only(),
+        state.chat.channel::<T>().visible.read_only(),
     )
 }
 

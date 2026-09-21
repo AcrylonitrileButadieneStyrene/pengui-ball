@@ -13,8 +13,8 @@ pub struct ChatChannel {
     pub capacity: RwSignal<usize>,
     /// List of IDs corresponding to messages in the primary `messages` list
     pub tracker: Mutex<VecDeque<(Arc<str>, Arc<str>)>>,
-    /// If true then this channel is not shown to the user
-    pub filter: RwSignal<bool>,
+    /// If false then this channel is not shown to the user
+    pub visible: RwSignal<bool>,
     /// Shared message list, all channels interact with it.
     messages: WriteSignal<super::MessageList>,
 }
@@ -24,7 +24,7 @@ impl ChatChannel {
         Self {
             capacity: RwSignal::new(150),
             tracker: Mutex::new(VecDeque::with_capacity(150)),
-            filter: RwSignal::new(false),
+            visible: RwSignal::new(true),
             messages,
         }
     }

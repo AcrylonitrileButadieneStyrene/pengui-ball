@@ -17,7 +17,7 @@ impl MessageComponent for SendingMessage {
 
         view! {
             <super::Message
-                filtered=message.filtered
+                visible=message.visible
                 header=move || {
                     view! {
                         <span>Sending...</span>

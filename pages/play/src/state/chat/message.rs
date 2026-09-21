@@ -7,15 +7,11 @@ pub struct MessageItem {
     pub id: Arc<str>,
     pub text: Arc<str>,
     pub timestamp: chrono::DateTime<chrono::Local>,
-    pub filtered: ReadSignal<bool>,
+    pub visible: ReadSignal<bool>,
 }
 
 impl MessageItem {
-    pub fn new(
-        id: Option<impl Into<Arc<str>>>,
-        text: Arc<str>,
-        filtered: ReadSignal<bool>,
-    ) -> Self {
+    pub fn new(id: Option<impl Into<Arc<str>>>, text: Arc<str>, visible: ReadSignal<bool>) -> Self {
         leptos_use::use_timestamp();
 
         let timestamp = chrono::Local::now();
@@ -26,7 +22,7 @@ impl MessageItem {
             ),
             text,
             timestamp,
-            filtered,
+            visible,
         }
     }
 }
