@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 6px;
+}
+
+.container label {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    color: #FF3636;
+    background-color: oklch(0.3 0.2348 26.76);
+}
+
+.container label:has(input[type="checkbox"]:checked) {
+    color: #54FF65;
+    background-color: oklch(0.3 0.2415 144.66);
+}
+
+.container label:has(input[type="radio"]:checked) {
+    color: #5cc6ff;
+    background-color: oklch(0.3 0.1267 235.12);
+}
+
+.container label:has(input[type="radio"]:checked):not(:has(input[type="checkbox"]:checked)) {
+    color: yellow;
+    background-color: magenta;
+}
+
+.container label:first-child {
+    border-end-start-radius: 12px;
+}
+
+.container label:last-child {
+    border-end-end-radius: 12px;
+}
+
+.container input {
+    display: none;
+}

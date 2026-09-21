@@ -2,7 +2,7 @@ use leptos::prelude::*;
 
 use crate::components::Scroller;
 
-mod filters;
+mod channels;
 mod input;
 pub mod message;
 
@@ -17,7 +17,7 @@ pub fn Chat() -> impl IntoView {
             </Scroller>
         </div>
         <input::ChatInput />
-        <filters::Filters />
+        <channels::Channels />
     }
     .into_any()
 }

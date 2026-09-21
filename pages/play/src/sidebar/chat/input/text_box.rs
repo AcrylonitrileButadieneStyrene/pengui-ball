@@ -120,15 +120,19 @@ fn clamp(input: &str, length: usize) -> &str {
 fn send(state: crate::State, content: String) {
     let text = content.clone();
     let (command, filter) = match state.chat.destination.get_untracked() {
-        MessageDestination::Map => (
+        None => {
+            leptos::logging::warn!("Tried to send message to no destination");
+            return;
+        }
+        Some(MessageDestination::Map) => (
             Command::SayMap(content),
             &state.chat.channel::<MapMessage>().filter,
         ),
-        MessageDestination::Party => (
+        Some(MessageDestination::Party) => (
             Command::SayParty(content),
             &state.chat.channel::<PartyMessage>().filter,
         ),
-        MessageDestination::Global => (
+        Some(MessageDestination::Global) => (
             Command::SayGlobal(content),
             &state.chat.channel::<GlobalMessage>().filter,
         ),

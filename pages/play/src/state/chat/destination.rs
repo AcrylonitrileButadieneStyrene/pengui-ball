@@ -8,17 +8,23 @@ use crate::{
 };
 
 #[derive(
-    Clone, Copy, Default, PartialEq, Eq, strum::EnumProperty, strum::FromRepr, strum::VariantArray,
+    Clone,
+    Copy,
+    Default,
+    PartialEq,
+    Eq,
+    serde::Serialize,
+    serde::Deserialize,
+    strum::IntoStaticStr,
+    strum::FromRepr,
+    strum::VariantArray,
 )]
 #[repr(u8)]
 pub enum MessageDestination {
     // the order of these determines the order of the fallback on filter disabled
-    #[strum(props(Name = "Map"))] // these will be used for localization later
     Map,
     #[default]
-    #[strum(props(Name = "Global"))]
     Global,
-    #[strum(props(Name = "Party"))]
     Party,
 }
 

@@ -2,7 +2,6 @@ use leptos::prelude::*;
 
 use crate::states::players::player::PlayerStoreFields as _;
 
-mod destination;
 mod guest_name;
 mod text_box;
 
@@ -11,7 +10,6 @@ pub fn ChatInput() -> impl IntoView {
     view! {
         <Wrapper>
             <guest_name::GuestName />
-            <destination::Destination />
             <text_box::TextBox />
         </Wrapper>
     }

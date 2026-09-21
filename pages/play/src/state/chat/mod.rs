@@ -19,7 +19,7 @@ pub struct State {
     channels: RwSignal<HashMap<TypeId, Arc<ChatChannel>>>,
 
     pub input: NodeRef<leptos::html::Div>,
-    pub destination: RwSignal<MessageDestination>,
+    pub destination: RwSignal<Option<MessageDestination>>,
 
     /// User ID of the currently signed in user.
     pub my_id: Signal<Option<Arc<str>>>,
@@ -34,7 +34,7 @@ impl State {
             set_messages,
             channels: RwSignal::default(),
             input: NodeRef::new(),
-            destination: RwSignal::default(),
+            destination: RwSignal::new(Some(MessageDestination::default())),
             my_id,
             mention_audio: SendOption::new_local(is_browser().then(|| {
                 let audio =
