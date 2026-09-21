@@ -10,6 +10,7 @@
     cursor: pointer;
     color: #FF3636;
     background-color: oklch(0.3 0.2348 26.76);
+    user-select: none;
 }
 
 .container label:has(input[type="checkbox"]:checked) {
