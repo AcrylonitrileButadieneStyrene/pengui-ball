@@ -1,3 +1,5 @@
+#![feature(nonpoison_mutex)]
+#![feature(sync_nonpoison)]
 #![allow(non_snake_case)]
 #![allow(clippy::cast_precision_loss)]
 #![allow(clippy::empty_enums)]

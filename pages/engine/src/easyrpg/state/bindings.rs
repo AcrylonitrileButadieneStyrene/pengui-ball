@@ -15,6 +15,9 @@ extern "C" {
     #[wasm_bindgen(method, getter)]
     pub fn api(this: &PlayerJSObject) -> PlayerAPIJSObject;
 
+    #[wasm_bindgen(method, getter, js_name = HEAPU8)]
+    pub fn heap_u8(this: &PlayerJSObject) -> Option<leptos::web_sys::js_sys::Uint8Array>;
+
     // (window.)easyrpgPlayer.api
     #[wasm_bindgen]
     pub type PlayerAPIJSObject;
@@ -30,4 +33,7 @@ extern "C" {
 
     #[wasm_bindgen(method, js_name = setNametagMode)]
     pub fn set_nametag_mode(this: &PlayerAPIJSObject, value: u8);
+
+    #[wasm_bindgen(method, catch, js_name = resetCanvas)]
+    pub fn reset_canvas(this: &PlayerAPIJSObject) -> Result<bool, JsValue>;
 }

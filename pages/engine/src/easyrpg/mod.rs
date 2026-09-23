@@ -43,12 +43,25 @@ pub fn StartPlayer() -> impl IntoView {
             };
             state.easyrpg_player.start(config).await;
 
-            // waiting about 30ms seems to be necssary for some reason for the
-            // api to work. an obvious delay isn't placed anywhere in forest-orb
-            // so it's probably a side effect of its strange load system
-            set_timeout(
-                || crate::send(common::PlayMessage::EngineLoaded),
-                std::time::Duration::from_millis(350),
+            let handle =
+                std::sync::Arc::new(std::sync::nonpoison::Mutex::new(None::<IntervalHandle>));
+            *handle.lock() = Some(
+                set_interval_with_handle(
+                    {
+                        let handle = handle.clone();
+                        move || {
+                            if let Some(Ok(_)) = state
+                                .easyrpg_player
+                                .call_untracked(|easyrpg| easyrpg.api().reset_canvas())
+                            {
+                                handle.lock().unwrap().clear();
+                                crate::send(common::PlayMessage::EngineLoaded);
+                            }
+                        }
+                    },
+                    std::time::Duration::from_millis(100),
+                )
+                .unwrap(),
             );
         });
     });

@@ -46,9 +46,11 @@ fn handle(state: crate::EngineState, message: EngineMessage) {
         EngineMessage::PressKey(keycode, is_down) => {
             super::inputs::press(state.easyrpg_player.canvas, keycode, is_down);
         }
-        EngineMessage::SetNameTagMode(value) => state
-            .easyrpg_player
-            .call(move |engine| engine.api().set_nametag_mode(value)),
+        EngineMessage::SetNameTagMode(value) => drop(
+            state
+                .easyrpg_player
+                .call_untracked(move |engine| engine.api().set_nametag_mode(value)),
+        ),
     }
 }
 

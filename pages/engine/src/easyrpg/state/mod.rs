@@ -42,23 +42,17 @@ impl Player {
         self.set_object.set(SendOption::new_local(Some(object)));
     }
 
-    pub fn call<F>(&self, closure: F)
+    pub fn call<F, T>(&self, closure: F) -> Option<T>
     where
-        F: FnOnce(&PlayerJSObject),
+        F: FnOnce(&PlayerJSObject) -> T,
     {
-        let object = self.object.read();
-        if let Some(object) = &**object {
-            closure(object);
-        }
+        self.object.read().as_ref().map(closure)
     }
 
-    pub fn call_untracked<F>(&self, closure: F)
+    pub fn call_untracked<F, T>(&self, closure: F) -> Option<T>
     where
-        F: FnOnce(&PlayerJSObject),
+        F: FnOnce(&PlayerJSObject) -> T,
     {
-        let object = self.object.read_untracked();
-        if let Some(object) = &**object {
-            closure(object);
-        }
+        self.object.read_untracked().as_ref().map(closure)
     }
 }
