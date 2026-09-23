@@ -1,6 +1,6 @@
 #[allow(clippy::duplicated_attributes)]
 #[derive(Debug, logos::Logos)]
-pub enum Token {
+pub enum InputToken {
     #[regex(r"\\.", |lex| str_trim(lex, 1, 0))]
     Escaped(String),
 
@@ -25,7 +25,6 @@ pub enum Token {
 
     #[regex(r"\[t?[a-z0-9]{16}(:(\d+))?\]", |lex| str_trim(lex, 1, 1))]
     Screenshot(String),
-    Sticker(String),
 
     #[token("\\", str)]
     #[token("_", str)]
@@ -37,11 +36,11 @@ pub enum Token {
     Text(String),
 }
 
-fn str(lex: &logos::Lexer<Token>) -> String {
+fn str(lex: &logos::Lexer<InputToken>) -> String {
     lex.slice().to_string()
 }
 
-fn str_trim(lex: &logos::Lexer<'_, Token>, start: usize, end: usize) -> String {
+fn str_trim(lex: &logos::Lexer<'_, InputToken>, start: usize, end: usize) -> String {
     let slice = lex.slice();
     slice[start..slice.len() - end].to_string()
 }

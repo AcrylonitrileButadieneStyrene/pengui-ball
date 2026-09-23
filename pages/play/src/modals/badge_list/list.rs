@@ -83,6 +83,7 @@ fn Category(
 }
 
 #[component]
+#[allow(unused)]
 fn Badge(
     meta: Arc<crate::states::badges::BadgeMetadata>,
     lang: Option<Arc<crate::states::badges::BadgeTranslation>>,

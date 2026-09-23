@@ -36,15 +36,15 @@ parse_eq!(italics_2, "\\* a * b *", "* a <i> b </i>");
 parse_eq!(
     emoji_small,
     ":test: text",
-    r#"<img src="test-url" class="emoji"> text"#
+    r#"<img src="test-url" title="test" class="emoji"> text"#
 );
 parse_eq!(
     emoji_big,
     ":test:",
-    r#"<img src="test-url" class="emoji big">"#
+    r#"<img src="test-url" title="test" class="emoji big">"#
 );
 parse_eq!(
     emoji_large,
     "[:test:]",
-    r#"<img src="test-url" class="emoji screenshot">"#
+    r#"<img src="test-url" title="test" class="emoji screenshot">"#
 );
