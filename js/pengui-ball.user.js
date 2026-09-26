@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        PenguiBall Temporary Workarounds
-// @version     0.1.16
+// @version     0.1.17
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @homepageURL https://github.com/AcrylonitrileButadieneStyrene/pengui-ball/
@@ -141,7 +141,7 @@ if (location.host == "ynoproject.net") {
             return alert("Account created successfully.");
           const auth = response.responseHeaders.split("auth=")[1].split(";")[0];
           iframe.contentWindow.postMessage(["set-auth", auth], "*");
-          onAuthCookieSet();
+          setTimeout(() => onAuthCookieSet(), 100);
         },
       });
     } else if (e.data?.length == 3) {
