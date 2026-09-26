@@ -90,5 +90,5 @@ fn has_ping(state: &crate::state::PlayState, message: &str) -> bool {
     message
         .split(' ')
         .filter(|part| part.starts_with('@'))
-        .any(|part| part[1..].eq_ignore_ascii_case(&*username))
+        .any(|part| part[1..].eq_ignore_ascii_case(&username))
 }

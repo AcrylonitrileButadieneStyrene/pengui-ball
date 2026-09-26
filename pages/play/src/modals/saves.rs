@@ -179,9 +179,8 @@ fn Sync() -> impl IntoView {
             let outdated = local_timestamps[0]
                 .as_deref()
                 .map(chrono::DateTime::parse_from_rfc3339)
-                .map(Result::ok)
-                .flatten()
-                .map_or(true, |local| cloud > local);
+                .and_then(Result::ok)
+                .is_none_or(|local| cloud > local);
 
             if outdated {
                 leptos::task::spawn_local(download_save(
