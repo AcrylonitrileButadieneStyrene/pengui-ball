@@ -1,3 +1,4 @@
+use chrono::Datelike;
 use common::{EngineMessage, messages::play::ConnectionStatus};
 use leptos::prelude::*;
 
@@ -142,70 +143,55 @@ fn Sync() -> impl IntoView {
     let state = crate::state();
     let user = state.api.user;
 
-    let url: std::sync::Arc<str> = format!(
-        "https://api.ynoproject.net/{}/api/savesync?command=timestamp",
-        state.locations.game
-    )
-    .into();
-
-    let cloud_timestamp = LocalResource::new(move || {
-        let url = url.clone();
-        async move {
-            if user.read().is_none() {
-                return None;
-            }
-
-            gloo_net::http::Request::get(&url)
-                .credentials(leptos::web_sys::RequestCredentials::Include)
-                .send()
-                .await
-                .ok()?
-                .text()
-                .await
-                .ok()
+    let cloud_timestamp = LocalResource::new(move || async move {
+        if user.read().is_none() {
+            return None;
         }
+
+        gloo_net::http::Request::get(&format!(
+            "https://api.ynoproject.net/{}/api/savesync?command=timestamp",
+            state.locations.game
+        ))
+        .credentials(leptos::web_sys::RequestCredentials::Include)
+        .send()
+        .await
+        .ok()?
+        .text()
+        .await
+        .ok()
     });
 
     Effect::new(move || {
-        let Some(cloud) = cloud_timestamp.get() else {
-            return;
-        };
+        // the api will return one of:
+        // - the correct timestamp if the save exists
+        // - a timezone adjusted UTC epoch if no save exists
+        // - the string "player is banned\n"
+        if let Some(Some(cloud_timestamp)) = cloud_timestamp.get()
+            && let Ok(cloud) = chrono::DateTime::parse_from_rfc3339(&cloud_timestamp)
+            && cloud.year() != 1970
+        {
+            let Some(local_timestamps) = state.engine.save_timestamps.value.get() else {
+                // the engine not yet having loaded should not cause an overwrite
+                return;
+            };
 
-        let Some(local) = state.engine.save_timestamps.value.get_untracked() else {
-            state.engine.save_timestamps.value.track();
-            return;
-        };
+            // if the engine gave no timestamp for the slot, there is no save
+            let outdated = local_timestamps[0]
+                .as_deref()
+                .map(chrono::DateTime::parse_from_rfc3339)
+                .map(Result::ok)
+                .flatten()
+                .map_or(true, |local| cloud > local);
 
-        if should_download(local[0].as_deref(), cloud.as_deref()) {
-            leptos::task::spawn_local(download_save(
-                state.locations.game.clone(),
-                state.engine.frame,
-                chrono::DateTime::parse_from_rfc3339(cloud.as_deref().unwrap())
-                    .unwrap()
-                    .into(),
-            ));
+            if outdated {
+                leptos::task::spawn_local(download_save(
+                    state.locations.game.clone(),
+                    state.engine.frame,
+                    cloud.into(),
+                ));
+            }
         }
     });
-}
-
-fn should_download(local: Option<&str>, cloud: Option<&str>) -> bool {
-    let Some(cloud) = cloud else {
-        return false;
-    };
-
-    let Some(local) = local else {
-        return true;
-    };
-
-    let Ok(cloud) = chrono::DateTime::parse_from_rfc3339(cloud) else {
-        return false;
-    };
-
-    let Ok(local) = chrono::DateTime::parse_from_rfc3339(local) else {
-        return false;
-    };
-
-    cloud > local
 }
 
 #[allow(clippy::future_not_send)]
