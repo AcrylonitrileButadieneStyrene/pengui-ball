@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        PenguiBall Temporary Workarounds
-// @version     0.1.17
+// @version     0.1.18
 // @description Temporary workarounds to make pengui-ball work before official support is added.
 // @grant       GM.xmlHttpRequest
 // @homepageURL https://github.com/AcrylonitrileButadieneStyrene/pengui-ball/
@@ -68,62 +68,21 @@ if (location.host == "ynoproject.net") {
   document.close();
 } else if (location.host == "api.ynoproject.net") {
   window.addEventListener("message", e => {
-    if (e.data.length == 2) {
-      if (e.data[0] == "set-auth")
-        cookieStore.set({
-          name: "auth",
-          value: e.data[1],
-          domain: "ynoproject.net",
-          sameSite: "none",
-          expires: Date.now() + 86400000,
-          partitioned: true,
-        });
-    } else if (e.data.length == 3) {
-      if (e.data[0].startsWith("/api/"))
-        e.data[0] = e.data[0].replace("/api/", "/");
-      if (e.data[0] == "/seiko/logout")
-        cookieStore.delete({
-          name: "auth",
-          domain: "ynoproject.net",
-          partitioned: true
-        });
-      fetch(e.data[0], e.data[1])
-        .then(async resp => [resp.status, resp.statusText, await resp.arrayBuffer()])
-        .then(resp => window.parent.postMessage([e.data[2], "resolve", resp], "*"))
-        .catch(err => window.parent.postMessage([e.data[2], "reject", err.toString()], "*"));
-    }
+    cookieStore.set({
+      name: "auth",
+      value: e.data,
+      domain: "ynoproject.net",
+      sameSite: "none",
+      expires: Date.now() + 86400000,
+      partitioned: true,
+    });
   });
 } else if (window.self == window.top) {
-  let queue = [];
-  const ongoing = {};
-
-  // please give me a CORS excemption so i don't have to do this
   const iframe = document.createElement("iframe");
   iframe.src = "https://api.ynoproject.net/%F0%9F%A5%BA";
   iframe.style.display = "none";
-  iframe.onload = () => {
-    let items = queue;
-    queue = undefined;
-    for (const item of items)
-      iframe.contentWindow.postMessage(item, "*");
-  };
+
   window.addEventListener("load", () => document.body.appendChild(iframe));
-
-  let originalFetch = unsafeWindow.fetch;
-  unsafeWindow.fetch = function (url, options) {
-    url = new URL(url?.url || url, location.href).href;
-    if (!url.includes("/api/"))
-      return originalFetch.apply(this, arguments);
-    else return new Promise((resolve, reject) => {
-      const key = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-      ongoing[key] = [resolve, reject];
-
-      let opts = [url.replace(location.origin, ""), options, key];
-      if (queue) queue.push(opts)
-      else iframe.contentWindow.postMessage(opts, "*");
-    });
-  };
-
   window.addEventListener("message", e => {
     if (e.data?.length == 2) {
       GM.xmlHttpRequest({
@@ -140,19 +99,10 @@ if (location.host == "ynoproject.net") {
           if (e.data[0] == "register")
             return alert("Account created successfully.");
           const auth = response.responseHeaders.split("auth=")[1].split(";")[0];
-          iframe.contentWindow.postMessage(["set-auth", auth], "*");
+          iframe.contentWindow.postMessage(auth, "*");
           setTimeout(() => onAuthCookieSet(), 100);
         },
       });
-    } else if (e.data?.length == 3) {
-      let [resolve, reject] = ongoing[e.data[0]];
-      if (e.data[1] == "resolve")
-        resolve(new Response(e.data[2][2], {
-          status: e.data[2][0],
-          statusText: e.data[2][1],
-        }));
-      else reject(new Error(e.data[2]));
     }
   });
 }
-
