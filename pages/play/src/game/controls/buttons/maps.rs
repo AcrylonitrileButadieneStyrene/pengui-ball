@@ -107,6 +107,7 @@ pub fn Maps() -> impl IntoView {
         maps.read().as_ref().map(|maps| {
             maps.clone()
                 .into_iter()
+                .rev()
                 .map(|map| {
                     let (Map::WikiMap(WikiMap {
                         path: wiki_link,
