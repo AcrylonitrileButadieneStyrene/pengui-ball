@@ -15,6 +15,7 @@ pub enum Message {
     SaveTimestamps(Box<[Option<String>; 15]>),
     RoomSwitch,
     SetSystem(String),
+    OpenMap,
 }
 
 #[derive(Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]

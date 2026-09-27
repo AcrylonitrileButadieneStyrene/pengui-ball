@@ -10,6 +10,7 @@ pub fn Effects() -> impl IntoView {
 
     volume::effect(state);
     events::focus::effect(state);
+    events::key_down::effect();
     events::error::effect();
     save_timestamps::effect(state);
 }

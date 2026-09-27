@@ -64,5 +64,15 @@ fn handle(state: crate::State, message: common::PlayMessage) {
         }
         PlayMessage::RoomSwitch => state.players.in_map.update(HashMap::clear),
         PlayMessage::SetSystem(system) => state.players.local.system().set(Some(system.into())),
+        PlayMessage::OpenMap => {
+            if let Some(maps) = &*state.locations.current_maps.read()
+                && let Some(map) = maps.get(0)
+            {
+                let (wiki_link, _) = map.extract_ref();
+                window()
+                    .open_with_url_and_target(wiki_link, "yumeWikiMap")
+                    .ok();
+            }
+        }
     }
 }
