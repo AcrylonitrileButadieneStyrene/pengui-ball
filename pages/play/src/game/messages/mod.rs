@@ -66,7 +66,7 @@ fn handle(state: crate::State, message: common::PlayMessage) {
         PlayMessage::SetSystem(system) => state.players.local.system().set(Some(system.into())),
         PlayMessage::OpenMap => {
             if let Some(maps) = &*state.locations.current_maps.read()
-                && let Some(map) = maps.get(0)
+                && let Some(map) = maps.first()
             {
                 let (wiki_link, _) = map.extract_ref();
                 window()

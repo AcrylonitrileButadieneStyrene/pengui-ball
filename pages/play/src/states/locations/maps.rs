@@ -12,11 +12,11 @@ pub enum Map {
 
 impl Map {
     pub fn extract(self) -> (String, String) {
-        let (Map::WikiMap(WikiMap {
+        let (Self::WikiMap(WikiMap {
             path: wiki_link,
             caption: description,
         })
-        | Map::ExplorerMap(ExplorerMap {
+        | Self::ExplorerMap(ExplorerMap {
             url: wiki_link,
             label: description,
         })) = self;
@@ -25,11 +25,11 @@ impl Map {
     }
 
     pub fn extract_ref(&self) -> (&str, &str) {
-        let (Map::WikiMap(WikiMap {
+        let (Self::WikiMap(WikiMap {
             path: wiki_link,
             caption: description,
         })
-        | Map::ExplorerMap(ExplorerMap {
+        | Self::ExplorerMap(ExplorerMap {
             url: wiki_link,
             label: description,
         })) = self;

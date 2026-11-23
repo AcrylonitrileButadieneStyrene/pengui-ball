@@ -78,16 +78,12 @@ fn metadata_resource(game: &str) -> LocalResource<RawMetadata> {
 pub type BadgeById = HashMap<Arc<str>, Arc<BadgeMetadata>>;
 fn badge_by_id(resource: LocalResource<RawMetadata>) -> impl Fn(Option<&BadgeById>) -> BadgeById {
     move |_| {
-        resource
-            .read()
-            .as_ref()
-            .map(|badges| {
-                badges
-                    .iter()
-                    .map(|badge| (badge.badge_id.clone(), badge.clone()))
-                    .collect::<HashMap<Arc<str>, Arc<BadgeMetadata>>>()
-            })
-            .unwrap_or_default()
+        resource.read().as_ref().map_or_default(|badges| {
+            badges
+                .iter()
+                .map(|badge| (badge.badge_id.clone(), badge.clone()))
+                .collect::<HashMap<Arc<str>, Arc<BadgeMetadata>>>()
+        })
     }
 }
 
@@ -115,17 +111,13 @@ fn badge_to_language(
     resource: LocalResource<RawLanguage>,
 ) -> impl Fn(Option<&BadgeToTranslation>) -> BadgeToTranslation {
     move |_| {
-        resource
-            .read()
-            .as_ref()
-            .map(|badges| {
-                badges
-                    .values()
-                    .flatten()
-                    .map(|(badge_id, badge)| (badge_id.clone(), badge.clone()))
-                    .collect::<HashMap<Arc<str>, Arc<BadgeTranslation>>>()
-            })
-            .unwrap_or_default()
+        resource.read().as_ref().map_or_default(|badges| {
+            badges
+                .values()
+                .flatten()
+                .map(|(badge_id, badge)| (badge_id.clone(), badge.clone()))
+                .collect::<HashMap<Arc<str>, Arc<BadgeTranslation>>>()
+        })
     }
 }
 
@@ -146,7 +138,7 @@ fn by_game_category(
                     map
                 })
             })
-            .map(|badges| {
+            .map_or_default(|badges| {
                 badges
                     .into_iter()
                     .map(|(key, value)| {
@@ -174,7 +166,6 @@ fn by_game_category(
                     })
                     .collect()
             })
-            .unwrap_or_default()
     }
 }
 
