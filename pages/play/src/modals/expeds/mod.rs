@@ -155,7 +155,7 @@ fn Location(location: types::ExpedLocation) -> impl IntoView {
                 <use
                     href="#exped-stars"
                     fill="white"
-                    clip-path=format!("inset(0 {}px 0 0)", (10 - depth) * 9)
+                    clip-path=format!("inset(0 {}px 0 0)", (10u8.saturating_sub(depth)) * 9)
                 />
             </svg>
             <Details game ends_at experience complete />
