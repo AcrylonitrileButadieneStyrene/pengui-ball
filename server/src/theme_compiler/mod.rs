@@ -36,7 +36,7 @@ pub async fn run() {
         return;
     }
 
-    log::info!("Theme recompilation started. This will take a few minutes.");
+    tracing::info!("Theme recompilation started. This will take a few minutes.");
 
     let themes: std::collections::HashMap<Arc<str>, Vec<String>> =
         yaml_serde::from_str(&themes).unwrap();
@@ -81,7 +81,7 @@ pub async fn run() {
     output.flush().unwrap();
     std::fs::copy("assets/css/themes.css", "public/css/themes.css").unwrap();
 
-    log::info!("Theme compilation finished");
+    tracing::info!("Theme compilation finished");
 }
 
 async fn get_image(url: &str) -> Option<image::DynamicImage> {

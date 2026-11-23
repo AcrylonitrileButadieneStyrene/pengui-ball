@@ -10,6 +10,7 @@ workspace = true
 anyhow = "1.0"
 arc-swap = "1.9.5"
 axum = "0.8.9"
+common.path = "../common"
 futures = "0.3.34"
 image = { version = "0.25.10", default-features = false, features = ["png"] }
 leptos.workspace = true
@@ -18,16 +19,14 @@ leptos_router.workspace = true
 leptos-use-signal-debounce-throttle.workspace = true
 leptos-use-websocket.workspace = true
 leptos-use-storage.workspace = true
-log = "0.4.35"
 notify = "9.0.0"
 reqwest = "0.13.5"
 serde.workspace = true
+shared.path = "../shared"
 tokio = { version = "1", features = ["rt-multi-thread"] }
+tracing = "0.1.44"
 tracing-subscriber = "0.3.23"
 yaml_serde = "0.10.7"
-
-common.path = "../common"
-shared.path = "../shared"
 
 [features]
 ssr = [

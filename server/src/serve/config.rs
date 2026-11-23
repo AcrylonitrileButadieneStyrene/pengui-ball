@@ -21,11 +21,11 @@ pub fn watch(
 
             match load() {
                 Ok(new_config) => {
-                    log::info!("Configuration updated in place");
+                    tracing::info!("Configuration updated in place");
                     config.store(std::sync::Arc::new(new_config));
                 }
                 Err(reason) => {
-                    log::error!("Failed to update configuration: {reason:?}");
+                    tracing::error!("Failed to update configuration: {reason:?}");
                 }
             }
         }
