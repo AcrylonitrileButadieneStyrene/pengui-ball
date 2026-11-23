@@ -2,8 +2,9 @@ use std::sync::Arc;
 
 use common::messages::play::ConnectionStatus;
 use leptos::{prelude::*, server::codee::string::FromToStringCodec};
-use leptos_use::{
-    UseWebSocketOptions, UseWebSocketReturn, core::ConnectionReadyState, use_websocket_with_options,
+use leptos_use_websocket::{
+    ConnectionReadyState, ReconnectLimit, UseWebSocketOptions, UseWebSocketReturn,
+    use_websocket_with_options,
 };
 
 mod command;
@@ -47,7 +48,7 @@ fn Connection(game: Arc<str>, children: Children) -> impl IntoView {
         &format!("wss://api.ynoproject.net/{game}/session"),
         UseWebSocketOptions::default()
             .immediate(false)
-            .reconnect_limit(leptos_use::ReconnectLimit::Limited(0))
+            .reconnect_limit(ReconnectLimit::Limited(0))
             .on_message(move |message: &String| {
                 let parts = message.split('\u{FFFF}').collect::<Vec<_>>();
                 handler::on_message(state, &parts);

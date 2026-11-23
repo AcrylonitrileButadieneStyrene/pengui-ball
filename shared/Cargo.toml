@@ -14,7 +14,7 @@ console_error_panic_hook = { version = "0.1", optional = true }
 leptos.workspace = true
 leptos_meta.workspace = true
 leptos_router.workspace = true
-leptos-use.workspace = true
+# leptos-use.workspace = true
 wasm-bindgen.workspace = true
 
 # local crates
@@ -25,4 +25,9 @@ play.path = "../pages/play"
 
 [features]
 hydrate = ["dep:console_error_panic_hook", "leptos/hydrate"]
-ssr = ["leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr", "leptos-use/ssr"]
+ssr = [
+    "leptos/ssr",
+    "leptos_meta/ssr",
+    "leptos_router/ssr",
+    # "leptos-use/ssr"
+]

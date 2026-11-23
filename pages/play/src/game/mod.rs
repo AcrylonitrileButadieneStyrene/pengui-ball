@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use leptos_use::core::ConnectionReadyState;
+use leptos_use_websocket::ConnectionReadyState;
 
 mod controls;
 mod messages;

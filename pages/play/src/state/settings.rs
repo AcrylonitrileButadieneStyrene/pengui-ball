@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use leptos_use::storage::{UseStorageOptions, use_local_storage_with_options};
+use leptos_use_storage::{UseStorageOptions, use_local_storage_with_options};
 
 pub struct State {
     pub global: RwSignal<GlobalSettings>,

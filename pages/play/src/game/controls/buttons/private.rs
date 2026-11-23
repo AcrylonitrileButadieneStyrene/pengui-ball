@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use leptos_use::core::ConnectionReadyState;
+use leptos_use_websocket::ConnectionReadyState;
 
 stylance::import_style!(pub style, "private.module.css");
 

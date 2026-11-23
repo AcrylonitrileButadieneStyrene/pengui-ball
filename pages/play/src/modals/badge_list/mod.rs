@@ -52,14 +52,12 @@ fn Inner() -> impl IntoView {
 fn use_refetch() {
     let state = crate::state();
     let (throttle, set_throttle) = signal(0);
-    let throttle: Signal<usize> = leptos_use::signal_throttled_with_options(
-        throttle,
-        60_000.,
-        leptos_use::ThrottleOptions {
-            trailing: false,
-            leading: true,
-        },
-    );
+    let throttle: Signal<usize> =
+        leptos_use_signal_debounce_throttle::signal_throttled_with_options(
+            throttle,
+            60_000.,
+            leptos_use_storage::ThrottleOptions::default().leading(true),
+        );
 
     Effect::new(move || {
         if state.modal.get() == Some(super::Modals::BadgeList) {

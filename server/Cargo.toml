@@ -15,7 +15,10 @@ image = { version = "0.25.10", default-features = false, features = ["png"] }
 leptos.workspace = true
 leptos_axum = "0.8.10"
 leptos_router.workspace = true
-leptos-use.workspace = true
+leptos-use-signal-debounce-throttle.workspace = true
+leptos-use-websocket.workspace = true
+leptos-use-timestamp.workspace = true
+leptos-use-storage.workspace = true
 log = "0.4.35"
 notify = "9.0.0"
 reqwest = "0.13.5"
@@ -28,4 +31,11 @@ common.path = "../common"
 shared.path = "../shared"
 
 [features]
-ssr = ["leptos/ssr", "leptos_router/ssr", "leptos-use/ssr", "leptos-use/axum"]
+ssr = [
+    "leptos/ssr",
+    "leptos_router/ssr",
+    "leptos-use-signal-debounce-throttle/ssr",
+    "leptos-use-websocket/ssr",
+    "leptos-use-timestamp/ssr",
+    "leptos-use-storage/ssr",
+]

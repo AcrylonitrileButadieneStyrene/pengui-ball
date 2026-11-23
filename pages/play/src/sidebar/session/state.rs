@@ -1,7 +1,7 @@
 use std::num::NonZeroUsize;
 
 use leptos::prelude::*;
-use leptos_use::core::ConnectionReadyState;
+use leptos_use_websocket::ConnectionReadyState;
 
 pub struct State {
     pub channel: super::command::Channel,

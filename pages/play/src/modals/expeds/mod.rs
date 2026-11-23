@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use itertools::Itertools;
 use leptos::{prelude::*, reactive::send_wrapper_ext::SendOption};
-use leptos_use::core::ConnectionReadyState;
+use leptos_use_websocket::ConnectionReadyState;
 use locations::LocationResolved;
 
 use crate::{sidebar::session::Command, state};
