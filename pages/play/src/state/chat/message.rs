@@ -12,8 +12,6 @@ pub struct MessageItem {
 
 impl MessageItem {
     pub fn new(id: Option<impl Into<Arc<str>>>, text: Arc<str>, visible: ReadSignal<bool>) -> Self {
-        leptos_use_timestamp::use_timestamp();
-
         let timestamp = chrono::Local::now();
         Self {
             id: id.map_or_else(

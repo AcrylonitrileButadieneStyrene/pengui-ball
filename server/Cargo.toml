@@ -17,7 +17,6 @@ leptos_axum = "0.8.10"
 leptos_router.workspace = true
 leptos-use-signal-debounce-throttle.workspace = true
 leptos-use-websocket.workspace = true
-leptos-use-timestamp.workspace = true
 leptos-use-storage.workspace = true
 log = "0.4.35"
 notify = "9.0.0"
@@ -36,6 +35,5 @@ ssr = [
     "leptos_router/ssr",
     "leptos-use-signal-debounce-throttle/ssr",
     "leptos-use-websocket/ssr",
-    "leptos-use-timestamp/ssr",
     "leptos-use-storage/ssr",
 ]

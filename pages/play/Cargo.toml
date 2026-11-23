@@ -20,7 +20,6 @@ leptos_meta.workspace = true
 leptos_router.workspace = true
 leptos-use-signal-debounce-throttle.workspace = true
 leptos-use-websocket.workspace = true
-leptos-use-timestamp.workspace = true
 leptos-use-storage.workspace = true
 locations.path = "../../components/locations"
 reactive_stores = "0.4.4"

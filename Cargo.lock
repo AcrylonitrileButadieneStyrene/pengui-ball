@@ -1816,21 +1816,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "leptos-use-raf-fn"
-version = "0.20.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "211b1f9d6cb78ea99f64bfbb2ede19c92eb5671870722d4f9abafeddac88be36"
-dependencies = [
- "cfg-if",
- "default-struct-builder",
- "leptos",
- "leptos-use-filters",
- "send_wrapper",
- "sendwrap-fn",
- "wasm-bindgen",
-]
-
-[[package]]
 name = "leptos-use-rw-signal"
 version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1889,20 +1874,6 @@ dependencies = [
  "default-struct-builder",
  "leptos",
  "leptos-use-rw-signal",
-]
-
-[[package]]
-name = "leptos-use-timestamp"
-version = "0.20.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "532e73e4bc2b7bb2ce02fde2bbfdfb0d81d31e54b0020203cd9f6b6aeaa24853"
-dependencies = [
- "default-struct-builder",
- "leptos",
- "leptos-use-filters",
- "leptos-use-interval-fn",
- "leptos-use-now",
- "leptos-use-raf-fn",
 ]
 
 [[package]]
@@ -2534,7 +2505,6 @@ dependencies = [
  "leptos",
  "leptos-use-signal-debounce-throttle",
  "leptos-use-storage",
- "leptos-use-timestamp",
  "leptos-use-websocket",
  "leptos_meta",
  "leptos_router",
@@ -3234,7 +3204,6 @@ dependencies = [
  "leptos",
  "leptos-use-signal-debounce-throttle",
  "leptos-use-storage",
- "leptos-use-timestamp",
  "leptos-use-websocket",
  "leptos_axum",
  "leptos_router",
