@@ -6,18 +6,15 @@ use leptos::prelude::*;
 pub struct MessageItem {
     pub id: Arc<str>,
     pub text: Arc<str>,
-    pub timestamp: chrono::DateTime<chrono::Local>,
+    pub timestamp: jiff::Timestamp,
     pub visible: ReadSignal<bool>,
 }
 
 impl MessageItem {
     pub fn new(id: Option<impl Into<Arc<str>>>, text: Arc<str>, visible: ReadSignal<bool>) -> Self {
-        let timestamp = chrono::Local::now();
+        let timestamp = jiff::Timestamp::now();
         Self {
-            id: id.map_or_else(
-                || timestamp.timestamp_millis().to_string().into(),
-                Into::into,
-            ),
+            id: id.map_or_else(|| timestamp.as_millisecond().to_string().into(), Into::into),
             text,
             timestamp,
             visible,

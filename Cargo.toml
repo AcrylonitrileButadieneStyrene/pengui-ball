@@ -17,12 +17,12 @@ lto = true
 panic = "abort"
 
 [workspace.dependencies]
-chrono = { version = "0.4.43", features = ["serde"] }
 gloo-net = { version = "0.8.0", default-features = false, features = [
     "http",
     "json",
 ] }
 indexmap = { version = "2.14.2", features = ["serde"] }
+jiff = { version = "1.0.2", features = ["js", "serde"] }
 leptos = { version = "0.8.23", features = ["nightly", "islands"] }
 leptos_router = { version = "0.8.17", features = ["nightly"] }
 leptos_meta = "0.8.7"

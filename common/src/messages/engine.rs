@@ -5,7 +5,7 @@ pub enum Message {
     Connect,
     Mute(bool),
     Focus(bool),
-    SetSave(usize, Arc<[u8]>, Option<chrono::DateTime<chrono::Utc>>),
+    SetSave(usize, Arc<[u8]>, Option<jiff::Timestamp>),
     GetSave(usize),
     DeleteSave(usize),
     GetSaveTimestamps,

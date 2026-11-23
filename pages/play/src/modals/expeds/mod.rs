@@ -215,7 +215,7 @@ fn VM(vm: types::ExpedVM) -> impl IntoView {
 #[component]
 fn Details(
     game: Arc<str>,
-    ends_at: chrono::DateTime<chrono::Local>,
+    ends_at: jiff::Timestamp,
     experience: u8,
     complete: bool,
 ) -> impl IntoView {
@@ -230,7 +230,7 @@ fn Details(
                 .map_or_else(|| game.clone(), |game| game.name.clone())}
         </a>
         <div class=style::available>Available Until</div>
-        <div class=style::ends_at>{ends_at.format("%-m/%d/%y, %-I:%M %p").to_string()}</div>
+        <div class=style::ends_at>{jiff::fmt::strtime::format("%-m/%d/%y, %-I:%M %p", ends_at)}</div>
         <div class=style::experience>{format!("{experience} ExP")}</div>
         <div class=style::checkbox class:toggled=complete />
     }

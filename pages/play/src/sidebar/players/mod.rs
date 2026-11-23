@@ -77,8 +77,8 @@ fn PlayerCell(
     }
 }
 
-fn to_last_online(last_active: chrono::DateTime<chrono::Utc>) -> String {
-    match (chrono::Utc::now() - last_active).num_minutes() {
+fn to_last_online(last_active: jiff::Timestamp) -> String {
+    match (jiff::Timestamp::now() - last_active).as_mins() {
         x if x < 0 => "A long time ago".to_string(),
         1 => "A moment ago".to_string(),
         x if x < 60 => format!("{x} minutes ago"),

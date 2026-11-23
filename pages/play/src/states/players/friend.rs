@@ -21,7 +21,7 @@ pub struct Friend {
     #[serde(rename = "prevMapId")]
     pub prev_map_id: Option<Arc<str>>,
     #[serde(rename = "lastActive")]
-    pub last_active: chrono::DateTime<chrono::Utc>,
+    pub last_active: jiff::Timestamp,
     pub incoming: bool,
     pub accepted: bool,
     pub online: bool,

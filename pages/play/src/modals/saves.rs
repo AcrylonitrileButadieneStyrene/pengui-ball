@@ -1,4 +1,3 @@
-use chrono::Datelike;
 use common::{EngineMessage, messages::play::ConnectionStatus};
 use leptos::prelude::*;
 
@@ -54,11 +53,11 @@ fn Slot(index: usize) -> impl IntoView {
             .map_or_else(
                 || view! { <div>Empty</div> }.into_any(),
                 |timestamp| {
-                    let formatted = chrono::DateTime::parse_from_rfc3339(timestamp)
-                        .unwrap()
-                        .with_timezone(&chrono::Local)
-                        .format("%-m/%-d/%y, %-I:%M %p")
-                        .to_string();
+                    let formatted = jiff::fmt::strtime::format(
+                        "%-m/%-d/%y, %-I:%M %p",
+                        timestamp.parse::<jiff::Timestamp>().unwrap(),
+                    );
+
                     view! { <div>{formatted}</div> }.into_any()
                 },
             )
@@ -167,8 +166,8 @@ fn Sync() -> impl IntoView {
         // - a timezone adjusted UTC epoch if no save exists
         // - the string "player is banned\n"
         if let Some(Some(cloud_timestamp)) = cloud_timestamp.get()
-            && let Ok(cloud) = chrono::DateTime::parse_from_rfc3339(&cloud_timestamp)
-            && cloud.year() != 1970
+            && let Ok(cloud) = cloud_timestamp.parse::<jiff::Timestamp>()
+            && !cloud.is_zero()
         {
             let Some(local_timestamps) = state.engine.save_timestamps.value.get() else {
                 // the engine not yet having loaded should not cause an overwrite
@@ -178,7 +177,7 @@ fn Sync() -> impl IntoView {
             // if the engine gave no timestamp for the slot, there is no save
             let outdated = local_timestamps[0]
                 .as_deref()
-                .map(chrono::DateTime::parse_from_rfc3339)
+                .map(str::parse)
                 .and_then(Result::ok)
                 .is_none_or(|local| cloud > local);
 
@@ -197,7 +196,7 @@ fn Sync() -> impl IntoView {
 async fn download_save(
     game: std::sync::Arc<str>,
     frame: NodeRef<leptos::html::Iframe>,
-    timestamp: chrono::DateTime<chrono::Utc>,
+    timestamp: jiff::Timestamp,
 ) {
     let bytes = gloo_net::http::Request::get(&format!(
         "https://api.ynoproject.net/{game}/api/savesync?command=get",

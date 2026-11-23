@@ -16,7 +16,7 @@ pub struct ExpedLocation {
     #[serde(rename = "exp")]
     pub experience: u8,
     #[serde(rename = "endDate")]
-    pub ends_at: chrono::DateTime<chrono::Local>,
+    pub ends_at: jiff::Timestamp,
     pub complete: bool,
 }
 
@@ -64,6 +64,6 @@ pub struct ExpedVM {
     #[serde(rename = "exp")]
     pub experience: u8,
     #[serde(rename = "endDate")]
-    pub ends_at: chrono::DateTime<chrono::Local>,
+    pub ends_at: jiff::Timestamp,
     pub complete: bool,
 }
