@@ -18,15 +18,15 @@ panic = "abort"
 
 [workspace.dependencies]
 chrono = { version = "0.4.43", features = ["serde"] }
-gloo-net = { version = "0.7.0", default-features = false, features = [
+gloo-net = { version = "0.8.0", default-features = false, features = [
     "http",
     "json",
 ] }
-indexmap = { version = "2.13.0", features = ["serde"] }
-leptos = { version = "0.8.20", features = ["nightly", "islands"] }
-leptos_router = { version = "0.8.15", features = ["nightly"] }
-leptos_meta = "0.8.6"
-leptos-use = "0.19.2"
+indexmap = { version = "2.14.2", features = ["serde"] }
+leptos = { version = "0.8.23", features = ["nightly", "islands"] }
+leptos_router = { version = "0.8.17", features = ["nightly"] }
+leptos_meta = "0.8.7"
+leptos-use = "0.20.0"
 serde = { version = "1", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
 stylance = "0.8.4"
