@@ -7,7 +7,7 @@ pub fn Logo() -> impl IntoView {
     view! {
         <a href="/" class=style::logo class:pop-out=true>
             <svg height="48" viewBox="0 0 64 28">
-                <path d="m0 0h6v10h16v-10h6v16h-11v12.5h-6v-12.5h-11v-15.5m34-0.5h22v6h-16v22.5h-6v-28.5m22 6h6v22.5h-6v-22.5" />
+                <path d="m0 0h6v10h16v-10h6v16h-11v12.5h-6v-12.5h-11v-15.5m34-0.5h28v6h-11v22.5h-6v-22.5h-11v-6z" />
             </svg>
             <svg height="48" viewBox="0 0 28 28">
                 <path
