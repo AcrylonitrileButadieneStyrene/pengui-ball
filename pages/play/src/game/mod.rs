@@ -1,5 +1,4 @@
 use leptos::prelude::*;
-use leptos_use_websocket::ConnectionReadyState;
 
 mod controls;
 mod messages;
@@ -21,12 +20,12 @@ pub fn Game() -> impl IntoView {
 fn Engine() -> impl IntoView {
     let state = crate::state();
     let frame = state.engine.frame;
-    let status = state.session.status;
+    let is_connected = state.session.is_connected;
     let is_focused = state.engine.is_focused;
     messages::setup_handler(state);
 
     Effect::new(move || {
-        if status.get() == ConnectionReadyState::Open {
+        if is_connected.get() {
             crate::state::engine::State::send_frame(frame, common::EngineMessage::Connect);
         }
     });

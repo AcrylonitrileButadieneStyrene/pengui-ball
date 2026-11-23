@@ -1,5 +1,4 @@
 use leptos::prelude::*;
-use leptos_use_websocket::ConnectionReadyState;
 
 use crate::{sidebar::session::Command, states::players::player::PlayerStoreFields};
 
@@ -33,7 +32,7 @@ fn Input() -> impl IntoView {
 
     Effect::new(move || {
         if let Some(guest_name) = guest_name.get()
-            && state.session.status.get() == ConnectionReadyState::Open
+            && state.session.is_connected.get()
         {
             state
                 .session

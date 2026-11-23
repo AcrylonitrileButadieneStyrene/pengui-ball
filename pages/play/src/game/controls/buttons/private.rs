@@ -1,5 +1,4 @@
 use leptos::prelude::*;
-use leptos_use_websocket::ConnectionReadyState;
 
 stylance::import_style!(pub style, "private.module.css");
 
@@ -13,7 +12,7 @@ pub fn Private(children: Children) -> impl IntoView {
 
     let mut last_sent = None;
     Effect::new(move || {
-        if state.session.status.get() != ConnectionReadyState::Open {
+        if state.session.is_connected.get() {
             last_sent = None;
             return;
         }

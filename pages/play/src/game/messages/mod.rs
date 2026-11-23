@@ -6,7 +6,6 @@ use leptos::{
     prelude::*,
     web_sys::{js_sys::Reflect, wasm_bindgen::prelude::Closure},
 };
-use leptos_use_websocket::ConnectionReadyState;
 
 use crate::states::players::player::PlayerStoreFields as _;
 
@@ -34,7 +33,7 @@ fn handle(state: crate::State, message: common::PlayMessage) {
             .unwrap();
 
             state.engine.load_count.update(|count| *count += 1);
-            if state.session.status.get_untracked() == ConnectionReadyState::Open {
+            if state.session.is_connected.get_untracked() {
                 state.engine.send(common::EngineMessage::Connect);
             }
         }

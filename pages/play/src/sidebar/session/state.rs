@@ -6,14 +6,19 @@ use leptos_use_websocket::ConnectionReadyState;
 pub struct State {
     pub channel: super::command::Channel,
     pub status: RwSignal<ConnectionReadyState>,
+    pub is_connected: Signal<bool>,
     pub target: RwSignal<Option<NonZeroUsize>>,
 }
 
 impl Default for State {
     fn default() -> Self {
+        let status = RwSignal::new(ConnectionReadyState::Closed);
         Self {
             channel: super::command::Channel::default(),
-            status: RwSignal::new(ConnectionReadyState::Closed),
+            status,
+            is_connected: Signal::derive(move || {
+                status.read() == leptos_use_websocket::ConnectionReadyState::Open
+            }),
             target: RwSignal::new(
                 #[cfg(debug_assertions)]
                 None,
