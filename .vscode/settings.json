@@ -1,4 +1,5 @@
 {
+    "explorer.fileNesting.expand": false,
     "explorer.fileNesting.patterns": {
         "*.rs": "${capture}.module.css",
         "Cargo.toml": "Cargo.lock"
@@ -13,5 +14,5 @@
             "server"
         ]
     },
-    "deno.enable": true
+    "deno.enable": true,
 }
