@@ -11,38 +11,20 @@ body {
     background-attachment: fixed;
     background-position-x: center;
     animation: fade-in 0.5s ease forwards;
-}
-
-@keyframes fade-in {
-    from {
-        opacity: var(--fade-in-opacity);
-    }
-
-    to {
-        opacity: 1;
-    }
+    /* Vertically center the page if less than 1 screen large */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #logo {
     display: block;
-    margin: auto;
+    margin: 0 auto;
     height: 130px;
     padding: 64px 0;
     image-rendering: pixelated;
 
     animation: logo-animation 0.75s ease-in-out forwards;
-}
-
-@keyframes logo-animation {
-    from {
-        opacity: var(--fade-in-opacity);
-        transform: translateY(120px)
-    }
-
-    to {
-        opacity: 1;
-        transform: 0
-    }
 }
 
 .doors {
@@ -120,6 +102,28 @@ body:has(.spotlight) .door {
     syntax: "<length>";
     initial-value: max(120vw, 120vh);
     inherits: false;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: var(--fade-in-opacity);
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes logo-animation {
+    from {
+        opacity: var(--fade-in-opacity);
+        transform: translateY(120px)
+    }
+
+    to {
+        opacity: 1;
+        transform: 0
+    }
 }
 
 @keyframes spotlight-zoom {
