@@ -9,6 +9,7 @@ body {
     background: url("https://ynoproject.net/images/bg.png");
     background-size: cover;
     background-attachment: fixed;
+    background-position-x: center;
     animation: fade-in 0.5s ease forwards;
 }
 
