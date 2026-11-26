@@ -1,5 +1,15 @@
 # :penguiBall:
+
+![GitHub contributors](https://img.shields.io/github/contributors/AcrylonitrileButadieneStyrene/pengui-ball)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/AcrylonitrileButadieneStyrene/pengui-ball)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/AcrylonitrileButadieneStyrene)](#contributing)
+[![Static Badge](https://img.shields.io/badge/license-MIT%20or%20Apache%202.0%20with%20exceptions-green)](#license)
+
 Alternative frontend client for [YNOproject](https://ynoproject.net/).
+
+A [public instance](https://pengui-ball.jackssrt.com/) 
+is being hosted by 
+[@AcrylonitrileButadieneStyrene](https://github.com/AcrylonitrileButadieneStyrene).
 
 ${\color{transparent}█████\color{#4646e8}█\color{#7070ee}███\color{#4646e8}█\color{transparent}█████}$<br>
 ${\color{transparent}███\color{#7070ee}█\color{#4646e8}█\color{white}█\color{#4646e8}█\color{#7070ee}█\color{#4646e8}█\color{white}█\color{#4646e8}█\color{#7070ee}█\color{transparent}███}$<br>
@@ -43,6 +53,12 @@ ${\color{transparent}█████\color{#eeee70}██\color{white}█\color{
 ## Formatting
 - `cargo fmt` (Outside of views)
 - `just fmt` (Inside of views)
+
+# Contributing
+
+You can contribute by spreading the good word of pengui-ball to new users :fluoPray:
+
+If you make a pull request, notify me somehow or it will never be seen.
 
 # License
 This project is licensed under [MIT](LICENSE-MIT) OR [Apache-2.0](LICENSE-APACHE), 
