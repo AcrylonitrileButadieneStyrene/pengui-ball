@@ -1,5 +1,6 @@
 # :penguiBall:
 
+![Static Badge](https://img.shields.io/badge/artificial%20intelligence-forbidden-red)
 ![GitHub contributors](https://img.shields.io/github/contributors/AcrylonitrileButadieneStyrene/pengui-ball)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/AcrylonitrileButadieneStyrene/pengui-ball)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/AcrylonitrileButadieneStyrene)](#contributing)
